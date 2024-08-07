@@ -3,10 +3,22 @@ module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
+      colors:{
+        'red':'#ff0000',
+        'text-gray':'#2E2E2E',
+      },
+      fontFamily:{
+        inika: ['Inika', 'serif'],
+        inknut: ['Inknut_Antiqua', 'serif'],
+        inter: ['Inter', 'serif']
+      },
+      letterSpacing:{
+        'widest-plus': '0.3em',
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
