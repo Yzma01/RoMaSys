@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
-import { TtileBg } from "../app/public/images";
+import { TtileBg } from "../../../public/images";
+import { GalerieDisplay } from "./GalerieDisplay";
 
 const Galerie = () => {
   return (
@@ -14,7 +15,7 @@ const Galerie = () => {
         imágenes. Conoce los espacios y equipos con los que contamos.
       </p>
       <div>
-        //*Iamgenes
+        <GalerieDisplay />
       </div>
     </>
   );

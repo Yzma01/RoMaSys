@@ -1,7 +1,8 @@
-import Galerie from "../components/Galerie";
-import Hero from "../components/Hero";
-import HeroCard from "../components/HeroCard";
-import NavBar from "../components/NavBar";
+import Galerie from "../components/landing-page/Galerie";
+import Hero from "../components/landing-page/Hero";
+import HeroCard from "../components/landing-page/HeroCard";
+import Membership from "../components/landing-page/Membership";
+import NavBar from "../components/landing-page/NavBar";
 
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
         <NavBar />
         <Hero />
         <Galerie />
+        <Membership/>
     </div>
   );
 }
