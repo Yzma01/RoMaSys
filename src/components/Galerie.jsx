@@ -13,6 +13,9 @@ const Galerie = () => {
         Descubre el ambiente de nuestro gimnasio a través de esta galería de
         imágenes. Conoce los espacios y equipos con los que contamos.
       </p>
+      <div>
+        //*Iamgenes
+      </div>
     </>
   );
 };
