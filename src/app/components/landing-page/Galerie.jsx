@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { TtileBg } from "../../../public/images";
+import { TtileBg } from "../../../../public/images";
 import { GalerieDisplay } from "./GalerieDisplay";
 
 const Galerie = () => {

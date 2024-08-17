@@ -1,5 +1,5 @@
 import React from "react";
-import { CardioLogo, MachineLogo, WeightLogo } from "../../../public/images";
+import { CardioLogo, MachineLogo, WeightLogo } from "../../../../public/images";
 import Image from "next/image";
 
 const items = [
