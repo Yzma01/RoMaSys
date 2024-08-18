@@ -34,6 +34,8 @@ export default function Page() {
             formFieldLabel: "text-gray-700",
             formFieldAction: "text-red-900 hover:text-red-900", //buton forgot password
 
+            formFieldInputShowPasswordIcon: "text-white",
+
             formButtonPrimary:
               "flex justify-center mt-3 bg-[#252525] text-white p-2 rounded-lg transition duration-400 ease-in-out hover:bg-red-900 hover:text-white w-auto",
 

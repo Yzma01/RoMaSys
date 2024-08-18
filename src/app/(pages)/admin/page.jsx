@@ -21,8 +21,8 @@ function page() {
     <>
       <BrowserRouter>
         <main
-          className={`grid ${
-            sidebarOpen ? "grid-cols-[300px_auto]" : "grid-cols-[90px_auto]"
+          className={`grid bg-[#222831] ${
+            sidebarOpen ? "grid-cols-[250px_auto]" : "grid-cols-[90px_auto]"
           } `}>
           <section>
             <Sidebar
