@@ -20,6 +20,7 @@ module.exports = {
       colors: {
         adminBackground: "#222831",
         bgGray: "#171717",
+        blueDark: "#161A23",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
