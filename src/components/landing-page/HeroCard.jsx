@@ -25,23 +25,25 @@ const items = [
 
 const HeroCard = () => {
   return (
-    <div className="flex flex-row w-full ml-3 mr-3 items-center justify-center">
+    <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center mx-3">
       {items.map(({ title, logo, description }, index) => (
         <div
           key={index}
-          className="h-[300px] w-[500px] flex flex-col items-center justify-center text-center pl-4 pr-4 border rounded-tr-[4rem] rounded-bl-[5rem] m-3 -translate-y-24 bg-white shadow-gray-400 shadow-lg"
+          className="h-auto w-full sm:w-[250px] md:w-[300px] lg:w-[350px] xl:w-[400px] flex flex-col items-center justify-center text-center p-4 border rounded-tr-[1rem] -translate-y-24 rounded-bl-[1rem] m-3 bg-white shadow-gray-400 shadow-lg"
         >
-          <div className="w-full flex items-center justify-center">
-            <Image src={logo} alt={title} layout="intrinsic" />
+          <div className="w-full flex items-center justify-center mb-4">
+            <Image src={logo} alt={title} layout="intrinsic" width={80} height={80} />
           </div>
           <h1
-            className={`font-inknut font-bold text-2xl ${
+            className={`font-inknut font-bold text-lg sm:text-lg md:text-2xl ${
               index === 1 ? "text-black" : "text-red"
             }`}
           >
             {title}
           </h1>
-          <p className="text-wrap font-inter text-lg text-text-gray">{description}</p>
+          <p className="text-wrap font-inter text-base sm:text-sm md:text-base text-text-gray">
+            {description}
+          </p>
         </div>
       ))}
     </div>
