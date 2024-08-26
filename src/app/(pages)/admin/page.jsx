@@ -21,7 +21,7 @@ function page() {
     <>
       <BrowserRouter>
         <main
-          className={`grid bg-[#222831] ${
+          className={`grid bg-adminBackground ${
             sidebarOpen ? "grid-cols-[250px_auto]" : "grid-cols-[90px_auto]"
           } `}>
           <section>
