@@ -19,9 +19,15 @@ module.exports = {
     extend: {
       colors: {
         adminBackground: "#222831",
-        bgGray: {
+        gray: {
           0:"#171717",
-          1: "#2D3039"},
+          1: "#2D3039",
+          2: "161A23",
+          3: "D8D8D8",
+        },
+        blue:{
+          0: "96E9F4",
+        },
         blueDark: "#161A23",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
