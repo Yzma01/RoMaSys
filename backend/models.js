@@ -6,6 +6,7 @@ export const Models = {
   clientsModel,additionalClientsDataModel,rutinesModel,paymentsModel,messagesAgendaModel,
 };
 
+
 function clientsModel() {
   const schema = new Schema({
     cli_id: { type: String, unique: true, required: true },
@@ -66,7 +67,7 @@ function rutinesModel() {
     rut_gender: { type: String, unique: false, requered: true },
     rut_max_height: { type: Number, unique: false, required: true },
     rut_min_height: { type: Number, unique: false, required: true },
-    rut_max_weight: { type: Numebr, unique: false, required: true },
+    rut_max_weight: { type: Number, unique: false, required: true },
     rut_min_weight: { type: Number, unique: false, required: true },
     rut_rutine: { type: String, unique: false, required: true },
   });
