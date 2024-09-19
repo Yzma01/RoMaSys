@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"next dev\" \"node ./backend/db.js\"",
+    "dev": "concurrently \"next dev\" \"node ./backend/server.js\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -17,7 +17,9 @@
     "@mui/material": "^5.16.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "express": "^4.21.0",
     "lucide-react": "^0.427.0",
     "mongodb": "^6.9.0",
     "mongoose": "^8.6.2",
