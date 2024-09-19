@@ -1,5 +1,4 @@
 import express from "express";
-// import cors from 'cors'
 import { db } from "./api/db.js";
 import { clientsRepo } from "./api/CRUD/clients-repo.js";
 
@@ -8,7 +7,6 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
-
 //! Middleware to validate methods HTTP
 app.use((req, res, next) => {
   const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
