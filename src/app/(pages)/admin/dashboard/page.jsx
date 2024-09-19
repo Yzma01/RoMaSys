@@ -1,108 +1,28 @@
+"use client";
 import SearchBar from "@/src/app/components/admin-page/SearchBard";
 import { ClientsTable } from "@/src/app/components/admin-page/table/Table";
 import React from "react";
-const clients = [
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-  {
-    id: "0-0000-0000",
-    name: "Jorge",
-    lastname: "Rojas Mena",
-    phone: "0000-0000",
-    payDate: "20-09-2024",
-  },
-];
+import { useState, useEffect } from "react";
 
 export default function Dashboard() {
+  const [clients, setClients] = useState([]);
+  useEffect(() => {
+    setClients([]);
+    const getClients = async () => {
+      const response = await fetch("/api/CRUD/clients-repo", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        cache: "default",
+      });
+      if (response.status === 200) {
+        setClients(await response.json());
+      }
+    };
+    getClients();
+  }, []);
   return (
     <div>
       <div className="flex items-center justify-center min-h-screen text-white">

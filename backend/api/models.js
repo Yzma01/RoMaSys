@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 export const Models = {
-  clientsModel,additionalClientsDataModel,rutinesModel,paymentsModel,messagesAgendaModel,
+  clientsModel, additionalClientsDataModel, rutinesModel, paymentsModel, messagesAgendaModel,
 };
 
 
@@ -22,6 +22,9 @@ function clientsModel() {
       type: Number,
       ref: "Additional_Clients_Data",
       required: false,
+    },
+    cli_pay_date: {
+      type: Date, unique: false, require: false
     },
   });
 
@@ -88,7 +91,7 @@ function paymentsModel() {
     pay_client_id: { type: String, unique: false, required: true },
     pay_date: { type: Date, unique: false, required: true },
     pay_amount: { type: Number, unique: false, required: true },
-    pay_monthly_payment_type: { type: String, unique: false, required: true},
+    pay_monthly_payment_type: { type: String, unique: false, required: true },
   });
 
   schema.set("toJSON", {
@@ -103,20 +106,20 @@ function paymentsModel() {
 }
 
 function messagesAgendaModel() {
-    const schema = new Schema({
-        msg_client_id: {type: String, unique:false, required: true},
-        msg_sent: { type: Boolean, unique: false, required: true},
-        msg_next_payment_date: { type: Date, unique: false, required: false},
-    });
-  
-    schema.set("toJSON", {
-      virtuals: true,
-      versionKey: false,
-      transform: function (doc, ret) {
-        delete ret._id;
-      },
-    });
-  
-    return mongoose.models.Messages_Agenda || mongoose.model("Messages_Agenda", schema);
-  }
-  
+  const schema = new Schema({
+    msg_client_id: { type: String, unique: false, required: true },
+    msg_sent: { type: Boolean, unique: false, required: true },
+    msg_next_payment_date: { type: Date, unique: false, required: false },
+  });
+
+  schema.set("toJSON", {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret) {
+      delete ret._id;
+    },
+  });
+
+  return mongoose.models.Messages_Agenda || mongoose.model("Messages_Agenda", schema);
+}
+
