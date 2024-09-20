@@ -45,7 +45,7 @@ function additionalClientsDataModel() {
     cli_goals: { type: String, unique: false, required: false },
     cli_gender: { type: String, unique: false, required: false },
     cli_height: { type: Number, unique: false, required: false },
-    cli_weight: { type: Number, unque: false, required: false },
+    cli_weight: { type: Number, unique: false, required: false },
     cli_birthdate: { type: Date, unique: false, required: false },
   });
 
@@ -67,7 +67,7 @@ function rutinesModel() {
   const schema = new Schema({
     rut_id: { type: Number, unique: true, required: true },
     rut_goal: { type: String, unique: false, required: true },
-    rut_gender: { type: String, unique: false, requered: true },
+    rut_gender: { type: String, unique: false, required: true },
     rut_max_height: { type: Number, unique: false, required: true },
     rut_min_height: { type: Number, unique: false, required: true },
     rut_max_weight: { type: Number, unique: false, required: true },

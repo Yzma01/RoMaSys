@@ -7,6 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
+
+
 //! Middleware to validate methods HTTP
 app.use((req, res, next) => {
   const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
@@ -20,12 +22,22 @@ app.use((req, res, next) => {
 
 clientsFunctions();
 
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+
 
 //!Functions with methods HTTP
 
 function clientsFunctions() {
   app.get("/api/CRUD/clients-repo", clientsRepo.getClients);
+
+  app.post("/api/CRUD/clients-repo", clientsRepo.addClient);
+
+  app.put("/api/CRUD/clients-repo/:cli_id", clientsRepo.updateClient);
+
+  app.delete("/api/CRUD/clients-repo/:cli_id", clientsRepo._deleteClient);
+
 }
