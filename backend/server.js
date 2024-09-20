@@ -1,6 +1,7 @@
 import express from "express";
 import { db } from "./api/db.js";
 import { clientsRepo } from "./api/CRUD/clients-repo.js";
+import { clientsFilter } from "./api/Filter/clients.js";
 
 const app = express();
 
@@ -20,8 +21,9 @@ app.use((req, res, next) => {
   next();
 });
 
-clientsFunctions();
 
+clientsFunctions();
+clientFilters();
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
@@ -30,6 +32,12 @@ app.listen(PORT, () => {
 
 
 //!Functions with methods HTTP
+
+function clientFilters(){
+
+  app.get("/api/Filter/clients", clientsFilter.getClientsByMonthlyType);
+
+}
 
 function clientsFunctions() {
   app.get("/api/CRUD/clients-repo", clientsRepo.getClients);
