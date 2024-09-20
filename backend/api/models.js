@@ -3,9 +3,12 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 export const Models = {
-  clientsModel, additionalClientsDataModel, rutinesModel, paymentsModel, messagesAgendaModel,
+  clientsModel,
+  additionalClientsDataModel,
+  rutinesModel,
+  paymentsModel,
+  messagesAgendaModel,
 };
-
 
 function clientsModel() {
   const schema = new Schema({
@@ -13,19 +16,18 @@ function clientsModel() {
     cli_name: { type: String, unique: false, required: true },
     cli_last_name1: { type: String, unique: false, required: true },
     cli_last_name2: { type: String, unique: false, required: true },
-    cli_monthly_payment: { type: String, unique: false, required: true },
+    cli_monthly_payment_type: { type: String, unique: false, required: true },
     cli_phone: { type: String, unique: true, required: false },
     cli_frozen: { type: Boolean, unique: false, required: false },
     cli_remaining_days: { type: Number, unique: false, required: false },
     cli_register_date: { type: Date, unique: false, required: true },
-    cli_rutine: {
-      type: Number,
-      ref: "Additional_Clients_Data",
+    cli_rutine:  { type: Boolean, unique: false, required: false },
+    cli_pay_date: { type: Date, unique: false, require: false,},
+    cli_additionalData: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Additional_Clients_Data", 
       required: false,
-    },
-    cli_pay_date: {
-      type: Date, unique: false, require: false
-    },
+    }, 
   });
 
   schema.set("toJSON", {
@@ -45,7 +47,7 @@ function additionalClientsDataModel() {
     cli_goals: { type: String, unique: false, required: false },
     cli_gender: { type: String, unique: false, required: false },
     cli_height: { type: Number, unique: false, required: false },
-    cli_weight: { type: Number, unque: false, required: false },
+    cli_weight: { type: Number, unique: false, required: false },
     cli_birthdate: { type: Date, unique: false, required: false },
   });
 
@@ -67,7 +69,7 @@ function rutinesModel() {
   const schema = new Schema({
     rut_id: { type: Number, unique: true, required: true },
     rut_goal: { type: String, unique: false, required: true },
-    rut_gender: { type: String, unique: false, requered: true },
+    rut_gender: { type: String, unique: false, required: true },
     rut_max_height: { type: Number, unique: false, required: true },
     rut_min_height: { type: Number, unique: false, required: true },
     rut_max_weight: { type: Number, unique: false, required: true },
@@ -120,6 +122,7 @@ function messagesAgendaModel() {
     },
   });
 
-  return mongoose.models.Messages_Agenda || mongoose.model("Messages_Agenda", schema);
+  return (
+    mongoose.models.Messages_Agenda || mongoose.model("Messages_Agenda", schema)
+  );
 }
-

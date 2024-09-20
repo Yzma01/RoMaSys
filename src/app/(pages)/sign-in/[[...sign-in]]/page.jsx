@@ -23,7 +23,7 @@ export default function Page() {
 
             rootBox: "bg-adminBackground",
             cardBox: "bg-red-900",
-            card: "flex flex-col gap-2 pl-8 pr-8 pb-4 bg-bgGray-1 rounded-2xl transition-transform duration-400 ease-in-out hover:scale-105 hover:border-black hover:border",
+            card: "flex flex-col gap-2 pl-8 pr-8 pb-4 bg-gray-1 rounded-2xl transition-transform duration-400 ease-in-out hover:scale-105 hover:border-black hover:border",
 
             form: "flex gap-0",
             headerTitle: "text-white text-center text-lg",
