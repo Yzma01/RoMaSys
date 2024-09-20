@@ -18,10 +18,7 @@ const makeFetch = async (url, method, params, body) => {
     body: JSON.stringify(body),
     cache: "default",
   });
-  if (response.status === 200) {
-    return response;
-  }
-  return -1;
+  return response;
 };
 
 export default function Dashboard() {
@@ -31,12 +28,13 @@ export default function Dashboard() {
     setClients([]);
     const getClients = async () => {
       const response = await makeFetch("/api/CRUD/clients-repo", "GET", "");
-      if (response !== -1) {
+      if (response.status === 200) {
         const data = await response.json();
         setClients(data);
         setOriginalClients(data);
-      }else{
-        alert("Error de conexión, si el problema persiste contacte a soporte")
+      }
+      if (response.status === 500) {
+        alert("Error de conexión, si el problema persiste contacte a soporte");
       }
     };
     getClients();
@@ -44,13 +42,17 @@ export default function Dashboard() {
 
   const searchClientsByFilter = async (searchValue) => {
     alert(searchValue);
-    const response = await makeFetch("/api/Filter/clients", "GET", searchValue);
-    if (response !== -1) {
+    const response = await makeFetch(`api/Filter/clients?filterType=${searchValue}`, "GET", "", "");
+    if (response.status === 200) {
       const data = await response.json();
       setClients(data);
+      setOriginalClients(data);
+    }
+    if (response.status === 500) {
+      alert("Error de conexión, si el problema persiste contacte a soporte");
     }
   };
-  
+
   const searchByNameOrId = (searchValue) => {
     if (searchValue === "") {
       setClients(originalClients);
