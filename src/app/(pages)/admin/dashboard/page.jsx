@@ -1,28 +1,69 @@
 "use client";
-import SearchBar from "@/src/app/components/admin-page/SearchBard";
+import SearchBar from "@/src/app/components/admin-page/SearchBar";
 import { ClientsTable } from "@/src/app/components/admin-page/table/Table";
 import React from "react";
 import { useState, useEffect } from "react";
 
+const makeFetch = async (url, method, params, body) => {
+  const baseUrl = "http://localhost:3000";
+  const apiURL = `${baseUrl + url}${
+    params !== undefined || null ? "/" + params : ""
+  }`;
+  const response = await fetch(url, {
+    method: method,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+    cache: "default",
+  });
+  if (response.status === 200) {
+    return response;
+  }
+  return -1;
+};
+
 export default function Dashboard() {
   const [clients, setClients] = useState([]);
+  const [originalClients, setOriginalClients] = useState([]);
   useEffect(() => {
     setClients([]);
     const getClients = async () => {
-      const response = await fetch("/api/CRUD/clients-repo", {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        cache: "default",
-      });
-      if (response.status === 200) {
-        setClients(await response.json());
+      const response = await makeFetch("/api/CRUD/clients-repo", "GET", "");
+      if (response !== -1) {
+        const data = await response.json();
+        setClients(data);
+        setOriginalClients(data);
+      }else{
+        alert("Error de conexión, si el problema persiste contacte a soporte")
       }
     };
     getClients();
   }, []);
+
+  const searchClientsByFilter = async (searchValue) => {
+    alert(searchValue);
+    const response = await makeFetch("/api/Filter/clients", "GET", searchValue);
+    if (response !== -1) {
+      const data = await response.json();
+      setClients(data);
+    }
+  };
+  
+  const searchByNameOrId = (searchValue) => {
+    if (searchValue === "") {
+      setClients(originalClients);
+    } else {
+      setClients(
+        originalClients.filter(
+          (client) =>
+            client.cli_name.toLowerCase().includes(searchValue.toLowerCase()) ||
+            client.cli_id.toLowerCase().includes(searchValue.toLowerCase())
+        )
+      );
+    }
+  };
   return (
     <div>
       <div className="flex items-center justify-center min-h-screen text-white">
@@ -36,7 +77,10 @@ export default function Dashboard() {
                 </p>
               </div>
               <div className="w-fit sm:w-1/4">
-                <SearchBar />
+                <SearchBar
+                  searchClientsByFilter={searchClientsByFilter}
+                  searchByNameOrId={searchByNameOrId}
+                />
               </div>
             </header>
             <ClientsTable clients={clients} />
