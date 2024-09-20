@@ -3,9 +3,12 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 export const Models = {
-  clientsModel, additionalClientsDataModel, rutinesModel, paymentsModel, messagesAgendaModel,
+  clientsModel,
+  additionalClientsDataModel,
+  rutinesModel,
+  paymentsModel,
+  messagesAgendaModel,
 };
-
 
 function clientsModel() {
   const schema = new Schema({
@@ -18,14 +21,13 @@ function clientsModel() {
     cli_frozen: { type: Boolean, unique: false, required: false },
     cli_remaining_days: { type: Number, unique: false, required: false },
     cli_register_date: { type: Date, unique: false, required: true },
-    cli_rutine: {
-      type: Number,
-      ref: "Additional_Clients_Data",
+    cli_rutine:  { type: Boolean, unique: false, required: false },
+    cli_pay_date: { type: Date, unique: false, require: false,},
+    cli_additionalData: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Additional_Clients_Data", 
       required: false,
-    },
-    cli_pay_date: {
-      type: Date, unique: false, require: false
-    },
+    }, 
   });
 
   schema.set("toJSON", {
@@ -120,6 +122,7 @@ function messagesAgendaModel() {
     },
   });
 
-  return mongoose.models.Messages_Agenda || mongoose.model("Messages_Agenda", schema);
+  return (
+    mongoose.models.Messages_Agenda || mongoose.model("Messages_Agenda", schema)
+  );
 }
-
