@@ -74,7 +74,7 @@ const linksArray = [
   {
     label: "Inicio",
     icon: <HomeRoundedIcon />,
-    to: "/admin",
+    to: "/admin/dashboard",
   },
   {
     label: "Añadir Cliente",

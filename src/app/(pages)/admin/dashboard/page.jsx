@@ -3,23 +3,8 @@ import SearchBar from "@/src/app/components/admin-page/SearchBar";
 import { ClientsTable } from "@/src/app/components/admin-page/table/Table";
 import React from "react";
 import { useState, useEffect } from "react";
+import { makeFetch } from "@/src/app/components/utils/fetch";
 
-const makeFetch = async (url, method, params, body) => {
-  const baseUrl = "http://localhost:3000";
-  const apiURL = `${baseUrl + url}${
-    params !== undefined || null ? "/" + params : ""
-  }`;
-  const response = await fetch(url, {
-    method: method,
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-    cache: "default",
-  });
-  return response;
-};
 
 export default function Dashboard() {
   const [clients, setClients] = useState([]);
@@ -41,15 +26,23 @@ export default function Dashboard() {
   }, []);
 
   const searchClientsByFilter = async (searchValue) => {
-    alert(searchValue);
-    const response = await makeFetch(`api/Filter/clients?filterType=${searchValue}`, "GET", "", "");
-    if (response.status === 200) {
-      const data = await response.json();
-      setClients(data);
-      setOriginalClients(data);
-    }
-    if (response.status === 500) {
-      alert("Error de conexión, si el problema persiste contacte a soporte");
+    console.log(searchValue)
+    if (searchValue === "") {
+      console.log(originalClients)
+      setClients(originalClients);
+    } else {
+      const response = await makeFetch(
+        `api/Filter/clients?filterType=${searchValue.toLowerCase()}`,
+        "GET",
+        ""
+      );
+      if (response.status === 200) {
+        const data = await response.json();
+        setClients(data);
+      }
+      if (response.status === 500) {
+        alert("Error de conexión, si el problema persiste contacte a soporte");
+      }
     }
   };
 
@@ -73,7 +66,7 @@ export default function Dashboard() {
           <section>
             <header className="flex flex-col sm:flex-row items-center justify-between">
               <div className="flex flex-col w-full sm:w-3/4 mb-4 sm:mb-0">
-                <h1 className="text-xl sm:text-2xl mb-2 font-bold">DASBOARD</h1>
+                <h1 className="text-xl sm:text-2xl mb-2 font-bold">DAShBOARD</h1>
                 <p className="text-base sm:text-lg mb-4 text-gray-3 font-light">
                   Hola Niger. ¡Bienvenido de nuevo a RoMaSys!
                 </p>

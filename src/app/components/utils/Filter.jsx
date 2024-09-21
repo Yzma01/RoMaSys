@@ -18,19 +18,19 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 const frameworks = [
   {
-    value: "Day",
+    value: "dia",
     label: "Dia",
   },
   {
-    value: "Fortnight",
+    value: "quincena",
     label: "Quincena",
   },
   {
-    value: "Month",
+    value: "mes",
     label: "Mes",
   },
   {
-    value: "Overdue",
+    value: "vencido",
     label: "Vencidos",
   },
 ];
@@ -57,7 +57,9 @@ export function Filter({ searchClientsByFilter }) {
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
-                    searchClientsByFilter(currentValue);
+                    searchClientsByFilter(
+                      currentValue === value ? "" : currentValue
+                    );
                   }}
                 >
                   <Check

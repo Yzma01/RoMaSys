@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { AdminRoutes } from "../../routers/routes.jsx";
 import { BrowserRouter } from "react-router-dom";
-import { Sidebar } from "../../components/admin-page/Sidebar";
+import { Sidebar } from "../../components/admin-page/Sidebar.jsx";
 
 function page() {
   const [sidebarOpen, setSidebarOpen] = useState(true);

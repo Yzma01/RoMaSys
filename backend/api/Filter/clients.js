@@ -17,7 +17,7 @@ async function getClientsByMonthlyType(req, res) {
       filter.cli_monthly_payment_type = filterType;
     }else{
         const currentDate = new Date();
-        filter.cli_pay_date  = { $lt: currentDate }; //*$lt: signifa menor que
+        filter.cli_next_pay_date = { $lt: currentDate }; //*$lt: signifa menor que
     }
 
     console.log(filter, "dsfsnd");
