@@ -9,7 +9,7 @@ import Reports from "../(pages)/admin/reports/page.jsx";
 export function AdminRoutes() {
   return (
     <Routes>
-      <Route path="/admin" element={<Dashboard />} />
+      <Route path="/admin/dashboard" element={<Dashboard />} />
       <Route path="/admin/addClient" element={<AddClient />} />
       <Route path="/admin/reports" element={<Reports />} />
     </Routes>

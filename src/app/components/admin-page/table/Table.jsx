@@ -67,7 +67,7 @@ export function ClientsTable({ clients }) {
                 cli_last_name1,
                 cli_last_name2,
                 cli_phone,
-                cli_pay_date,
+                cli_next_pay_date,
               },
               index
             ) => (
@@ -85,7 +85,7 @@ export function ClientsTable({ clients }) {
                   {cli_phone}
                 </TableCell>
                 <TableCell className="text-center hidden md:table-cell">
-                  {format(new Date(cli_pay_date), "MM-dd-yyyy")}
+                  {format(new Date(cli_next_pay_date), "MM-dd-yyyy")}
                 </TableCell>
 
                 <TableCell className="text-center">

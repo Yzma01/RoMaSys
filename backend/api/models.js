@@ -22,7 +22,7 @@ function clientsModel() {
     cli_remaining_days: { type: Number, unique: false, required: false },
     cli_register_date: { type: Date, unique: false, required: true },
     cli_rutine:  { type: Boolean, unique: false, required: false },
-    cli_pay_date: { type: Date, unique: false, require: false,},
+    cli_next_pay_date: { type: Date, unique: false, require: false,},
     cli_additionalData: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Additional_Clients_Data", 
