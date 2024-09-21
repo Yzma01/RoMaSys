@@ -8,19 +8,17 @@ export const clientsFilter = {
 
 async function getClientsByMonthlyType(req, res) {
     const { filterType } = req.query;
-    console.log(filterType, "Fdcds");
+    const overdue = "vencido";
  
   try {
     let filter = {};
 
-    if (filterType != "vencido") {
+    if (filterType != overdue) {
       filter.cli_monthly_payment_type = filterType;
     }else{
         const currentDate = new Date();
-        filter.cli_pay_date  = { $lt: currentDate }; //*$lt: signifa menor que
+        filter.cli_pay_date  = { $lt: currentDate }; 
     }
-
-    console.log(filter, "dsfsnd");
 
     const clients = await Client.find(filter);
     console.log(clients);

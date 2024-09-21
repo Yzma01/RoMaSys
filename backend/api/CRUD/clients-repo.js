@@ -10,7 +10,7 @@ export const clientsRepo = {
   _deleteClient,
 };
 
-//!Get all clients
+//*Get all clients
 async function getClients(req, res) {
   try {
     const clients = await db.Clients.find();
@@ -22,7 +22,7 @@ async function getClients(req, res) {
   }
 }
 
-//!Add client
+//*Add client
 async function addClient(req, res) {
   const body = req.body;
 
@@ -47,7 +47,7 @@ async function addClient(req, res) {
   }
 }
 
-//!Add additional client data
+//*Add additional client data
 async function addAdditionalClientData(body, rutineId) {
   const data = {
     cli_rutine_id: rutineId,
@@ -66,7 +66,7 @@ async function addAdditionalClientData(body, rutineId) {
   }
 }
 
-//!Update client
+//*Update client
 async function updateClient(req, res) {
   const cli_id = req.params.cli_id;
   const body = req.body;
@@ -110,7 +110,7 @@ async function updateClient(req, res) {
   }
 }
 
-//!Update additional client data
+//*Update additional client data
 async function updateAdditionalClientData(body, clientId, rutineId) {
   const additionalData = await AdditionalData.findOne({ _id: clientId });
 
@@ -135,7 +135,7 @@ async function updateAdditionalClientData(body, clientId, rutineId) {
   }
 }
 
-//!Delete client
+//*Delete client
 async function _deleteClient(req, res) {
   const cli_id = req.params.cli_id;
   try {
@@ -167,7 +167,7 @@ async function _deleteClient(req, res) {
 //   return false;
 // }
 
-//!Client alredy exists
+//*Client alredy exists
 async function userAlredyExists(body) {
   if (await Client.findOne({ cli_id: body.cli_id })) {
     throw {
@@ -177,7 +177,7 @@ async function userAlredyExists(body) {
   }
 }
 
-//!Client phone alredy in use
+//*Client phone alredy in use
 async function phoneAlredyInUse(body) {
   if (await Client.findOne({ cli_phone: body.cli_phone })) {
     throw {
