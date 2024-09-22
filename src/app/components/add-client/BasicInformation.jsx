@@ -25,13 +25,48 @@ const BasicInformation = () => {
   const [amount, setAmount] = useState("");
   const { toast } = useToast();
 
-  const handleSubmit = () => {
+  const clearForm = () => {
+    setId("");
+    setName("");
+    setLastname1("");
+    setLastname2("");
+    setPhone("");
+    setMothlyType("");
+    setAmount("");
+  };
+
+  const validate = (message, status, code) => {
+    if (status == code) {
+      toast({ description: message });
+      if (code == 201) {
+        clearForm();
+      }
+    }
+    return;
+  };
+
+  const verifiedNull = () => {
+    if (
+      id == "" ||
+      name == "" ||
+      lastname1 == "" ||
+      lastname2 == "" ||
+      phone == "" ||
+      monthlyType == "" ||
+      amount == ""
+    ) {
+      return true;
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     const body = {
       cli_id: id,
       cli_name: name,
       cli_last_name1: lastname1,
       cli_last_name2: lastname2,
-      cli_monthly_payment_type: monthlyType,
+      cli_monthly_payment_type: monthlyType.toLowerCase(),
       cli_phone: phone,
       cli_frozen: false,
       cli_remaining_days: 30,
@@ -44,13 +79,22 @@ const BasicInformation = () => {
       cli_weight: 0,
       cli_birthdate: "",
     };
-
-    const response = makeFetch("/api/CRUD/clients-repo", "POST", "", body);
-    if (response == 200) {
-      toast({
-        description: `${name} ha sido agregado.`,
-      });
+    if (verifiedNull()) {
+      toast({ description: "Por favor llene todos los campos." });
     }
+    const response = await makeFetch(
+      "/api/CRUD/clients-repo",
+      "POST",
+      "",
+      body
+    );
+    validate(`${name} ha sido agregado.`, response.status, 201);
+    validate(`El cliente cédula: ${id} ya existe.`, response.status, 401);
+    validate(
+      `El número de teléfono: ${phone} ya está registrado`,
+      response.status,
+      406
+    );
   };
   return (
     <div className="flex justify-center items-center w-full">
@@ -83,7 +127,7 @@ const BasicInformation = () => {
             <HasRutine />
             <br />
             <Button
-              onClick={() => handleSubmit()}
+              onClick={(e) => handleSubmit(e)}
               color={"green"}
               text={"Guardar"}
             />

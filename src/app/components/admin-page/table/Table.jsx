@@ -14,9 +14,9 @@ import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { ClientAction } from "../ClientsAction";
 import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
+import { makeFetch } from "../../utils/fetch";
 
 export function ClientsTable({ clients }) {
-  console.log(clients);
   return (
     <div
       className="max-h-[30vw] overflow-y-auto"
@@ -112,7 +112,11 @@ export function ClientsTable({ clients }) {
                   <div className="flex justify-center">
                     <ClientAction
                       logo={DeleteOutlineOutlinedIcon}
-                      onClick={() => alert("Delete clicked")}
+                      onClick={() => {
+                        makeFetch("/api/CRUD/clients-repo", "DELETE", cli_id)
+                        window.location.reload();
+
+                      }}
                       className="hover:bg-[#ff0000] text-white"
                     />
                   </div>

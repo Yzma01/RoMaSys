@@ -3,8 +3,8 @@ import React from "react";
 
 export default function AddClient() {
   return (
-    <div className="bg-adminBackground">
-      <div className="items-center justify-center min-h-screen text-white flex flex-col p-5">
+    <div className="bg-adminBackground flex items-center justify-center">
+      <div className="items-center justify-center min-h-screen text-white flex flex-col p-5 w-fit">
         <h1 className="text-xl sm:text-2xl mb-2 font-bold flex text-start w-full pl-3">
           Agregar Usuario
         </h1>
