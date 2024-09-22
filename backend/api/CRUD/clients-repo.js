@@ -39,7 +39,7 @@ function calculateAge(body) {
   return age;
 }
 
-async function assignRoutine(body) {
+async function assignRutine(body) {
   console.log("asingRuntine")
 
   const additionalData = body.cli_additional_data;
@@ -63,7 +63,7 @@ async function assignRoutine(body) {
   if (!rutineId) {
     console.log("No hay rutine");
     console.log(rutineId);
-    return null; //!Podemos colocar alguna ue sea general que sea la 1 en caso de que no se encuentre alguna
+    return null; //!Podemos colocar alguna que sea general que sea la 1 en caso de que no se encuentre alguna
   }
 
   return rutineId.rut_id;
@@ -77,10 +77,8 @@ async function addClient(req, res) {
     await userAlredyExists(body);
     await phoneAlredyInUse(body);
 
-    //!Camnbiar esto, debe de ser la ruitna que le coreresponda al cliente segun las necesidaes
-    const rutineId = await assignRoutine(body);
+    const rutineId = await assignRutine(body);
     console.log("Rutina ✅😇" , rutineId)
-
 
     const additionalData = await addAdditionalClientData(
       body.cli_additional_data,
