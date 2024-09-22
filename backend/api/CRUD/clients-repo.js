@@ -2,6 +2,7 @@ import { db } from "../db.js";
 
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
+const Rutine = db.Rutines;
 
 export const clientsRepo = {
   getClients,
@@ -22,6 +23,52 @@ async function getClients(req, res) {
   }
 }
 
+function calculateAge(body) {
+  const currentDate = new Date();
+  const birthdate = new Date(body.cli_additional_data.cli_birthdate);
+  
+  let age = currentDate.getFullYear() - birthdate.getFullYear();
+  
+  if (
+    currentDate.getMonth() < birthdate.getMonth() || 
+    (currentDate.getMonth() === birthdate.getMonth() && currentDate.getDate() < birthdate.getDate())
+  ) {
+    age--;
+  }
+  
+  return age;
+}
+
+async function assignRoutine(body) {
+  console.log("asingRuntine")
+
+  const additionalData = body.cli_additional_data;
+  let filter = {};
+
+  const age = calculateAge(body);
+  console.log("edasd:" , age);
+  filter.rut_min_age = { $lte: age };
+  filter.rut_max_age = { $gte: age };
+
+  filter.rut_goal = additionalData.cli_goal;
+
+  filter.rut_gender = (additionalData.cli_gender === "masculino" || additionalData.cli_gender === "femenino") 
+                      ? additionalData.cli_gender 
+                      : "masculino"; //! Que coman mierdaaaaaaa las vacas
+
+  console.log("El filtro: " , filter);
+
+  const rutineId = await Rutine.findOne(filter);
+
+  if (!rutineId) {
+    console.log("No hay rutine");
+    console.log(rutineId);
+    return null; //!Podemos colocar alguna ue sea general que sea la 1 en caso de que no se encuentre alguna
+  }
+
+  return rutineId.rut_id;
+}
+
 //*Add client
 async function addClient(req, res) {
   const body = req.body;
@@ -31,10 +78,15 @@ async function addClient(req, res) {
     await phoneAlredyInUse(body);
 
     //!Camnbiar esto, debe de ser la ruitna que le coreresponda al cliente segun las necesidaes
-    const rutineId = 1;
+    const rutineId = await assignRoutine(body);
+    console.log("Rutina ✅😇" , rutineId)
 
-    const additionalData = await addAdditionalClientData(body, rutineId);
-    body.cli_additionalData = additionalData._id;
+
+    const additionalData = await addAdditionalClientData(
+      body.cli_additional_data,
+      rutineId
+    );
+    body.cli_additional_data = additionalData._id;
 
     const client = new Client(body);
     await client.save();
@@ -49,16 +101,9 @@ async function addClient(req, res) {
 
 //*Add additional client data
 async function addAdditionalClientData(body, rutineId) {
-  const data = {
-    cli_rutine_id: rutineId,
-    cli_goals: body.cli_goals,
-    cli_gender: body.cli_gender,
-    cli_height: body.cli_height,
-    cli_weight: body.cli_weight,
-    cli_birthdate: body.cli_birthdate,
-  };
+  body.cli_rutine_id = rutineId;
   try {
-    const additionalData = new AdditionalData(data);
+    const additionalData = new AdditionalData(body);
     await additionalData.save();
     return additionalData;
   } catch (error) {
@@ -90,12 +135,14 @@ async function updateClient(req, res) {
     }
     //!Cambiaaaaaaaaaaar cuando este lo de rutina
     const rutineId = 1;
-
+    console.log("aaaaaaaaaaaaaa:", client.cli_additional_data);
     const additionalData = await updateAdditionalClientData(
-      body,
-      client.cli_additionalData,
+      body.cli_additional_data,
+      client.cli_additional_data,
       rutineId
     );
+
+    body.cli_additional_data = additionalData._id;
 
     Object.assign(client, body);
     await client.save();
@@ -111,23 +158,17 @@ async function updateClient(req, res) {
 }
 
 //*Update additional client data
-async function updateAdditionalClientData(body, clientId, rutineId) {
-  const additionalData = await AdditionalData.findOne({ _id: clientId });
-
+async function updateAdditionalClientData(body, clientObjectId, rutineId) {
+  const additionalData = await AdditionalData.findOne({ _id: clientObjectId });
+  console.log("dnfjsdf", additionalData);
   if (!additionalData) {
     return;
   }
 
-  const data = {
-    cli_rutine_id: rutineId,
-    cli_goals: body.cli_goals,
-    cli_gender: body.cli_gender,
-    cli_height: body.cli_height,
-    cli_weight: body.cli_weight,
-    cli_birthdate: body.cli_birthdate,
-  };
+  body.cli_rutine_id = rutineId;
+  console.log("lknfidncdn: ", body);
   try {
-    Object.assign(additionalData, data);
+    Object.assign(additionalData, body);
     await additionalData.save();
     return additionalData;
   } catch (error) {
@@ -144,8 +185,8 @@ async function _deleteClient(req, res) {
       return res.status(404).json({ message: "Client not found" });
     }
 
-    if (client.cli_additionalData) {
-      await AdditionalData.findByIdAndDelete(client.cli_additionalData);
+    if (client.cli_additional_data) {
+      await AdditionalData.findByIdAndDelete(client.cli_additional_data);
     }
 
     await Client.findOneAndDelete({ cli_id: cli_id });

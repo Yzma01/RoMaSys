@@ -21,13 +21,13 @@ function clientsModel() {
     cli_frozen: { type: Boolean, unique: false, required: false },
     cli_remaining_days: { type: Number, unique: false, required: false },
     cli_register_date: { type: Date, unique: false, required: true },
-    cli_rutine:  { type: Boolean, unique: false, required: false },
-    cli_next_pay_date: { type: Date, unique: false, require: false,},
-    cli_additionalData: {
+    // cli_rutine:  { type: Boolean, unique: false, required: false },
+    cli_next_pay_date: { type: Date, unique: false, require: false },
+    cli_additional_data: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Additional_Clients_Data", 
+      ref: "Additional_Clients_Data",
       required: false,
-    }, 
+    },
   });
 
   schema.set("toJSON", {
@@ -70,6 +70,8 @@ function rutinesModel() {
     rut_id: { type: Number, unique: true, required: true },
     rut_goal: { type: String, unique: false, required: true },
     rut_gender: { type: String, unique: false, required: true },
+    rut_min_age: { type: Number, unique: false, required: true },
+    rut_max_age: { type: Number, unique: false, required: true },
     rut_max_height: { type: Number, unique: false, required: true },
     rut_min_height: { type: Number, unique: false, required: true },
     rut_max_weight: { type: Number, unique: false, required: true },
