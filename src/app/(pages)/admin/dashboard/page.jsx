@@ -32,7 +32,7 @@ export default function Dashboard() {
       setClients(originalClients);
     } else {
       const response = await makeFetch(
-        `api/Filter/clients?filterType=${searchValue.toLowerCase()}`,
+        `/api/Filter/clients?filterType=${searchValue.toLowerCase()}`,
         "GET",
         ""
       );

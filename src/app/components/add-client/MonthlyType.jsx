@@ -22,25 +22,25 @@ const MonthlyType = ({ setValue, value }) => {
         >
           <input
             type="radio"
-            id={`value-${index + 1}`}
+            id={type}
             name="value-radio"
             onChange={(e) => setValue(e.target.value)}
-            checked={value === `value-${index + 1}`}
-            value={`value-${index + 1}`}
+            checked={value === type}
+            value={type}
             className="appearance-none w-4 h-4 rounded-full bg-gray-800 focus:outline-none cursor-pointer relative"
             required
           />
           <div className={`absolute w-full h-full rounded-lg transition-all duration-300 ease-in-out 
               bg-transparent border-2 border-transparent 
               hover:bg-[rgba(66,153,225,0.5)] 
-              ${value === `value-${index + 1}` ? "bg-[rgba(66,153,225,0.5)] border-blue-500" : ""}
+              ${value === type ? "bg-[rgba(66,153,225,0.5)] border-blue-500" : ""}
             `}></div>
           <div className={`absolute w-4 h-4 rounded-full bg-blue-500 transition-all duration-200 
-              ${value === `value-${index + 1}` ? "scale-100" : "scale-0"} 
+              ${value === type ? "scale-100" : "scale-0"} 
               flex items-center justify-center
             `}>
             <div className={`w-2 h-2 rounded-full bg-white transition-all duration-200 
-                ${value === `value-${index + 1}` ? "scale-100" : "scale-0"}
+                ${value === type ? "scale-100" : "scale-0"}
               `}></div>
           </div>
           <p className="text-white z-10">{type}</p>
