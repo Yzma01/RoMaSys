@@ -2,11 +2,14 @@ import express from "express";
 import { db } from "./api/db.js";
 import { clientsRepo } from "./api/CRUD/clients-repo.js";
 import { clientsFilter } from "./api/Filter/clients.js";
+import whatsapp from './apiWhatsApp/lib/whatsapp.js'
+import whatsappRoutes from  './apiWhatsApp/routes/links.js'
 
 const app = express();
 
 const PORT = process.env.PORT || 5000;
 
+app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
 
@@ -24,6 +27,15 @@ app.use((req, res, next) => {
 
 clientsFunctions();
 clientFilters();
+
+
+//!Las rutas de envio que usemos
+app.use('/apiWhatsApp/routes', whatsappRoutes);
+
+
+whatsapp.initialize();
+
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

@@ -1,4 +1,5 @@
 import { db } from "../db.js";
+import { makeFetch } from "../../../src/app/components/utils/fetch.js";
 
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
@@ -39,6 +40,7 @@ function calculateAge(body) {
   return age;
 }
 
+
 async function assignRutine(body) {
   console.log("asingRuntine")
 
@@ -54,19 +56,43 @@ async function assignRutine(body) {
 
   filter.rut_gender = (additionalData.cli_gender === "masculino" || additionalData.cli_gender === "femenino") 
                       ? additionalData.cli_gender 
-                      : "masculino"; //! Que coman mierdaaaaaaa las vacas
+                      : "masculino";
 
   console.log("El filtro: " , filter);
 
-  const rutineId = await Rutine.findOne(filter);
+  const rutine = await Rutine.findOne(filter);
 
-  if (!rutineId) {
+  if (!rutine) {
     console.log("No hay rutine");
-    console.log(rutineId);
+    console.log(rutine);
     return null; //!Podemos colocar alguna que sea general que sea la 1 en caso de que no se encuentre alguna
   }
 
-  return rutineId.rut_id;
+  return rutine;
+}
+
+async function sendRutine(body,rutine){
+
+  const messageData = {
+    "postalCode": "+506", //!Por ahora esta asi hasta que yzma pase el postal Code, seria body.postal_code
+    "phones": [body.cli_phone],
+    "mensaje": rutine
+  }
+  //const response = await makeFetch("/apiWhatsApp/routes/enviarMensaje", "POST", "", messageData);
+
+  const apiURL = "http://localhost:5000/apiWhatsApp/routes/enviarMensaje" //!Buscar una mejor solucion a esto y pasar a variable de entorno
+  const response =  await fetch(apiURL, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(messageData),
+    cache: "default",
+  });
+
+  const aux = response.status === 200 ? "Se envio la rutina" : "No se envio :(";
+  console.log("yayayayayaayay: " , aux)
 }
 
 //*Add client
@@ -77,17 +103,20 @@ async function addClient(req, res) {
     await userAlredyExists(body);
     await phoneAlredyInUse(body);
 
-    const rutineId = await assignRutine(body);
-    console.log("Rutina ✅😇" , rutineId)
+    const rutine = await assignRutine(body);
+    console.log("Rutina ✅😇" , rutine)
 
     const additionalData = await addAdditionalClientData(
       body.cli_additional_data,
-      rutineId
+      rutine.rut_id
     );
     body.cli_additional_data = additionalData._id;
 
     const client = new Client(body);
     await client.save();
+
+    //!aqui iamo 
+    await sendRutine(body,rutine.rut_rutine);
 
     res.status(201).json({ message: "Client saved!", client, additionalData });
   } catch (error) {
@@ -131,9 +160,9 @@ async function updateClient(req, res) {
         .status(406)
         .json({ message: `Phone "${body.cli_phone}" is already in use` });
     }
-    //!Cambiaaaaaaaaaaar cuando este lo de rutina
-    const rutineId = 1;
-    console.log("aaaaaaaaaaaaaa:", client.cli_additional_data);
+  
+    const rutineId = await assignRutine(body);
+
     const additionalData = await updateAdditionalClientData(
       body.cli_additional_data,
       client.cli_additional_data,
