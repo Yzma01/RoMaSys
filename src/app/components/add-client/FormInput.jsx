@@ -6,7 +6,10 @@ const FormInput = ({ value, placeholder, setValue }) => {
     <div className="relative w-full max-w-xs py-5 border-b-gray-200">
       <input
         type={
-          placeholder == "Teléfono" || placeholder == "Monto"
+          placeholder == "Teléfono" ||
+          placeholder == "Monto" ||
+          placeholder == "cm" ||
+          placeholder == "kg"
             ? "number"
             : "text"
         }
@@ -16,7 +19,7 @@ const FormInput = ({ value, placeholder, setValue }) => {
         onChange={(e) => setValue(e.target.value)}
         required
       />
-      {placeholder == "Teléfono" || placeholder == "Monto" ? (
+      {placeholder == "Teléfono" ? (
         <label
           htmlFor="name"
           className="absolute top-0 left-0 text-gray-500 peer-placeholder-shown:top-5 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-cyan-400 transition-all duration-200 pl-2"
@@ -34,7 +37,14 @@ const FormInput = ({ value, placeholder, setValue }) => {
           {placeholder}
         </label>
       )}
-      <svg width={placeholder == "Monto" ? "150" : "300"} height="10">
+      <svg
+        width={
+          placeholder == "Monto" || placeholder == "cm" || placeholder == "kg"
+            ? "150"
+            : "300"
+        }
+        height="10"
+      >
         <line x1="0" y1="0" x2="300" y2="0" stroke="white" strokeWidth="2" />
       </svg>
     </div>

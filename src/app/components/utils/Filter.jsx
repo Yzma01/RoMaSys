@@ -16,34 +16,28 @@ import {
 } from "../ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
-const frameworks = [
-  {
-    value: "dia",
-    label: "Dia",
-  },
-  {
-    value: "quincena",
-    label: "Quincena",
-  },
-  {
-    value: "mes",
-    label: "Mes",
-  },
-  {
-    value: "vencido",
-    label: "Vencidos",
-  },
-];
-
-export function Filter({ searchClientsByFilter }) {
+export function Filter({
+  searchClientsByFilter,
+  frameworks,
+  icon,
+  text,
+  className,
+  value,
+  setValue,
+}) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
 
   return (
     <Popover open={open} onOpenChange={setOpen} className="bg-transparent">
       <PopoverTrigger asChild>
         <button className="px-4 pl-3 h-10 bg-transparent cursor-pointer">
-          <TuneOutlinedIcon sx={{ color: "#6b7280" }} />
+          {icon ? (
+            <TuneOutlinedIcon sx={{ color: "#6b7280" }} />
+          ) : (
+            <div className={`w-fit h-fit ${className}`}>
+              {value == "" ? text : (value.length > 10? value.substring(0,10) + "...": value)}
+            </div>
+          )}
         </button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
@@ -57,9 +51,10 @@ export function Filter({ searchClientsByFilter }) {
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
-                    searchClientsByFilter(
-                      currentValue === value ? "" : currentValue
-                    );
+                    icon &&
+                      searchClientsByFilter(
+                        currentValue === value ? "" : currentValue
+                      );
                   }}
                 >
                   <Check

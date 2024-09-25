@@ -1,8 +1,28 @@
 import React, { useState } from "react";
 import { Filter } from "../utils/Filter";
 
+const frameworks = [
+  {
+    value: "dia",
+    label: "Dia",
+  },
+  {
+    value: "quincena",
+    label: "Quincena",
+  },
+  {
+    value: "mes",
+    label: "Mes",
+  },
+  {
+    value: "vencido",
+    label: "Vencidos",
+  },
+];
 const SearchBar = ({ searchClientsByFilter, searchByNameOrId }) => {
   const [searchValue, setSearchValue] = useState("");
+  const [value, setValue] = React.useState("");
+
   return (
     <div className="flex items-center justify-center h-10 bg-transparent rounded-lg overflow-hidden cursor-pointer pl-4 shadow-md border border-gray-3">
       <input
@@ -33,7 +53,13 @@ const SearchBar = ({ searchClientsByFilter, searchByNameOrId }) => {
 
       <div className="h-[40%] w-[1.3px] bg-gray-500"></div>
 
-      <Filter searchClientsByFilter={searchClientsByFilter} />
+      <Filter
+        searchClientsByFilter={searchClientsByFilter}
+        frameworks={frameworks}
+        icon={true}
+        value={value}
+        setValue={setValue}
+      />
     </div>
   );
 };

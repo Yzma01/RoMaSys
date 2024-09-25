@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
-const HasRutine = () => {
-  const [checked, setChecked] = useState(false);
-
+const HasRutine = ({checked, setChecked}) => {
   return (
     <div className="checkbox-wrapper flex items-center">
       <input
@@ -10,6 +8,7 @@ const HasRutine = () => {
         name="checkbox"
         type="checkbox"
         className="hidden"
+        value={checked}
         onChange={() => setChecked(!checked)}
       />
       <label className="terms-label cursor-pointer flex items-center" htmlFor="terms-checkbox-37">
