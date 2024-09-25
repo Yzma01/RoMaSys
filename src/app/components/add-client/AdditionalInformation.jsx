@@ -6,7 +6,6 @@ import FormInput from "./FormInput";
 import { Filter } from "../utils/Filter";
 import { DatePicker } from "./DatePicker";
 
-
 const goals = [
   {
     value: "Pérdida de peso",
@@ -64,7 +63,15 @@ const AdditionalInformation = ({
         </div>
         <div className="flex flex-col gap-2 pb-10">
           <Title title={"Fecha de Nacimiento"} />
-          <DatePicker date={date} setDate={setDate} />
+
+          <DatePicker
+            label="Event Date"
+            variant="bordered"
+            date={date}
+            setDate={setDate}
+            hideTimeZone
+            showMonthAndYearPickers
+          />
         </div>
       </div>
     </div>

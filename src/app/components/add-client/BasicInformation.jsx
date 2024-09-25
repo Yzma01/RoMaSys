@@ -128,7 +128,8 @@ const BasicInformation = ({
       "/api/CRUD/clients-repo",
       "POST",
       "",
-      body
+      body,
+      process.env.BASE_URL
     );
     validate(`${name} ha sido agregado.`, response.status, 201);
     validate(`El cliente cédula: ${id} ya existe.`, response.status, 401);
