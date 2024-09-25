@@ -1,5 +1,5 @@
 import { Router } from 'express';  
-import whatsapp from '../lib/whatsapp.js';
+import {whatsapp, isAuthenticated} from '../lib/whatsapp.js';
 
 const router = Router();
 
@@ -8,6 +8,10 @@ router.post('/enviarMensaje', async (req, res) => {
     console.log("Se recibio en api wasa:", req.body);
     
     const { postalCode, phones, mensaje } = req.body;
+
+    if (!isAuthenticated()) {
+      return res.status(403).json({ error: 'No autenticado. Por favor, verifica tu sesión de WhatsApp.' });
+    }
 
     if (!postalCode || !phones || !mensaje) {
       console.error('Faltan datos: postalCode, phones o mensaje');
@@ -18,6 +22,7 @@ router.post('/enviarMensaje', async (req, res) => {
       console.error('El campo phones debe ser un array no vacío');
       return res.status(400).json({ error: 'El campo phones debe ser un array no vacío' });
     }
+
 
     const results = [];
 
@@ -48,5 +53,8 @@ router.post('/enviarMensaje', async (req, res) => {
     return res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
+
+
+
 
 export default router;
