@@ -25,11 +25,11 @@ whatsapp.on('ready', () => {
 });
 
 whatsapp.on('authenticated', (session) => {
-    console.log('Cliente autenticado 👻', session);
+    console.log('Cliente autenticado 👻');
 });
 
 whatsapp.on('auth_failure', (msg) => {
-    console.error('Autenticacion falló 📡:', msg);
+    console.error('Autenticacion falló, contacte con los desarrolladores 📡:', msg);
 });
 
 whatsapp.on('disconnected', (reason) => {
