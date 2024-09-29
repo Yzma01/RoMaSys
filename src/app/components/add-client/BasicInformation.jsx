@@ -7,7 +7,7 @@ import Button from "../utils/Button";
 import { makeFetch } from "../utils/fetch";
 import { useToast } from "@/hooks/use-toast";
 
-const Title = ({ title }) => {
+export const Title = ({ title }) => {
   return (
     <p className="text-base sm:text-lg text-gray-3 font-bold -translate-x-10">
       {title}
@@ -15,7 +15,20 @@ const Title = ({ title }) => {
   );
 };
 
-const BasicInformation = () => {
+const BasicInformation = ({
+  routine,
+  setRoutine,
+  gender,
+  height,
+  weight,
+  goal,
+  birthdate,
+  setHeight,
+  setWeight,
+  setGoal,
+  setDate,
+  setGender,
+}) => {
   const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [lastname1, setLastname1] = useState("");
@@ -33,6 +46,11 @@ const BasicInformation = () => {
     setPhone("");
     setMothlyType("");
     setAmount("");
+    setRoutine(false);
+    setHeight("");
+    setWeight("");
+    setGoal("");
+    setDate("");
   };
 
   const validate = (message, status, code) => {
@@ -46,6 +64,10 @@ const BasicInformation = () => {
   };
 
   const verifiedNull = () => {
+    console.log(gender);
+    console.log(id);
+    console.log(name);
+    console.log(routine);
     if (
       id == "" ||
       name == "" ||
@@ -55,7 +77,26 @@ const BasicInformation = () => {
       monthlyType == "" ||
       amount == ""
     ) {
-      return true;
+      console.log("first");
+      if (routine) {
+        console.log("second");
+        console.log(gender)
+        console.log(weight)
+        console.log(height)
+        console.log(birthdate)
+        if (
+          height == "" ||
+          weight == "" ||
+          goal == "" ||
+          gender == "" ||
+          birthdate == undefined || birthdate == ""
+        ) {
+          console.log("third");
+          return true;
+        }
+      } else {
+        return true;
+      }
     }
   };
 
@@ -71,13 +112,14 @@ const BasicInformation = () => {
       cli_frozen: false,
       cli_remaining_days: 30,
       cli_register_date: new Date(),
-      cli_rutine: false,
       cli_next_pay_date: "2024-10-01T00:00:00.000Z",
-      cli_goals: "",
-      cli_gender: "",
-      cli_height: 0,
-      cli_weight: 0,
-      cli_birthdate: "",
+      cli_adittional_data: {
+        cli_goal: goal,
+        cli_gender: gender,
+        cli_height: height,
+        cli_weight: weight,
+        cli_birthdate: birthdate,
+      },
     };
     if (verifiedNull()) {
       toast({ description: "Por favor llene todos los campos." });
@@ -124,13 +166,19 @@ const BasicInformation = () => {
               placeholder={"Monto"}
               setValue={setAmount}
             />
-            <HasRutine />
+            <HasRutine checked={routine} setChecked={setRoutine} />
             <br />
-            <Button
-              onClick={(e) => handleSubmit(e)}
-              color={"green"}
-              text={"Guardar"}
-            />
+            <div
+              className={`${
+                routine && "items-center justify-center flex w-full"
+              }`}
+            >
+              <Button
+                onClick={(e) => handleSubmit(e)}
+                color={"green"}
+                text={"Guardar"}
+              />
+            </div>
           </div>
         </div>
       </form>

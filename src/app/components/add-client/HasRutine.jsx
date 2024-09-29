@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
-const HasRutine = () => {
-  const [checked, setChecked] = useState(false);
-
+const HasRutine = ({checked, setChecked}) => {
   return (
     <div className="checkbox-wrapper flex items-center">
       <input

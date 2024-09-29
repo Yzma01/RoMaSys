@@ -1,11 +1,13 @@
+const {nextui} = require('@nextui-org/theme');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{js,jsx}',
-    './components/**/*.{js,jsx}',
-    './app/**/*.{js,jsx}',
-    './src/**/*.{js,jsx}',
+    "./pages/**/*.{js,jsx}",
+    "./components/**/*.{js,jsx}",
+    './src/**/*.{js,jsx,ts,tsx}',
+    "./app/**/*.{js,jsx}",
+    "./src/**/*.{js,jsx}",
   ],
   prefix: "",
   theme: {
@@ -18,6 +20,10 @@ module.exports = {
     },
     extend: {
       colors: {
+        ring: {
+          DEFAULT: "hsl(var(--ring))",
+          400: "#60A5FA", // Color específico para el anillo azul
+        },
         adminBackground: "#222831",
         gray: {
           0:"#171717",
@@ -88,5 +94,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require(tailwindcss-animate),nextui()],
 }
