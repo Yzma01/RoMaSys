@@ -8,6 +8,7 @@ const HasRutine = ({checked, setChecked}) => {
         name="checkbox"
         type="checkbox"
         className="hidden"
+        value={checked}
         onChange={() => setChecked(!checked)}
       />
       <label className="terms-label cursor-pointer flex items-center" htmlFor="terms-checkbox-37">

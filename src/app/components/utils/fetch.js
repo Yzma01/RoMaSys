@@ -1,6 +1,6 @@
-export const makeFetch = async (url, method, params, body) => {
-  const baseUrl = "http://localhost:3000";
-  const apiURL = `${baseUrl + url}${params !== "" ? "/" + params : ""
+export const makeFetch = async (url, method, params, body, baseUrl) => {
+    const apiURL = `${baseUrl + url}${
+      params !== "" ? "/" + params : ""
     }`;
   const response = await fetch(apiURL, {
     method: method,

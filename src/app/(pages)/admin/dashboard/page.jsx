@@ -12,7 +12,7 @@ export default function Dashboard() {
   useEffect(() => {
     setClients([]);
     const getClients = async () => {
-      const response = await makeFetch("/api/CRUD/clients-repo", "GET", "");
+      const response = await makeFetch("/api/CRUD/clients-repo", "GET", "", process.env.BASE_URL);
       if (response.status === 200) {
         const data = await response.json();
         setClients(data);
@@ -34,7 +34,8 @@ export default function Dashboard() {
       const response = await makeFetch(
         `/api/Filter/clients?filterType=${searchValue.toLowerCase()}`,
         "GET",
-        ""
+        "",
+        process.env.BASE_URL
       );
       if (response.status === 200) {
         const data = await response.json();
