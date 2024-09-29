@@ -1,9 +1,11 @@
 import { db } from "../db.js";
-import { makeFetch } from "../../../src/app/components/utils/fetch.js";
+import { makeFetchWhatsapp } from "../../utils/fetchWhatsapp.js";
 
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
 const Rutine = db.Rutines;
+const MALE = "masculino";
+const FEMALE = "femenino";
 
 export const clientsRepo = {
   getClients,
@@ -41,25 +43,35 @@ function calculateAge(body) {
   return age;
 }
 
+function filterByAge(filter, age) {
+  filter.rut_min_age = { $lte: age };
+  filter.rut_max_age = { $gte: age };
+}
+
+function filterByGoal(filter, additionalData) {
+  filter.rut_goal = additionalData.cli_goal;
+}
+
+function filterByGender(filter, additionalData) {
+  filter.rut_gender =
+    additionalData.cli_gender === MALE ||
+    additionalData.cli_gender === FEMALE
+      ? additionalData.cli_gender
+      : MALE;
+}
+
 async function assignRutine(body) {
   const additionalData = body.cli_additional_data;
   let filter = {};
 
-  const age = calculateAge(body);
-  filter.rut_min_age = { $lte: age };
-  filter.rut_max_age = { $gte: age };
+  filterByAge(filter, calculateAge(body));
 
-  filter.rut_goal = additionalData.cli_goal;
+  filterByGoal(filter, additionalData);
 
-  filter.rut_gender =
-    additionalData.cli_gender === "masculino" ||
-    additionalData.cli_gender === "femenino"
-      ? additionalData.cli_gender
-      : "masculino";
+  filterByGender(filter, additionalData);
 
- 
   const rutine = await Rutine.findOne(filter);
-  
+
   if (!rutine) {
     return 1; //!Podemos colocar alguna que sea general que sea la 1 en caso de que no se encuentre alguna
   }
@@ -74,19 +86,15 @@ async function sendRutine(body, rutine) {
     mensaje: rutine,
   };
 
-  const apiURL = "http://localhost:5000/apiWhatsApp/routes/enviarMensaje"; //!Buscar una mejor solucion a esto y pasar a variable de entorno
-  const response = await fetch(apiURL, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(messageData),
-    cache: "default",
-  });
+  const response = await makeFetchWhatsapp(
+    "/apiWhatsApp/routes/enviarMensaje",
+    "POST",
+    "",
+    messageData
+  );
 
   const status = response.status === 200 ? 200 : 404; //! Eviar a izma un codigo de error cuando el numero no fue encontrado , para que lo muestre en pantalla y se den cuanta de ir a modificar el numero en el update cliente (posible)
-  console.log("yayayayayaayay: ", response.status);
+  console.log("Se envio el mensaje?:  ", response.status);
 }
 
 //*Add client
@@ -94,7 +102,7 @@ async function addClient(req, res) {
   const body = req.body;
 
   try {
-    await userAlredyExists(body);
+    await clientAlredyExists(body);
     await phoneAlredyInUse(body);
 
     const rutine = await assignRutine(body);
@@ -138,23 +146,9 @@ async function updateClient(req, res) {
 
   try {
     const client = await Client.findOne({ cli_id: cli_id });
-    if (!client) {
-      return res.status(404).json({ message: "Client not found" });
-    }
+    clientNotFound(client);
 
-    if (
-      body.cli_phone &&
-      (await Client.findOne({
-        cli_phone: body.cli_phone,
-        _id: { $ne: client._id },
-      }))
-    ) {
-      return res
-        .status(406)
-        .json({ message: `Phone "${body.cli_phone}" is already in use` });
-    }
-
-   // await validatePhone(body, client);
+    await validatePhone(body, client);
 
     const rutine = await assignRutine(body);
 
@@ -181,7 +175,6 @@ async function updateClient(req, res) {
   }
 }
 
-//*Update additional client data
 async function updateAdditionalClientData(body, clientObjectId, rutineId) {
   const additionalData = await AdditionalData.findOne({ _id: clientObjectId });
 
@@ -200,19 +193,18 @@ async function updateAdditionalClientData(body, clientObjectId, rutineId) {
   }
 }
 
-//*Delete client
 async function _deleteClient(req, res) {
   const cli_id = req.params.cli_id;
   try {
     const client = await Client.findOne({ cli_id: cli_id });
-    if (!client) {
-      return res.status(404).json({ message: "Client not found" });
-    }
+    clientNotFound(client);
 
+    //*Delete additional data
     if (client.cli_additional_data) {
       await AdditionalData.findByIdAndDelete(client.cli_additional_data);
     }
 
+    //*Delete client
     await Client.findOneAndDelete({ cli_id: cli_id });
     res.status(200).json({ message: "Client deleted successfully" });
   } catch (error) {
@@ -224,16 +216,16 @@ async function _deleteClient(req, res) {
 
 //? Verificaciones
 
-// async function validatePhone(body, client) {
-//   if (body.cli_phone &&
-//     (await Client.findOne({cli_phone: body.cli_phone, _id: { $ne: client._id },}))){
-//     return true
-//   }
-//   return false;
-// }
+function clientNotFound(client) {
+  if (!client) {
+    throw {
+      message: `"Client not found :(`,
+      status: 404,
+    };
+  }
+}
 
-//*Client alredy exists
-async function userAlredyExists(body) {
+async function clientAlredyExists(body) {
   if (await Client.findOne({ cli_id: body.cli_id })) {
     throw {
       message: 'User with ID "' + body.cli_id + '" already exists',
@@ -242,7 +234,6 @@ async function userAlredyExists(body) {
   }
 }
 
-//*Client phone alredy in use
 async function phoneAlredyInUse(body) {
   if (await Client.findOne({ cli_phone: body.cli_phone })) {
     throw {

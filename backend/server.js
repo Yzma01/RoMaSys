@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-//* Middleware para validar métodos HTTP
+//! Middleware para validar métodos HTTP
 app.use((req, res, next) => {
   const allowedMethods = ["GET", "POST", "PUT", "DELETE"];
   if (!allowedMethods.includes(req.method)) {
