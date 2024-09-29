@@ -13,7 +13,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
   return (
   <div
-  className="bg-blueDark text-white sticky h-screen flex flex-col transition-[width] duration-300 ease-in-out"
+  className="bg-blueDark border-r-2 text-white sticky h-full flex flex-col transition-[width] duration-300 ease-in-out"
   style={{ width: sidebarOpen ? "250px" : "90px" }}
 >
   <button
@@ -61,7 +61,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }) {
     ))}
   </div>
 
-  <div className="h-[1px] w-full bg-red-500 my-[24px]" />
+  <div className="h-[1px] w-full bg-white my-[24px]" />
 
   <div className="mb-4">
     <LogOut />

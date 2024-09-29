@@ -32,7 +32,7 @@ export default function Page() {
               "bg-transparent border-none outline-none w-full text-gray-300 mb-3",
             formFieldInputShowPasswordButton: "mb-3",
             formFieldLabel: "text-white",
-            formFieldAction: "text-red-900 hover:text-red-900", //buton forgot password
+            formFieldAction: "text-red-500 hover:text-red-600", //buton forgot password
 
             formFieldInputShowPasswordIcon: "text-white",
 
