@@ -116,7 +116,21 @@ function calculateNextPayDate(body) {
   return nextPaymentDate;
 }
 
-
+async function scheduleMessage(body) {
+  console.log("kakakak");
+  console.log("fecpagooooooo: ", calculateNextPayDate(body));
+  try {
+    const data = {
+      msg_client_id: body.cli_id,
+      msg_sent: false,
+      msg_next_payment_date: calculateNextPayDate(body),
+    };
+    const messagesAgenda = new MessagesAgenda(data);
+    await messagesAgenda.save();
+  } catch (error) {
+    throw new Error("Error schedule message: " + error.message);
+  }
+}
 //*Add client
 async function addClient(req, res) {
   const body = req.body;
