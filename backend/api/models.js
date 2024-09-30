@@ -21,7 +21,7 @@ function clientsModel() {
     cli_frozen: { type: Boolean, unique: false, required: false },
     cli_remaining_days: { type: Number, unique: false, required: false },
     cli_register_date: { type: Date, unique: false, required: true },
-    // cli_rutine:  { type: Boolean, unique: false, required: false },
+    cli_rutine:  { type: Boolean, unique: false, required: false },
     cli_next_pay_date: { type: Date, unique: false, require: false },
     cli_additional_data: {
       type: mongoose.Schema.Types.ObjectId,
@@ -92,7 +92,7 @@ function rutinesModel() {
 
 function paymentsModel() {
   const schema = new Schema({
-    pay_client_id: { type: String, unique: false, required: true },
+    pay_client_id: { type: String, unique: false, required: true },//!Porque esta como unico en false?
     pay_date: { type: Date, unique: false, required: true },
     pay_amount: { type: Number, unique: false, required: true },
     pay_monthly_payment_type: { type: String, unique: false, required: true },
@@ -111,8 +111,9 @@ function paymentsModel() {
 
 function messagesAgendaModel() {
   const schema = new Schema({
-    msg_client_id: { type: String, unique: false, required: true },
+    msg_client_id: { type: String, unique: false, required: true }, //!Porque esta como unico en false?
     msg_sent: { type: Boolean, unique: false, required: true },
+    // // msg_content: {type: String, unique: false, required: true},
     msg_next_payment_date: { type: Date, unique: false, required: false },
   });
 

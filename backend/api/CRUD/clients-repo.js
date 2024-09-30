@@ -4,8 +4,9 @@ import { makeFetchWhatsapp } from "../../utils/fetchWhatsapp.js";
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
 const Rutine = db.Rutines;
-const MALE = "masculino";
-const FEMALE = "femenino";
+const MessagesAgenda = db.MessagesAgenda;
+const GENDERS = ["masculino", "femenino"];
+const MONTHLY_PAYMENT_TYPE = ["mes","quincena","dia"];
 
 export const clientsRepo = {
   getClients,
@@ -54,10 +55,9 @@ function filterByGoal(filter, additionalData) {
 
 function filterByGender(filter, additionalData) {
   filter.rut_gender =
-    additionalData.cli_gender === MALE ||
-    additionalData.cli_gender === FEMALE
+    additionalData.cli_gender === GENDERS[0] || additionalData.cli_gender === GENDERS[1]
       ? additionalData.cli_gender
-      : MALE;
+      : GENDERS[0];
 }
 
 async function assignRutine(body) {
@@ -80,27 +80,48 @@ async function assignRutine(body) {
 }
 
 async function sendRutine(body, rutine) {
-  const messageData = {
-    postalCode: "+506", //!Por ahora esta asi hasta que yzma pase el postal Code, seria body.postal_code
-    phones: [body.cli_phone],
-    mensaje: rutine,
-  };
+  if (body.cli_rutine === true) {
+    const messageData = {
+      postalCode: "+506", //!Por ahora esta asi hasta que yzma pase el postal Code, seria body.postal_code
+      phones: [body.cli_phone],
+      mensaje: rutine,
+    };
 
-  const response = await makeFetchWhatsapp(
-    "/apiWhatsApp/routes/enviarMensaje",
-    "POST",
-    "",
-    messageData
-  );
+    const response = await makeFetchWhatsapp(
+      "/apiWhatsApp/routes/enviarMensaje",
+      "POST",
+      "",
+      messageData
+    );
 
-  const status = response.status === 200 ? 200 : 404; //! Eviar a izma un codigo de error cuando el numero no fue encontrado , para que lo muestre en pantalla y se den cuanta de ir a modificar el numero en el update cliente (posible)
-  console.log("Se envio el mensaje?:  ", response.status);
+    const status = response.status === 200 ? 200 : 404; //! Eviar a izma un codigo de error cuando el numero no fue encontrado , para que lo muestre en pantalla y se den cuanta de ir a modificar el numero en el update cliente (posible)
+    console.log("Se envio el mensaje?:  ", response.status);
+  }
 }
+
+function calculateNextPayDate(body) {
+  let today = new Date();
+  let nextPaymentDate = new Date(today);
+
+  if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[0]) {
+    nextPaymentDate.setDate(today.getDate() + 30);
+  }
+  if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[1]) {
+    nextPaymentDate.setDate(today.getDate() + 15);
+  }
+  if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[2]) {
+    nextPaymentDate.setDate(today.getDate() + 1);
+  }
+  console.log("la nueva fecha: ", nextPaymentDate);
+  return nextPaymentDate;
+}
+
 
 //*Add client
 async function addClient(req, res) {
   const body = req.body;
-
+  const today = new Date();
+  const registerDate = new Date(today);
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
@@ -114,8 +135,14 @@ async function addClient(req, res) {
     );
     body.cli_additional_data = additionalData._id;
 
+    body.cli_next_pay_date = calculateNextPayDate(body);
+
+    body.cli_register_date = registerDate;
+
     const client = new Client(body);
     await client.save();
+
+    await scheduleMessage(body);
 
     await sendRutine(body, rutine.rut_rutine);
 
@@ -162,7 +189,7 @@ async function updateClient(req, res) {
 
     Object.assign(client, body);
     await client.save();
-
+    
     await sendRutine(body, rutine.rut_rutine);
 
     res

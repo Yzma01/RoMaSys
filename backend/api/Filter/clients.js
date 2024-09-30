@@ -1,6 +1,7 @@
 import { db } from "../db.js";
 
 const Client = db.Clients;
+const OVERDUE = "vencido";
 
 export const clientsFilter = {
   getClientsByMonthlyType,
@@ -8,12 +9,11 @@ export const clientsFilter = {
 
 async function getClientsByMonthlyType(req, res) {
     const { filterType } = req.query;
-    const overdue = "vencido";
  
   try {
     let filter = {};
 
-    if (filterType != overdue) {
+    if (filterType != OVERDUE) {
       filter.cli_monthly_payment_type = filterType;
     }else{
         const currentDate = new Date();
