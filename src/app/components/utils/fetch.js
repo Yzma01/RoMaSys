@@ -1,5 +1,5 @@
 export const makeFetch = async (url, method, params, body) => {
-    const baseUrl = "http://localhost:3000"; //!Isma cambie esto a una variable de entorno
+    const baseUrl = "http://localhost:3000"; 
     const apiURL = `${baseUrl + url}${
       params !== "" ? "/" + params : ""
     }`;

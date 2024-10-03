@@ -92,7 +92,7 @@ function rutinesModel() {
 
 function paymentsModel() {
   const schema = new Schema({
-    pay_client_id: { type: String, unique: false, required: true },//!Porque esta como unico en false?
+    pay_client_id: { type: String, unique: false, required: true },
     pay_date: { type: Date, unique: false, required: true },
     pay_amount: { type: Number, unique: false, required: true },
     pay_monthly_payment_type: { type: String, unique: false, required: true },
@@ -111,7 +111,7 @@ function paymentsModel() {
 
 function messagesAgendaModel() {
   const schema = new Schema({
-    msg_client_id: { type: String, unique: true, required: true }, //!Porque estaba como unico en false?
+    msg_client_id: { type: String, unique: false, required: true },
     msg_sent: { type: Boolean, unique: false, required: true },
     // // msg_content: {type: String, unique: false, required: true},
     msg_next_payment_date: { type: Date, unique: false, required: false },

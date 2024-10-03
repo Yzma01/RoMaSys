@@ -6,7 +6,7 @@ const AdditionalData = db.AdditionalClientData;
 const Rutine = db.Rutines;
 const MessagesAgenda = db.MessagesAgenda;
 const GENDERS = ["masculino", "femenino"];
-const MONTHLY_PAYMENT_TYPE = ["mes","quincena","dia"];
+const MONTHLY_PAYMENT_TYPE = ["mes", "quincena", "dia"];
 
 export const clientsRepo = {
   getClients,
@@ -55,7 +55,8 @@ function filterByGoal(filter, additionalData) {
 
 function filterByGender(filter, additionalData) {
   filter.rut_gender =
-    additionalData.cli_gender === GENDERS[0] || additionalData.cli_gender === GENDERS[1]
+    additionalData.cli_gender === GENDERS[0] ||
+    additionalData.cli_gender === GENDERS[1]
       ? additionalData.cli_gender
       : GENDERS[0];
 }
@@ -180,6 +181,57 @@ async function addAdditionalClientData(body, rutineId) {
   }
 }
 
+function frozenClient(body, client) {  
+  if (body.cli_frozen) {
+    try {
+      const today = new Date();
+      const nextPayDate = new Date(client.cli_next_pay_date);
+
+      today.setHours(0, 0, 0, 0);
+      nextPayDate.setHours(0, 0, 0, 0);
+
+      if (today < nextPayDate) {
+        const diferenciaMilisegundos = nextPayDate - today;
+        const milisegundosPorDia = 1000 * 60 * 60 * 24;
+
+        console.log("🐕🐕: ", diferenciaMilisegundos / milisegundosPorDia);
+        body.cli_remaining_days = diferenciaMilisegundos / milisegundosPorDia;
+        console.log("Se congelo 🥶");
+      } else {
+        //!Hacer el else, que la fecha actual se mayor a la sigueinte fecha de pago
+        //!Seria que un cliente con mesualidad vencida intente congelar
+        //!ver si dejo el try-catch
+        console.log("que paho😷");
+      }
+    } catch (error) {
+      throw {
+        message: `Error frozen client`,
+        status: 400,
+      };
+    }
+  }
+}
+
+function unfreezeClient(body, client) {
+  if (body.cli_frozen === false && body.cli_remaining_days > 0) {
+    try {
+      const today = new Date();
+
+      today.setDate(today.getDate() + client.cli_remaining_days);
+
+      console.log("comooooooo: ", today);
+      body.cli_next_pay_date = today;  
+      body.cli_remaining_days = 0;
+      console.log("Se le sumaron los dias 🙋‍♂️|");
+    } catch (error) {
+      throw {
+        message: `Error unfreeze client`,
+        status: 400,
+      };
+    }
+  }
+}
+
 //*Update client
 async function updateClient(req, res) {
   const cli_id = req.params.cli_id;
@@ -200,10 +252,16 @@ async function updateClient(req, res) {
     );
 
     body.cli_additional_data = additionalData._id;
+    body.cli_register_date = client.cli_register_date; //!Si no es necesario quitarlo del postman, si yzma no lo envia quitarlo
+    body.cli_next_pay_date = client.cli_next_pay_date //!Tambien se podria quitar para no esperarlo, pero quiza es mejo que quede para escabilidad
+
+    frozenClient(body, client);
+
+    unfreezeClient(body, client);
 
     Object.assign(client, body);
     await client.save();
-    
+
     await sendRutine(body, rutine.rut_rutine);
 
     res
