@@ -4,8 +4,9 @@ import { makeFetchWhatsapp } from "../../utils/fetchWhatsapp.js";
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
 const Rutine = db.Rutines;
-const MALE = "masculino";
-const FEMALE = "femenino";
+const MessagesAgenda = db.MessagesAgenda;
+const GENDERS = ["masculino", "femenino"];
+const MONTHLY_PAYMENT_TYPE = ["mes", "quincena", "dia"];
 
 export const clientsRepo = {
   getClients,
@@ -54,10 +55,10 @@ function filterByGoal(filter, additionalData) {
 
 function filterByGender(filter, additionalData) {
   filter.rut_gender =
-    additionalData.cli_gender === MALE ||
-    additionalData.cli_gender === FEMALE
+    additionalData.cli_gender === GENDERS[0] ||
+    additionalData.cli_gender === GENDERS[1]
       ? additionalData.cli_gender
-      : MALE;
+      : GENDERS[0];
 }
 
 async function assignRutine(body) {
@@ -80,27 +81,62 @@ async function assignRutine(body) {
 }
 
 async function sendRutine(body, rutine) {
-  const messageData = {
-    postalCode: "+506", //!Por ahora esta asi hasta que yzma pase el postal Code, seria body.postal_code
-    phones: [body.cli_phone],
-    mensaje: rutine,
-  };
+  if (body.cli_rutine === true) {
+    const messageData = {
+      postalCode: "+506", //!Por ahora esta asi hasta que yzma pase el postal Code, seria body.postal_code
+      phones: [body.cli_phone],
+      mensaje: rutine,
+    };
 
-  const response = await makeFetchWhatsapp(
-    "/apiWhatsApp/routes/enviarMensaje",
-    "POST",
-    "",
-    messageData
-  );
+    const response = await makeFetchWhatsapp(
+      "/apiWhatsApp/routes/enviarMensaje",
+      "POST",
+      "",
+      messageData
+    );
 
-  const status = response.status === 200 ? 200 : 404; //! Eviar a izma un codigo de error cuando el numero no fue encontrado , para que lo muestre en pantalla y se den cuanta de ir a modificar el numero en el update cliente (posible)
-  console.log("Se envio el mensaje?:  ", response.status);
+    const status = response.status === 200 ? 200 : 404; //! Eviar a izma un codigo de error cuando el numero no fue encontrado , para que lo muestre en pantalla y se den cuanta de ir a modificar el numero en el update cliente (posible)
+    console.log("Se envio el mensaje?:  ", response.status);
+  }
 }
 
+function calculateNextPayDate(body) {
+  let today = new Date();
+  let nextPaymentDate = new Date(today);
+
+  if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[0]) {
+    nextPaymentDate.setDate(today.getDate() + 30);
+  }
+  if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[1]) {
+    nextPaymentDate.setDate(today.getDate() + 15);
+  }
+  if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[2]) {
+    nextPaymentDate.setDate(today.getDate() + 1);
+  }
+  console.log("la nueva fecha: ", nextPaymentDate);
+  return nextPaymentDate;
+}
+
+async function scheduleMessage(body) {
+  console.log("kakakak");
+  console.log("fecpagooooooo: ", calculateNextPayDate(body));
+  try {
+    const data = {
+      msg_client_id: body.cli_id,
+      msg_sent: false,
+      msg_next_payment_date: calculateNextPayDate(body),
+    };
+    const messagesAgenda = new MessagesAgenda(data);
+    await messagesAgenda.save();
+  } catch (error) {
+    throw new Error("Error schedule message: " + error.message);
+  }
+}
 //*Add client
 async function addClient(req, res) {
   const body = req.body;
-
+  const today = new Date();
+  const registerDate = new Date(today);
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
@@ -114,8 +150,14 @@ async function addClient(req, res) {
     );
     body.cli_additional_data = additionalData._id;
 
+    body.cli_next_pay_date = calculateNextPayDate(body);
+
+    body.cli_register_date = registerDate;
+
     const client = new Client(body);
     await client.save();
+
+    await scheduleMessage(body);
 
     await sendRutine(body, rutine.rut_rutine);
 
@@ -139,6 +181,62 @@ async function addAdditionalClientData(body, rutineId) {
   }
 }
 
+function frozenClient(body, client) {  
+  if (body.cli_frozen) {
+   // try {
+      const today = new Date();
+      const nextPayDate = new Date(client.cli_next_pay_date);
+
+      today.setHours(0, 0, 0, 0);
+      nextPayDate.setHours(0, 0, 0, 0);
+
+      if (today < nextPayDate) {
+        const diferenciaMilisegundos = nextPayDate - today;
+        const milisegundosPorDia = 1000 * 60 * 60 * 24;
+
+        console.log("🐕🐕: ", diferenciaMilisegundos / milisegundosPorDia);
+        body.cli_remaining_days = diferenciaMilisegundos / milisegundosPorDia;
+        console.log("Se congelo 🥶");
+      } else {
+        //!Hacer el else, que la fecha actual se mayor a la sigueinte fecha de pago
+        //!Seria que un cliente con mesualidad vencida intente congelar
+        //!ver si dejo el try-catch
+        console.log("que paho😷");
+        throw {
+          message: `Monthly payment due `,
+          status: 402,
+        }; 
+
+      }
+    // } catch (error) {
+    //   throw {
+    //     message: `Error frozen client`,
+    //     status: 402,
+    //   }; 
+    // }
+  }
+}
+
+function unfreezeClient(body, client) {
+  if (body.cli_frozen === false && body.cli_remaining_days > 0) {
+    try {
+      const today = new Date();
+
+      today.setDate(today.getDate() + client.cli_remaining_days);
+
+      console.log("comooooooo: ", today);
+      body.cli_next_pay_date = today;  
+      body.cli_remaining_days = 0;
+      console.log("Se le sumaron los dias 🙋‍♂️|");
+    } catch (error) {
+      throw {
+        message: `Error unfreeze client`,
+        status: 400,
+      };
+    }
+  }
+}
+
 //*Update client
 async function updateClient(req, res) {
   const cli_id = req.params.cli_id;
@@ -159,6 +257,12 @@ async function updateClient(req, res) {
     );
 
     body.cli_additional_data = additionalData._id;
+    body.cli_register_date = client.cli_register_date; //!Si no es necesario quitarlo del postman, si yzma no lo envia quitarlo
+    body.cli_next_pay_date = calculateNextPayDate(body);//!Tambien se podria quitar para no esperarlo, pero quiza es mejo que quede para escabilidad
+
+    frozenClient(body, client);
+
+    unfreezeClient(body, client);
 
     Object.assign(client, body);
     await client.save();
@@ -167,11 +271,11 @@ async function updateClient(req, res) {
 
     res
       .status(200)
-      .json({ message: "Client updated successfully", client, additionalData });
+      .json({ message: "Client updated successfully ", client, additionalData });
   } catch (error) {
     res
       .status(error.status || 500)
-      .json({ message: "Error updating clients" + error.message });
+      .json({ message: "Error updating clients " + error.message });
   }
 }
 
