@@ -183,7 +183,7 @@ async function addAdditionalClientData(body, rutineId) {
 
 function frozenClient(body, client) {  
   if (body.cli_frozen) {
-    try {
+   // try {
       const today = new Date();
       const nextPayDate = new Date(client.cli_next_pay_date);
 
@@ -202,13 +202,18 @@ function frozenClient(body, client) {
         //!Seria que un cliente con mesualidad vencida intente congelar
         //!ver si dejo el try-catch
         console.log("que paho😷");
+        throw {
+          message: `Monthly payment due `,
+          status: 402,
+        }; 
+
       }
-    } catch (error) {
-      throw {
-        message: `Error frozen client`,
-        status: 400,
-      };
-    }
+    // } catch (error) {
+    //   throw {
+    //     message: `Error frozen client`,
+    //     status: 402,
+    //   }; 
+    // }
   }
 }
 
@@ -253,7 +258,7 @@ async function updateClient(req, res) {
 
     body.cli_additional_data = additionalData._id;
     body.cli_register_date = client.cli_register_date; //!Si no es necesario quitarlo del postman, si yzma no lo envia quitarlo
-    body.cli_next_pay_date = client.cli_next_pay_date //!Tambien se podria quitar para no esperarlo, pero quiza es mejo que quede para escabilidad
+    body.cli_next_pay_date = calculateNextPayDate(body);//!Tambien se podria quitar para no esperarlo, pero quiza es mejo que quede para escabilidad
 
     frozenClient(body, client);
 
@@ -266,11 +271,11 @@ async function updateClient(req, res) {
 
     res
       .status(200)
-      .json({ message: "Client updated successfully", client, additionalData });
+      .json({ message: "Client updated successfully ", client, additionalData });
   } catch (error) {
     res
       .status(error.status || 500)
-      .json({ message: "Error updating clients" + error.message });
+      .json({ message: "Error updating clients " + error.message });
   }
 }
 
