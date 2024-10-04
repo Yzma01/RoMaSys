@@ -13,15 +13,15 @@ export default function AddClient() {
   const [date, setDate] = useState("");
   const [gender, setGender] = useState("");
   return (
-    <AnimatePresence>
-      <motion.div
-        className="overflow-hidden"
-        initial={{ height: 0, opacity: 0 }}
-        animate={{ height: "auto", opacity: 1 }}
-        exit={{ height: 0, opacity: 0 }}
-        transition={{ duration: 1.5 }}
-      >
-        <div className="bg-adminBackground flex items-center justify-center min-h-screen w-full">
+    <div className="bg-adminBackground flex items-center justify-center h-[100vh] w-full">
+      <AnimatePresence>
+        <motion.div
+          className="overflow-hidden"
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 1.5 }}
+        >
           <div className="flex flex-col  text-white p-5 w-fit">
             <h1 className="text-xl sm:text-2xl mb-2 font-bold">
               Agregar Usuario
@@ -62,8 +62,8 @@ export default function AddClient() {
               </section>
             </div>
           </div>
-        </div>
-      </motion.div>
-    </AnimatePresence>
+        </motion.div>
+      </AnimatePresence>
+    </div>
   );
 }

@@ -12,7 +12,12 @@ export default function Dashboard() {
   useEffect(() => {
     setClients([]);
     const getClients = async () => {
-      const response = await makeFetch("/api/CRUD/clients-repo", "GET", "", process.env.BASE_URL);
+      const response = await makeFetch(
+        "/api/CRUD/clients-repo",
+        "GET",
+        "",
+        process.env.BASE_URL
+      );
       if (response.status === 200) {
         const data = await response.json();
         setClients(data);
@@ -61,16 +66,16 @@ export default function Dashboard() {
     }
   };
   return (
-    <AnimatePresence>
-      <motion.div
-        className="overflow-hidden"
-        initial={{ height: 0, opacity: 0 }}
-        animate={{ height: "auto", opacity: 1 }}
-        exit={{ height: 0, opacity: 0 }}
-        transition={{ duration: 1.5 }}
-      >
-        <div>
-          <div className="flex items-center justify-center min-h-screen text-white">
+    <div>
+      <div className="flex items-center justify-center h-[100vh] text-white">
+        <AnimatePresence>
+          <motion.div
+            className="overflow-hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 1.5 }}
+          >
             <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 max-w-full w-full h-auto mx-4 md:mx-8 lg:mx-16">
               <section>
                 <header className="flex flex-col sm:flex-row items-center justify-between">
@@ -92,9 +97,9 @@ export default function Dashboard() {
                 <ClientsTable clients={clients} />
               </section>
             </div>
-          </div>
-        </div>
-      </motion.div>
-    </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
   );
 }
