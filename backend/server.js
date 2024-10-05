@@ -4,10 +4,18 @@ import { clientsRepo } from "./api/CRUD/clients-repo.js";
 import { clientsFilter } from "./api/Filter/clients.js";
 import { whatsapp }  from './apiWhatsApp/lib/whatsapp.js';
 import router from './apiWhatsApp/routes/links.js';
+import cors from "cors";
 
 const app = express();
 
 const PORT = process.env.PORT || 5000;
+
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

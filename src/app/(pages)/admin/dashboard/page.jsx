@@ -16,8 +16,9 @@ export default function Dashboard() {
         "/api/CRUD/clients-repo",
         "GET",
         "",
-        process.env.BASE_URL
       );
+      console.log(process.env.BASE_URL)
+      console.log("puto jorge")
       if (response.status === 200) {
         const data = await response.json();
         setClients(data);
@@ -40,7 +41,6 @@ export default function Dashboard() {
         `/api/Filter/clients?filterType=${searchValue.toLowerCase()}`,
         "GET",
         "",
-        process.env.BASE_URL
       );
       if (response.status === 200) {
         const data = await response.json();
@@ -67,7 +67,7 @@ export default function Dashboard() {
   };
   return (
     <div>
-      <div className="flex items-center justify-center h-[100vh] text-white">
+      <div className="h-[100vh] text-white">
         <AnimatePresence>
           <motion.div
             className="overflow-hidden"
@@ -76,6 +76,8 @@ export default function Dashboard() {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 1.5 }}
           >
+            <div className="flex items-center justify-center h-[100vh] text-white">
+
             <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 max-w-full w-full h-auto mx-4 md:mx-8 lg:mx-16">
               <section>
                 <header className="flex flex-col sm:flex-row items-center justify-between">
@@ -96,6 +98,7 @@ export default function Dashboard() {
                 </header>
                 <ClientsTable clients={clients} />
               </section>
+            </div>
             </div>
           </motion.div>
         </AnimatePresence>

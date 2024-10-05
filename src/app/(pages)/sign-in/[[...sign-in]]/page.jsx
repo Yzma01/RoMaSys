@@ -2,7 +2,7 @@ import { SignIn } from "@clerk/nextjs";
 
 export default function Page() {
   return (
-    <div className="bg-[#222831] flex flex-col items-center h-screen">
+    <div className="bg-adminBackground flex flex-col items-center h-screen">
       <div className="flex flex-grow items-center justify-center">
       <SignIn
         appearance={{
@@ -21,8 +21,8 @@ export default function Page() {
             footerActionLink: "hidden",
             dividerText: "hidden",
 
-            rootBox: "bg-adminBackground",
-            cardBox: "bg-red-900",
+            rootBox: "bg-[#161A23]",
+            cardBox: "bg-gray-600",
             card: "flex flex-col gap-2 pl-8 pr-8 pb-4 bg-gray-1 rounded-2xl transition-transform duration-400 ease-in-out hover:scale-105 hover:border-black hover:border",
 
             form: "flex gap-0",
@@ -37,10 +37,10 @@ export default function Page() {
             formFieldInputShowPasswordIcon: "text-white",
 
             formButtonPrimary:
-              "flex justify-center mt-3 bg-[#252525] text-white p-2 rounded-lg transition duration-400 ease-in-out hover:bg-red-900 hover:text-white w-auto",
+              "flex justify-center mt-3 bg-[#161A23] text-white p-2 rounded-lg transition duration-400 ease-in-out hover:bg-red-900 hover:text-white w-auto",
 
             alternativeMethodsBlockButton:
-              "flex justify-center mt-2 bg-[#252525] text-white p-2 rounded-lg transition duration-400 ease-in-out hover:bg-red-900 hover:text-white w-auto",
+              "flex justify-center mt-2 bg-[#161A23] text-white p-2 rounded-lg transition duration-400 ease-in-out hover:bg-red-900 hover:text-white w-auto",
 
             alternativeMethodsBlockButtonText: "text-gray-400",
 

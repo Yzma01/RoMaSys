@@ -2,6 +2,9 @@
 
 const nextConfig = {
   reactStrictMode: true,
+  env: {
+    BASE_URL: process.env.BASE_URL || "http://localhost:5000",
+  },
   
   // Configuración para las variables de entorno
   serverRuntimeConfig: {
