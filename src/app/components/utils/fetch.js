@@ -1,5 +1,6 @@
+
 export const makeFetch = async (url, method, params, body) => {
-    const baseUrl = process.env.BASE_URL || "http://localhost:3000";
+    const baseUrl = process.env.BASE_URL; // || "http://localhost:3000";
     const apiURL = `${baseUrl + url}${
       params !== "" ? "/" + params : ""
     }`;
