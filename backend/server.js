@@ -32,7 +32,7 @@ clientFilters();
 app.use("/apiWhatsApp/routes", router);
 
 //* Inicializa el cliente de WhatsApp
-//whatsapp.initialize();
+whatsapp.initialize();
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

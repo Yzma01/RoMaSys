@@ -64,11 +64,11 @@ function filterByGender(filter, additionalData) {
 async function assignRutine(body) {
   const additionalData = body.cli_additional_data;
   let filter = {};
-
+  console.log("que es?");
   filterByAge(filter, calculateAge(body));
-
+  console.log("mose");
   filterByGoal(filter, additionalData);
-
+  console.log("toy loccco");
   filterByGender(filter, additionalData);
 
   const rutine = await Rutine.findOne(filter);
@@ -82,21 +82,28 @@ async function assignRutine(body) {
 
 async function sendRutine(body, rutine) {
   if (body.cli_rutine === true) {
-    const messageData = {
-      postalCode: "+506", //!Por ahora esta asi hasta que yzma pase el postal Code, seria body.postal_code
-      phones: [body.cli_phone],
-      mensaje: rutine,
-    };
+    try {
+      const messageData = {
+        postalCode: "+506", //!Por ahora esta asi hasta que yzma pase el postal Code, seria body.postal_code
+        phones: [body.cli_phone],
+        mensaje: rutine,
+      };
 
-    const response = await makeFetchWhatsapp(
-      "/apiWhatsApp/routes/enviarMensaje",
-      "POST",
-      "",
-      messageData
-    );
-
-    const status = response.status === 200 ? 200 : 404; //! Eviar a izma un codigo de error cuando el numero no fue encontrado , para que lo muestre en pantalla y se den cuanta de ir a modificar el numero en el update cliente (posible)
-    console.log("Se envio el mensaje?:  ", response.status);
+      const response = await makeFetchWhatsapp(
+        "/apiWhatsApp/routes/enviarMensaje",
+        "POST",
+        "",
+        messageData
+      );
+      //Todo: Luego probar otro throw pa este caso
+      const status = response.status === 200 ? 200 : 404; //! Eviar a izma un codigo de error cuando el numero no fue encontrado , para que lo muestre en pantalla y se den cuanta de ir a modificar el numero en el update cliente (posible)
+      console.log("Se envio el mensaje?:  ", response.status);
+    } catch (error) {
+      throw {
+        message: `Error sending message: ${error.message}`,
+        status: 408,
+      };
+    }
   }
 }
 
@@ -113,13 +120,11 @@ function calculateNextPayDate(body) {
   if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[2]) {
     nextPaymentDate.setDate(today.getDate() + 1);
   }
-  console.log("la nueva fecha: ", nextPaymentDate);
+
   return nextPaymentDate;
 }
 
 async function scheduleMessage(body) {
-  console.log("kakakak");
-  console.log("fecpagooooooo: ", calculateNextPayDate(body));
   try {
     const data = {
       msg_client_id: body.cli_id,
@@ -129,39 +134,46 @@ async function scheduleMessage(body) {
     const messagesAgenda = new MessagesAgenda(data);
     await messagesAgenda.save();
   } catch (error) {
-    throw new Error("Error schedule message: " + error.message);
+    throw {
+      message: `Error schedule message: ${error.message}`,
+      status: 428,
+    };
   }
 }
+
 //*Add client
 async function addClient(req, res) {
   const body = req.body;
   const today = new Date();
-  const registerDate = new Date(today);
+  console.log(body);
   try {
     await clientAlredyExists(body);
+
     await phoneAlredyInUse(body);
-
-    const rutine = await assignRutine(body);
-    console.log("Rutina ✅😇", rutine);
-
-    const additionalData = await addAdditionalClientData(
-      body.cli_additional_data,
-      rutine.rut_id
-    );
-    body.cli_additional_data = additionalData._id;
 
     body.cli_next_pay_date = calculateNextPayDate(body);
 
-    body.cli_register_date = registerDate;
+    body.cli_register_date = today;
+
+    if (body.cli_rutine === true) {
+
+      const rutine = await assignRutine(body);
+
+      const additionalData = await addAdditionalClientData(
+        body.cli_additional_data,
+        rutine.rut_id
+      );
+      body.cli_additional_data = additionalData._id;
+
+      await sendRutine(body, rutine.rut_rutine); //!Si falla al enviar la rutina es porque iba despues de guardar cliente
+    }
 
     const client = new Client(body);
     await client.save();
 
     await scheduleMessage(body);
 
-    await sendRutine(body, rutine.rut_rutine);
-
-    res.status(201).json({ message: "Client saved!", client, additionalData });
+    res.status(201).json({ message: "Client saved!", client });
   } catch (error) {
     res
       .status(error.status || 500)
@@ -177,43 +189,35 @@ async function addAdditionalClientData(body, rutineId) {
     await additionalData.save();
     return additionalData;
   } catch (error) {
-    throw new Error("Error saving additional client data: " + error.message);
+    throw {
+      message: `Error saving additional client data: " + ${error.message}`,
+      status: 400,
+    };
   }
 }
 
-function frozenClient(body, client) {  
+function frozenClient(body, client) {
   if (body.cli_frozen) {
-   // try {
-      const today = new Date();
-      const nextPayDate = new Date(client.cli_next_pay_date);
+    const today = new Date();
+    const nextPayDate = new Date(client.cli_next_pay_date);
 
-      today.setHours(0, 0, 0, 0);
-      nextPayDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    nextPayDate.setHours(0, 0, 0, 0);
 
-      if (today < nextPayDate) {
-        const diferenciaMilisegundos = nextPayDate - today;
-        const milisegundosPorDia = 1000 * 60 * 60 * 24;
-
-        console.log("🐕🐕: ", diferenciaMilisegundos / milisegundosPorDia);
-        body.cli_remaining_days = diferenciaMilisegundos / milisegundosPorDia;
-        console.log("Se congelo 🥶");
-      } else {
-        //!Hacer el else, que la fecha actual se mayor a la sigueinte fecha de pago
-        //!Seria que un cliente con mesualidad vencida intente congelar
-        //!ver si dejo el try-catch
-        console.log("que paho😷");
-        throw {
-          message: `Monthly payment due `,
-          status: 402,
-        }; 
-
-      }
-    // } catch (error) {
-    //   throw {
-    //     message: `Error frozen client`,
-    //     status: 402,
-    //   }; 
-    // }
+    if (today < nextPayDate) {
+      const diferenciaMilisegundos = nextPayDate - today;
+      const milisegundosPorDia = 1000 * 60 * 60 * 24;
+      body.cli_remaining_days = diferenciaMilisegundos / milisegundosPorDia;
+      console.log("Se congelo 🥶");
+    } else {
+      //!Seria que un cliente con mesualidad vencida intente congelar
+      //!ver si dejo el try-catch
+      console.log("que paho😷");
+      throw {
+        message: `Monthly payment due `,
+        status: 402,
+      };
+    }
   }
 }
 
@@ -221,13 +225,9 @@ function unfreezeClient(body, client) {
   if (body.cli_frozen === false && body.cli_remaining_days > 0) {
     try {
       const today = new Date();
-
       today.setDate(today.getDate() + client.cli_remaining_days);
-
-      console.log("comooooooo: ", today);
-      body.cli_next_pay_date = today;  
+      body.cli_next_pay_date = today;
       body.cli_remaining_days = 0;
-      console.log("Se le sumaron los dias 🙋‍♂️|");
     } catch (error) {
       throw {
         message: `Error unfreeze client`,
@@ -257,8 +257,8 @@ async function updateClient(req, res) {
     );
 
     body.cli_additional_data = additionalData._id;
-    body.cli_register_date = client.cli_register_date; //!Si no es necesario quitarlo del postman, si yzma no lo envia quitarlo
-    body.cli_next_pay_date = calculateNextPayDate(body);//!Tambien se podria quitar para no esperarlo, pero quiza es mejo que quede para escabilidad
+    body.cli_register_date = client.cli_register_date;
+    body.cli_next_pay_date = calculateNextPayDate(body); //!Tambien se podria quitar para no esperarlo, pero quiza es mejo que quede para escabilidad
 
     frozenClient(body, client);
 
@@ -269,9 +269,11 @@ async function updateClient(req, res) {
 
     await sendRutine(body, rutine.rut_rutine);
 
-    res
-      .status(200)
-      .json({ message: "Client updated successfully ", client, additionalData });
+    res.status(200).json({
+      message: "Client updated successfully ",
+      client,
+      additionalData,
+    });
   } catch (error) {
     res
       .status(error.status || 500)
