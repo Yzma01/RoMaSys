@@ -110,10 +110,10 @@ const BasicInformation = ({
       cli_monthly_payment_type: monthlyType.toLowerCase(),
       cli_phone: phone,
       cli_frozen: false,
-      cli_remaining_days: 30,
+      cli_remaining_days: 0,
       cli_register_date: new Date(),
       cli_next_pay_date: "2024-10-01T00:00:00.000Z",
-      cli_adittional_data: {
+      cli_adittional_data: !routine ? null: {
         cli_goal: goal,
         cli_gender: gender,
         cli_height: height,
@@ -124,13 +124,14 @@ const BasicInformation = ({
     if (verifiedNull()) {
       toast({ description: "Por favor llene todos los campos." });
     }
+    console.log(body)
     const response = await makeFetch(
       "/api/CRUD/clients-repo",
       "POST",
       "",
-      body,
-      process.env.BASE_URL
+      body
     );
+    console.log(response)
     validate(`${name} ha sido agregado.`, response.status, 201);
     validate(`El cliente cédula: ${id} ya existe.`, response.status, 401);
     validate(

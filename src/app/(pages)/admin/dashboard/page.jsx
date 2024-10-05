@@ -5,10 +5,12 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { makeFetch } from "@/src/app/components/utils/fetch";
 import { AnimatePresence, motion } from "framer-motion";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Dashboard() {
   const [clients, setClients] = useState([]);
   const [originalClients, setOriginalClients] = useState([]);
+  const { toast } = useToast();
   useEffect(() => {
     setClients([]);
     const getClients = async () => {
@@ -25,7 +27,7 @@ export default function Dashboard() {
         setOriginalClients(data);
       }
       if (response.status === 500) {
-        alert("Error de conexión, si el problema persiste contacte a soporte");
+        toast("Error de conexión, si el problema persiste contacte a soporte");
       }
     };
     getClients();
