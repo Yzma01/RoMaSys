@@ -1,5 +1,5 @@
 export const makeFetchWhatsapp = async (url, method, params, body) => {
-    const baseUrl = process.env.BASE_URL_WHATSAPP; // "http://localhost:5000"; //!Cambiar estoooooooooooooooooooooooooooooooooooo
+    const baseUrl = process.env.BASE_URL_WHATSAPP; // "http://localhost:5000";
     const apiURL = `${baseUrl + url}${
       params !== "" ? "/" + params : ""
     }`;
