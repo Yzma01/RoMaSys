@@ -145,26 +145,22 @@ async function scheduleMessage(body) {
 async function addClient(req, res) {
   const body = req.body;
   const today = new Date();
-  console.log(body);
+
+  console.log(body); //!quitar
   try {
     await clientAlredyExists(body);
-
     await phoneAlredyInUse(body);
 
     body.cli_next_pay_date = calculateNextPayDate(body);
-
     body.cli_register_date = today;
 
     if (body.cli_rutine === true) {
-
       const rutine = await assignRutine(body);
-
       const additionalData = await addAdditionalClientData(
         body.cli_additional_data,
         rutine.rut_id
       );
       body.cli_additional_data = additionalData._id;
-
       await sendRutine(body, rutine.rut_rutine); //!Si falla al enviar la rutina es porque iba despues de guardar cliente
     }
 
@@ -238,8 +234,8 @@ function unfreezeClient(body, client) {
 }
 
 //*Update client
-async function updateClient(req, res) {
-  const cli_id = req.params.cli_id;
+async function updateClient(req, res, cli_id) {
+  //const cli_id = req.params.cli_id;
   const body = req.body;
 
   try {
@@ -299,8 +295,8 @@ async function updateAdditionalClientData(body, clientObjectId, rutineId) {
   }
 }
 
-async function _deleteClient(req, res) {
-  const cli_id = req.params.cli_id;
+async function _deleteClient(req, res, cli_id) {
+  //const cli_id = req.params.cli_id;
   try {
     const client = await Client.findOne({ cli_id: cli_id });
     clientNotFound(client);

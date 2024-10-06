@@ -128,7 +128,7 @@ const BasicInformation = ({
     }
     console.log(body)
     const response = await makeFetch(
-      "/api/CRUD/clients-repo",
+      "/api/clients",
       "POST",
       "",
       body

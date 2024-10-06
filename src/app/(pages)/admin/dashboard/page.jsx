@@ -15,7 +15,7 @@ export default function Dashboard() {
     setClients([]);
     const getClients = async () => {
       const response = await makeFetch(
-        "/api/CRUD/clients-repo",
+        "/api/clients",
         "GET",
         "",
       );
@@ -40,7 +40,7 @@ export default function Dashboard() {
       setClients(originalClients);
     } else {
       const response = await makeFetch(
-        `/api/Filter/clients?filterType=${searchValue.toLowerCase()}`,
+        `/api/filter/clients?filterType=${searchValue.toLowerCase()}`,
         "GET",
         "",
       );

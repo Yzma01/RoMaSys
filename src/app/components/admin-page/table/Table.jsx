@@ -113,7 +113,7 @@ export function ClientsTable({ clients }) {
                     <ClientAction
                       logo={DeleteOutlineOutlinedIcon}
                       onClick={() => {
-                        makeFetch("/api/CRUD/clients-repo", "DELETE", cli_id, )
+                        makeFetch("/api/clients", "DELETE", cli_id, )
                         window.location.reload();
 
                       }}
