@@ -5,6 +5,7 @@ import LeaderboardRoundedIcon from "@mui/icons-material/LeaderboardRounded";
 import PersonAddAlt1RoundedIcon from "@mui/icons-material/PersonAddAlt1Rounded";
 import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import LogOut from "./LogOut";
+import PopupQr from "./PopupQr";
 
 export function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const ModSidebaropen = () => {
@@ -59,7 +60,12 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }) {
         </NavLink>
       </div>
     ))}
+    
+        <div className="flex justify-center items-center">
+          <PopupQr/>
+        </div>
   </div>
+
 
   <div className="h-[1px] w-full bg-white my-[24px]" />
 
