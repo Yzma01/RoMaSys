@@ -28,9 +28,9 @@ async function getClients(req, res) {
 }
 
 function calculateAge(body) {
+  console.log("puta "+body.cli_additional_data.cli_birthdate);
   const currentDate = new Date();
   const birthdate = new Date(body.cli_additional_data.cli_birthdate);
-
   let age = currentDate.getFullYear() - birthdate.getFullYear();
 
   if (
@@ -40,13 +40,15 @@ function calculateAge(body) {
   ) {
     age--;
   }
-
+console.log("age: "+age)
   return age;
 }
 
 function filterByAge(filter, age) {
+  console.log("first")
   filter.rut_min_age = { $lte: age };
   filter.rut_max_age = { $gte: age };
+
 }
 
 function filterByGoal(filter, additionalData) {
