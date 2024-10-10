@@ -18,7 +18,28 @@ export const clientsRepo = {
 //*Get all clients
 async function getClients(req, res) {
   try {
-    const clients = await db.Clients.find();
+    const clients = await Client.find();
+    console.log("cle", clients);
+
+    for (let client of clients) {
+      if (client.cli_additional_data) {
+        try {
+          const additionalData = await AdditionalData.findById(
+            client.cli_additional_data
+          ).exec();
+          client.cli_additional_data = additionalData;
+        } catch (err) {
+          console.error(
+            "Error fetching additional data for client:",
+            client._id,
+            err.message
+          );
+        }
+      } else {
+        console.warn("Client without additional data:", client._id);
+      }
+    }
+
     res.json(clients);
   } catch (error) {
     res
@@ -47,7 +68,6 @@ function calculateAge(body) {
 function filterByAge(filter, age) {
   filter.rut_min_age = { $lte: age };
   filter.rut_max_age = { $gte: age };
-
 }
 
 function filterByGoal(filter, additionalData) {
@@ -64,7 +84,7 @@ function filterByGender(filter, additionalData) {
 
 async function assignRutine(body) {
   const additionalData = body.cli_additional_data;
-  console.log("adiiiiiiiiiiiiiitional",additionalData);
+  console.log("adiiiiiiiiiiiiiitional", additionalData);
   let filter = {};
   console.log("que es?");
   filterByAge(filter, calculateAge(body));
@@ -147,7 +167,7 @@ async function scheduleMessage(body) {
 async function addClient(req, res) {
   const body = req.body;
   const today = new Date();
-  console.log("today" , today);
+  console.log("today", today);
   console.log("El body: ", body);
   try {
     await clientAlredyExists(body);
@@ -162,10 +182,12 @@ async function addClient(req, res) {
         body.cli_additional_data,
         rutine.rut_id
       );
+      console.log("popopopop:", additionalData._id);
       body.cli_additional_data = additionalData._id;
+
       await sendRutine(body, rutine.rut_rutine); //!Si falla al enviar la rutina es porque iba despues de guardar cliente
     }
-
+    console.log("aaa", body);
     const client = new Client(body);
     await client.save();
 
