@@ -85,7 +85,7 @@ export function ClientsTable({ clients }) {
                   {cli_phone}
                 </TableCell>
                 <TableCell className="text-center hidden md:table-cell">
-                  {format(new Date(cli_next_pay_date), "MM-dd-yyyy")}
+                  {format(new Date(cli_next_pay_date), "dd-MM-yyyy")}
                 </TableCell>
 
                 <TableCell className="text-center">
