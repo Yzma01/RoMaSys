@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const ClientAction = ({ logo: Logo, onClick, className = '' }) => {
+export const ClientAction = ({ logo: Logo, onClick, className = '', child }) => {
   return (
     <button 
       onClick={onClick}
