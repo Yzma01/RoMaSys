@@ -19,8 +19,8 @@ const whatsapp = new Client({
 
 //* create QR
 whatsapp.on("qr", (qr) => {
-  console.log("QR: ");
-  qrcodeTerminal.generate(qr, { small: true }); //!Luego quitar esto pa que no salga en consola
+  // console.log("QR: ");
+  // qrcodeTerminal.generate(qr, { small: true }); //!Luego quitar esto pa que no salga en consola
 
   const qrDir = path.join(path.resolve(process.cwd(), "public"), "qrIMG");
   if (!fs.existsSync(qrDir)) {
