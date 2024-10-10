@@ -6,7 +6,7 @@ const GenderSelector = ({gender, setGender}) => {
   return (
     <div>
       <Title title={"Seleccione el Género"} />
-      <div className="flex flex-col items-start gap-4 overflow-hidden rounded-md p-6 shadow-sm ">
+      <div className="flex flex-col items-start gap-4 overflow-hidden rounded-md p-6 shadow-sm w-fit">
         <div className="flex items-center gap-4">
           <div className="relative flex h-[50px] w-[50px] items-center justify-center">
             <input
@@ -18,7 +18,7 @@ const GenderSelector = ({gender, setGender}) => {
               className="peer z-10 h-full w-full cursor-pointer opacity-0"
             />
             <div className="absolute h-full w-full rounded-full bg-blue-100 p-4 shadow-sm shadow-[#00000050] ring-blue-400 duration-300 peer-checked:scale-110 peer-checked:ring-2"></div>
-            <div className="absolute -z-10 h-full w-full scale-0 rounded-full bg-blue-200 duration-500 peer-checked:scale-[500%]"></div>
+            <div className="absolute -z-10 h-full w-full scale-0 rounded-full bg-blue-200 duration-500 peer-checked:scale-[150%]"></div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="50px"
@@ -48,7 +48,7 @@ const GenderSelector = ({gender, setGender}) => {
               className="peer z-10 h-full w-full cursor-pointer opacity-0"
             />
             <div className="absolute h-full w-full rounded-full bg-pink-100 p-2 shadow-sm shadow-[#00000050] ring-pink-400 duration-300 peer-checked:scale-110 peer-checked:ring-2"></div>
-            <div className="absolute -z-10 h-full w-full scale-0 rounded-full bg-pink-200 duration-500 peer-checked:scale-[500%]"></div>
+            <div className="absolute -z-10 h-full w-full scale-0 rounded-full bg-pink-200 duration-500 peer-checked:scale-[150%]"></div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="35px"
@@ -73,7 +73,7 @@ const GenderSelector = ({gender, setGender}) => {
               className="peer z-10 h-full w-full cursor-pointer opacity-0"
             />
             <div className="absolute h-full w-full rounded-full bg-purple-100 p-2 shadow-sm shadow-[#00000050] ring-purple-400 duration-300 peer-checked:scale-110 peer-checked:ring-2"></div>
-            <div className="absolute -z-10 h-full w-full scale-0 rounded-full bg-purple-200 duration-500 peer-checked:scale-[500%]"></div>
+            <div className="absolute -z-10 h-full w-full scale-0 rounded-full bg-purple-200 duration-500 peer-checked:scale-[150%]"></div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="40px"

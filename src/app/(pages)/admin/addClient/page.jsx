@@ -22,7 +22,7 @@ export default function AddClient() {
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 1.5 }}
         >
-          <div className="flex flex-col  text-white p-5 w-fit">
+          <div className="flex flex-col  text-white p-5 w-fit"> 
             <h1 className="text-xl sm:text-2xl mb-2 font-bold">
               Agregar Usuario
             </h1>

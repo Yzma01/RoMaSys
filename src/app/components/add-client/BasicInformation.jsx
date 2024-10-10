@@ -17,16 +17,16 @@ export const Title = ({ title }) => {
 
 const BasicInformation = ({
   routine,
-  setRoutine,
   gender,
   height,
   weight,
   goal,
-  birthdate,
+  date,
   setHeight,
   setWeight,
   setGoal,
   setDate,
+  setRoutine,
   setGender,
 }) => {
   const [id, setId] = useState("");
@@ -51,9 +51,10 @@ const BasicInformation = ({
     setWeight("");
     setGoal("");
     setDate("");
+    setGender("");
   };
 
-  const validate = (message, status, code) => {
+  const validate = (message, status, code, variant) => {
     if (status == code) {
       toast({ description: message });
       if (code == 201) {
@@ -64,10 +65,6 @@ const BasicInformation = ({
   };
 
   const verifiedNull = () => {
-    console.log(gender);
-    console.log(id);
-    console.log(name);
-    console.log(routine);
     if (
       id == "" ||
       name == "" ||
@@ -77,21 +74,15 @@ const BasicInformation = ({
       monthlyType == "" ||
       amount == ""
     ) {
-      console.log("first");
       if (routine) {
-        console.log("second");
-        console.log(gender)
-        console.log(weight)
-        console.log(height)
-        console.log(birthdate)
         if (
           height == "" ||
           weight == "" ||
           goal == "" ||
           gender == "" ||
-          birthdate == undefined || birthdate == ""
+          date == undefined ||
+          date == ""
         ) {
-          console.log("third");
           return true;
         }
       } else {
@@ -114,33 +105,36 @@ const BasicInformation = ({
       cli_register_date: new Date(),
       cli_rutine: routine,
       cli_next_pay_date: "2024-10-01T00:00:00.000Z",
-      cli_adittional_data: !routine ? null: {
-        cli_goal: goal,
-        cli_gender: gender,
-        cli_height: height,
-        cli_weight: weight,
-        cli_birthdate: birthdate,
-      },
+      cli_adittional_data: !routine
+        ? null
+        : {
+            cli_goal: goal,
+            cli_gender: gender,
+            cli_height: height,
+            cli_weight: weight,
+            cli_birthdate: date,
+          },
     };
     console.log(body);
     if (verifiedNull()) {
       toast({ description: "Por favor llene todos los campos." });
+    } else {
+      console.log(body);
+      const response = await makeFetch("/api/clients", "POST", "", body);
+      console.log(response);
+      validate(`${name} ha sido agregado.`, response.status, 201);
+      validate(
+        `Error de conexión, si el problema persiste contacte a soporte.`,
+        response.status,
+        500
+      );
+      validate(`El cliente cédula: ${id} ya existe.`, response.status, 401);
+      validate(
+        `El número de teléfono: ${phone} ya está registrado`,
+        response.status,
+        406
+      );
     }
-    console.log(body)
-    const response = await makeFetch(
-      "/api/clients",
-      "POST",
-      "",
-      body
-    );
-    console.log(response)
-    validate(`${name} ha sido agregado.`, response.status, 201);
-    validate(`El cliente cédula: ${id} ya existe.`, response.status, 401);
-    validate(
-      `El número de teléfono: ${phone} ya está registrado`,
-      response.status,
-      406
-    );
   };
   return (
     <div className="flex justify-center items-center w-full">
