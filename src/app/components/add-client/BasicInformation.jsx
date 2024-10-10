@@ -105,7 +105,7 @@ const BasicInformation = ({
       cli_register_date: new Date(),
       cli_rutine: routine,
       cli_next_pay_date: "2024-10-01T00:00:00.000Z",
-      cli_adittional_data: !routine
+      cli_additional_data: !routine
         ? null
         : {
             cli_goal: goal,
@@ -115,11 +115,9 @@ const BasicInformation = ({
             cli_birthdate: date,
           },
     };
-    console.log(body);
     if (verifiedNull()) {
       toast({ description: "Por favor llene todos los campos." });
     } else {
-      console.log(body);
       const response = await makeFetch("/api/clients", "POST", "", body);
       console.log(response);
       validate(`${name} ha sido agregado.`, response.status, 201);

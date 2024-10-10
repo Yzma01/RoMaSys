@@ -28,7 +28,7 @@ async function getClients(req, res) {
 }
 
 function calculateAge(body) {
-  console.log("puta "+body.cli_additional_data.cli_birthdate);
+  console.log("asdsaddsfds");
   const currentDate = new Date();
   const birthdate = new Date(body.cli_additional_data.cli_birthdate);
   let age = currentDate.getFullYear() - birthdate.getFullYear();
@@ -40,12 +40,11 @@ function calculateAge(body) {
   ) {
     age--;
   }
-console.log("age: "+age)
+  console.log("age", age);
   return age;
 }
 
 function filterByAge(filter, age) {
-  console.log("first")
   filter.rut_min_age = { $lte: age };
   filter.rut_max_age = { $gte: age };
 
@@ -65,6 +64,7 @@ function filterByGender(filter, additionalData) {
 
 async function assignRutine(body) {
   const additionalData = body.cli_additional_data;
+  console.log("adiiiiiiiiiiiiiitional",additionalData);
   let filter = {};
   console.log("que es?");
   filterByAge(filter, calculateAge(body));
@@ -122,7 +122,7 @@ function calculateNextPayDate(body) {
   if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[2]) {
     nextPaymentDate.setDate(today.getDate() + 1);
   }
-
+  console.log(nextPaymentDate);
   return nextPaymentDate;
 }
 
@@ -147,8 +147,8 @@ async function scheduleMessage(body) {
 async function addClient(req, res) {
   const body = req.body;
   const today = new Date();
-
-  console.log(body); //!quitar
+  console.log("today" , today);
+  console.log("El body: ", body);
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
