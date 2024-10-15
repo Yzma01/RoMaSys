@@ -3,6 +3,7 @@ import { getClients, addClient, updateClient, deleteClient } from "../controller
 
 const router = express.Router();
 
+
 router.get("/", getClients);
 router.post("/", addClient);
 router.put("/:cli_id", updateClient);

@@ -5,6 +5,7 @@ import Routine from "@/src/app/components/add-client/Routine";
 import { AnimatePresence, motion } from "framer-motion";
 import Button from "@/src/app/components/utils/Button";
 import { useToast } from "@/hooks/use-toast";
+import { makeFetch } from "@/src/app/components/utils/fetch";
 
 export default function AddClient() {
   const [id, setId] = useState("");

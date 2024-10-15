@@ -129,12 +129,20 @@ async function sendRutine(body, rutine) {
   }
 }
 
+function daysInMonth(month, year) {
+  return new Date(year, month + 1, 0).getDate();
+}
+
 function calculateNextPayDate(body) {
   let today = new Date();
   let nextPaymentDate = new Date(today);
 
-  if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[0]) {
+  //!Revisar el otro mes sigue funcionanado jaja
+  if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[0] && 
+    daysInMonth(today.getMonth(), today.getFullYear) === 30) {
     nextPaymentDate.setDate(today.getDate() + 30);
+  }else{
+    nextPaymentDate.setDate(today.getDate() + 31);
   }
   if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[1]) {
     nextPaymentDate.setDate(today.getDate() + 15);
