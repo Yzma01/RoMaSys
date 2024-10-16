@@ -5,5 +5,6 @@ export const addPayment = (req, res) => {
 };
 
 export const getPayment = (req, res) => {
-  paymentsRepo.getPayment(req, res);
+  const { pay_client_id } = req.params;
+  paymentsRepo.getPayment(req, res, pay_client_id);
 };
