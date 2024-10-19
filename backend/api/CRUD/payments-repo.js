@@ -39,7 +39,7 @@ async function getPayment(req, res, pay_client_id) {
     paymentNotFound(payment);
 
     res.json(payment);
-  } catch (error) {
+  } catch (error) {   
     res
       .status(error.status || 500)
       .json({ message: "Error getting payment  " + error.message });

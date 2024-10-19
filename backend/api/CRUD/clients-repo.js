@@ -80,6 +80,11 @@ async function addClient(req, res) {
 
       await sendRutine(body, rutine.rut_rutine); //!Si falla al enviar la rutina es porque iba despues de guardar cliente
     }
+
+    await addFirstPayment(body, today); //!Podria llamarlo antes de guardar al cliente para que en el body Yzma pase el monto y guardarlo aqui pero eliminarlo en el body del cliente
+
+    delete body.pay_amount;
+
     console.log("aaa", body);
     const client = new Client(body);
     await client.save();
@@ -107,6 +112,18 @@ async function addAdditionalClientData(body, rutineId) {
       status: 400,
     };
   }
+}
+
+async function addFirstPayment(body, today) {
+  const bodyPayment = {
+    pay_client_id: body.cli_id,
+    pay_date: today,
+    pay_amount: body.pay_amount, //!Cliente no tiene este dato coomo me lo pasa?
+    pay_monthly_payment_type: body.cli_monthly_payment_type,
+  };
+
+  const payment = new Payment(bodyPayment);
+  await payment.save();
 }
 
 function frozenClient(body, client) {
@@ -212,7 +229,6 @@ async function updateAdditionalClientData(body, clientObjectId, rutineId) {
 }
 
 async function _deleteClient(req, res, cli_id) {
-  //const cli_id = req.params.cli_id;
   try {
     const client = await Client.findOne({ cli_id: cli_id });
     clientNotFound(client);
