@@ -81,9 +81,9 @@ async function addClient(req, res) {
       await sendRutine(body, rutine.rut_rutine); //!Si falla al enviar la rutina es porque iba despues de guardar cliente
     }
 
-    await addFirstPayment(body, today); //!Podria llamarlo antes de guardar al cliente para que en el body Yzma pase el monto y guardarlo aqui pero eliminarlo en el body del cliente
+    // await addFirstPayment(body, today); //!Podria llamarlo antes de guardar al cliente para que en el body Yzma pase el monto y guardarlo aqui pero eliminarlo en el body del cliente
 
-    delete body.pay_amount;
+   // delete body.pay_amount;
 
     console.log("aaa", body);
     const client = new Client(body);
