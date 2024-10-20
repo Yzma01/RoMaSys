@@ -1,7 +1,7 @@
 // Button.jsx
 import React from "react";
 
-const Button = ({ text, onClick, color = "green" }) => {
+const Button = ({ text, onClick, color }) => {
   return (
     <button
       onClick={onClick}

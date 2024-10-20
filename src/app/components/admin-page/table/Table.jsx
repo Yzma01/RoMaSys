@@ -18,16 +18,10 @@ import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import AcUnitRoundedIcon from "@mui/icons-material/AcUnitRounded";
 import { makeFetch } from "../../utils/fetch";
 import Popover from "../../utils/Popover";
-import { button } from "@nextui-org/theme";
 import ModifyClient from "../../modify-client/ModifyClient";
+import DeleteClient from "../../delete-client/DeleteClient";
 
 export function ClientsTable({ clients }) {
-  const getClassName = (color) => {
-    return `text-[#${
-      color == undefined ? "96E9F4" : color
-    }] text-center hidden md:table-cell font-bold`;
-  };
-
   const buttons = [
     {
       button: (
@@ -54,19 +48,16 @@ export function ClientsTable({ clients }) {
           className="hover:bg-[#ffff00] text-white"
         />
       ),
-      child: (client)=> <ModifyClient client={client}/>
+      child: (client) => <ModifyClient selectedClient={client} />,
     },
     {
       button: (
         <ClientAction
           logo={DeleteOutlineOutlinedIcon}
-          onClick={() => {
-            makeFetch("/api/clients", "DELETE", cli_id);
-            window.location.reload();
-          }}
           className="hover:bg-[#ff0000] text-white"
         />
       ),
+      child: (client) => <DeleteClient selectedClient={client} />,
     },
     {
       button: (
@@ -91,51 +82,66 @@ export function ClientsTable({ clients }) {
         <TableCaption>Clientes</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className={getClassName()}>Cédula</TableHead>
-            <TableHead className={getClassName()}>Nombre</TableHead>
-            <TableHead className={getClassName()}>Apellidos</TableHead>
-            <TableHead className={getClassName()}>Teléfono</TableHead>
-            <TableHead className={getClassName()}>Fecha de Pago</TableHead>
-            <TableHead className={getClassName("367cff")}>Congelar</TableHead>
-            <TableHead className={getClassName("00FF00")}>Pagar</TableHead>
-            <TableHead className={getClassName("FFFF00")}>Editar</TableHead>
-            <TableHead className={getClassName("FF0000")}>Eliminar</TableHead>
-            <TableHead className={getClassName("897E7E")}>Historial</TableHead>
+            <TableHead className="text-[#96E9F4] text-center hidden md:table-cell font-bold">
+              Cédula
+            </TableHead>
+            <TableHead className="text-[#96E9F4] text-center hidden md:table-cell font-bold">
+              Nombre
+            </TableHead>
+            <TableHead className="text-[#96E9F4] text-center hidden md:table-cell font-bold">
+              Apellidos
+            </TableHead>
+            <TableHead className="text-[#96E9F4] text-center hidden md:table-cell font-bold">
+              Teléfono
+            </TableHead>
+            <TableHead className="text-[#96E9F4] text-center hidden md:table-cell font-bold">
+              Fecha de Pago
+            </TableHead>
+            <TableHead className="text-[#367cff] text-center hidden md:table-cell font-bold">
+              Congelar
+            </TableHead>
+            <TableHead className="text-[#00FF00] text-center hidden md:table-cell font-bold">
+              Pagar
+            </TableHead>
+            <TableHead className="text-[#FFFF00] text-center hidden md:table-cell font-bold">
+              Editar
+            </TableHead>
+            <TableHead className="text-[#FF0000] text-center hidden md:table-cell font-bold">
+              Eliminar
+            </TableHead>
+            <TableHead className="text-[#897E7E] text-center hidden md:table-cell font-bold">
+              Historial
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {clients.map(
-            (
-              client,
-              index
-            ) => (
-              <TableRow key={index} className="hover:bg-[#11111199]">
-                <TableCell className="text-center hidden md:table-cell">
-                  {client.cli_id}
-                </TableCell>
-                <TableCell className="text-center hidden md:table-cell">
-                  {client.cli_name}
-                </TableCell>
-                <TableCell className="text-center hidden md:table-cell">
-                  {client.cli_last_name1 + " " + client.cli_last_name2}
-                </TableCell>
-                <TableCell className="text-center hidden md:table-cell">
-                  {client.cli_phone}
-                </TableCell>
-                <TableCell className="text-center hidden md:table-cell">
-                  {format(new Date(client.cli_next_pay_date), "dd-MM-yyyy")}
-                </TableCell>
+          {clients.map((client, index) => (
+            <TableRow key={index} className="hover:bg-[#11111199]">
+              <TableCell className="text-center hidden md:table-cell">
+                {client.cli_id}
+              </TableCell>
+              <TableCell className="text-center hidden md:table-cell">
+                {client.cli_name}
+              </TableCell>
+              <TableCell className="text-center hidden md:table-cell">
+                {client.cli_last_name1 + " " + client.cli_last_name2}
+              </TableCell>
+              <TableCell className="text-center hidden md:table-cell">
+                {client.cli_phone}
+              </TableCell>
+              <TableCell className="text-center hidden md:table-cell">
+                {format(new Date(client.cli_next_pay_date), "dd-MM-yyyy")}
+              </TableCell>
 
-                {buttons.map(({ button, child }, index) => (
-                  <TableCell className="text-center" key={index}>
-                    <div className="flex justify-center">
-                      <Popover button={button} child={child} client={client}/>
-                    </div>
-                  </TableCell>
-                ))}
-              </TableRow>
-            )
-          )}
+              {buttons.map(({ button, child }, index) => (
+                <TableCell className="text-center" key={index}>
+                  <div className="flex justify-center">
+                    <Popover button={button} child={child} client={client} />
+                  </div>
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </div>

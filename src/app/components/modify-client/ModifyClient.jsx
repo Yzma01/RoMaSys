@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AlertDialogFooter, AlertDialogHeader } from "../ui/alert-dialog";
 import {
   AlertDialogAction,
@@ -8,32 +8,46 @@ import {
   AlertDialogTitle,
 } from "@radix-ui/react-alert-dialog";
 import BasicInformation, { Title } from "../add-client/BasicInformation";
-import AddClient from "../../(pages)/admin/addClient/page";
 import { AnimatePresence, motion } from "framer-motion";
 import Routine from "../add-client/Routine";
 import Button from "../utils/Button";
 
-const ModifyClient = ({ client }) => {
-  const [routine, setRoutine] = useState(client.client.cli_rutine);
-  const [height, setHeight] = useState(client.client.cli_height);
-  const [weight, setWeight] = useState(client.client.cli_weight);
-  const [goal, setGoal] = useState(client.client.cli_goal);
-  const [date, setDate] = useState(client.client.cli_date);
-  const [gender, setGender] = useState(client.client.cli_gender);
-  const [id, setId] = useState(client.client.cli_id);
-  const [name, setName] = useState(client.client.cli_name);
-  const [lastname1, setLastname1] = useState(client.client.cli_last_name1);
-  const [lastname2, setLastname2] = useState(client.client.cli_last_name2);
-  const [phone, setPhone] = useState(client.client.cli_phone);
-  const [monthlyType, setMothlyType] = useState(
-    client.client.cli_monthly_payment_type
-  );
+const ModifyClient = ({ selectedClient }) => {
+  const client = selectedClient.client;
+  const [gender, setGender] = useState("");
+  const [routine, setRoutine] = useState(false);
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+  const [goal, setGoal] = useState("");
+  const [date, setDate] = useState("");
+
+  const [id, setId] = useState(client.cli_id);
+  const [name, setName] = useState(client.cli_name);
+  const [lastname1, setLastname1] = useState(client.cli_last_name1);
+  const [lastname2, setLastname2] = useState(client.cli_last_name2);
+  const [phone, setPhone] = useState(client.cli_phone);
+  let mType = client.cli_monthly_payment_type;
+  mType = mType.charAt(0).toUpperCase() + mType.slice(1);
+  const [monthlyType, setMothlyType] = useState(mType);
   const [amount, setAmount] = useState(0);
+
+  useEffect(() => {
+    if (client.cli_rutine) {
+      setGender(client.cli_additional_data.cli_gender);
+      setRoutine(client.cli_rutine);
+      setHeight(client.cli_additional_data.cli_height);
+      setWeight(client.cli_additional_data.cli_weight);
+      setDate(client.cli_additional_data.cli_birthdate);
+      setGoal(client.cli_additional_data.cli_goal);
+    }
+  }, [client]);
+
   return (
-    <div>
+    <div className=" w-[100w]">
       <AlertDialogHeader>
+        <AlertDialogTitle></AlertDialogTitle>
         <AlertDialogDescription>
-          <div className=" flex items-center justify-centerw-full">
+          <div className="flex items-center justify-center w-full">
             <AnimatePresence>
               <motion.div
                 className="overflow-hidden"
@@ -94,10 +108,7 @@ const ModifyClient = ({ client }) => {
       <AlertDialogFooter>
         <div className="w-full items-end flex justify-center gap-4">
           <AlertDialogCancel>
-            <Button
-              color={"red"}
-              text={"Cancelar"}
-            />
+            <Button color={"red"} text={"Cancelar"} />
           </AlertDialogCancel>
           <AlertDialogAction>
             <Button

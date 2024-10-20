@@ -5,6 +5,7 @@ import Routine from "@/src/app/components/add-client/Routine";
 import { AnimatePresence, motion } from "framer-motion";
 import Button from "@/src/app/components/utils/Button";
 import { useToast } from "@/hooks/use-toast";
+import { makeFetch } from "@/src/app/components/utils/fetch";
 
 export default function AddClient() {
   const [id, setId] = useState("");
@@ -39,12 +40,12 @@ export default function AddClient() {
     setGender("");
   };
 
-  const validate = (message, status, code, variant) => {
+  const validate = (message, status, code, className) => {
     if (status == code) {
-      toast({ description: message });
-      if (code == 201) {
-        clearForm();
-      }
+      toast({ description: message, className: className });
+    }
+    if (code == 201) {
+      clearForm();
     }
     return;
   };
@@ -59,21 +60,22 @@ export default function AddClient() {
       monthlyType == "" ||
       amount == ""
     ) {
-      if (routine) {
-        if (
-          height == "" ||
-          weight == "" ||
-          goal == "" ||
-          gender == "" ||
-          date == undefined ||
-          date == ""
-        ) {
-          return true;
-        }
-      } else {
+      return true;
+    }
+    if (routine) {
+      console.log("ajshdf");
+      if (
+        height == "" ||
+        weight == "" ||
+        goal == "" ||
+        gender == "" ||
+        date == undefined ||
+        date == ""
+      ) {
         return true;
       }
     }
+    return false;
   };
 
   const doVerifications = (response) => {
@@ -104,6 +106,7 @@ export default function AddClient() {
       cli_remaining_days: 0,
       cli_register_date: new Date(),
       cli_rutine: routine,
+      cli_pay_amount: amount.includes(",") ? amount.replace(",", "") : amount,
       cli_next_pay_date: "2024-10-01T00:00:00.000Z",
       cli_additional_data: !routine
         ? null
@@ -115,6 +118,8 @@ export default function AddClient() {
             cli_birthdate: date,
           },
     };
+    console.log(body);
+    console.log(verifiedNull());
     if (verifiedNull()) {
       toast({ description: "Por favor llene todos los campos." });
     } else {

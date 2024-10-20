@@ -85,7 +85,7 @@ export default function Dashboard() {
                 <header className="flex flex-col sm:flex-row items-center justify-between">
                   <div className="flex flex-col w-full sm:w-3/4 mb-4 sm:mb-0">
                     <h1 className="text-xl sm:text-2xl mb-2 font-bold">
-                      DAShBOARD
+                      DASHBOARD
                     </h1>
                     <p className="text-base sm:text-lg mb-4 text-gray-3 font-light">
                       Hola Niger. ¡Bienvenido de nuevo a RoMaSys!

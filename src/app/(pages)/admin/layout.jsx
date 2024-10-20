@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Sidebar } from "../../components/admin-page/Sidebar.jsx";
 
 function page() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {

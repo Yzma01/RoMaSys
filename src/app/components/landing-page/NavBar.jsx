@@ -22,11 +22,11 @@ const NavBar = () => {
 
   return (
     <div className="w-full bg-black flex items-center justify-between px-5 lg:h-[8vh]">
-      <div className="flex items-center justify-between w-full lg:hidden">
+      <div className="flex items-center justify-between w-full lg:hidden hover:cursor-pointer">
         <div onClick={toggleSidebar}>
           <MenuIcon style={{ fontSize: "2em", color: "white" }} />
         </div>
-        <div onClick={() => router.push("/sign-in")}>
+        <div className="hover:cursor-pointer" onClick={() => router.push("/sign-in")}>
           <AccountCircleOutlinedIcon
             style={{ fontSize: "2em", color: "white" }}
           />

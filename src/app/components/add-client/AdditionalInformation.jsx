@@ -37,7 +37,7 @@ const AdditionalInformation = ({
   setGender,
 }) => {
   return (
-    <div className="flex flex-col h-full pl-20">
+    <div className="flex flex-col h-full pl-20 pr-20">
       <GenderSelector gender={gender} setGender={setGender} />
       <div className="flex flex-row pt-10 gap-5">
         <div className="flex flex-col justify-center items-center">

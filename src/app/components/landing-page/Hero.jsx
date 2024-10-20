@@ -19,7 +19,7 @@ const Hero = () => {
               Niger Fitness
             </h1>
             <Image
-              src={''}
+              src={Logo}
               width={80}
               height={80}
               alt="Logo"

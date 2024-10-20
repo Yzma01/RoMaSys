@@ -8,7 +8,7 @@ import { cn } from "../../../lib/utils"
 
 const ToastProvider = ToastPrimitives.Provider
 
-const ToastViewport = React.forwardRef(({ className, ...props }, ref) => (
+const ToastViewport = React.forwardRef(({ className, variant, ...props }, ref) => (
   <ToastPrimitives.Viewport
     ref={ref}
     className={cn(

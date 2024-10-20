@@ -7,6 +7,8 @@ import ArrowBackIosRoundedIcon from "@mui/icons-material/ArrowBackIosRounded";
 import QrCode2RoundedIcon from "@mui/icons-material/QrCode2Rounded";
 import PopupQr from "./PopupQr";
 import LogOut from "./LogOut";
+import { Logo } from "@/public/images";
+import Image from "next/image";
 
 export function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const ModSidebaropen = () => {
@@ -15,27 +17,26 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }) {
 
   return (
     <div
-      className="bg-blueDark border-r-2 text-white sticky h-full flex flex-col transition-[width] duration-300 ease-in-out"
+      className="bg-blueDark border-r-2 text-white sticky h-full flex flex-col transition-[width] duration-300 ease-in-out hover:cursor-pointer"
       style={{ width: sidebarOpen ? "250px" : "90px" }}>
       <button
         className="absolute top-[48px] right-[-18px] w-8 h-8 rounded-full bg-blueDark shadow-[0_0_4px_black,0_0_7px_black] flex items-center justify-center cursor-pointer transition-all duration-500 ease-in-out"
         style={{ transform: sidebarOpen ? "initial" : "rotate(180deg)" }}
-        onClick={ModSidebaropen}>
-        <ArrowBackIosRoundedIcon />
+          onClick={ModSidebaropen}
+        >
+      <ArrowBackIosRoundedIcon />
       </button>
 
       <div className="bg-bgGray-1 pb-3 grid justify-center items-center transition-all duration-300 ease-in-out">
         <div
           className="flex mt-5 mb-2 justify-center cursor-pointer transition-all duration-300 ease-in-out"
           style={{ transform: sidebarOpen ? "scale(1.5)" : "scale(2.0)" }}>
-          {/* <img src={logo} className="max-w-full h-auto" /> */}
-          {/* //!Esto hay que cambiarlo por el logo del gym */}
-          <AgricultureRoundedIcon /> 
+          <Image src={Logo} className="z-10"width={20} height={20} />
         </div>
         <h2
           className="transition-opacity duration-300 ease-in-out"
           style={{ display: sidebarOpen ? "block" : "none" }}>
-          Niger Fitness Gym
+          RoMaSys
         </h2>
       </div>
 

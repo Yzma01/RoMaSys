@@ -55,7 +55,7 @@ const Footer = () => {
           </svg>
           <div className="flex flex-col items-center gap-4 w-full">
             <Image
-              src={''}
+              src={Logo}
               width={150}
               height={150}
               alt="Niger Fitness Logo"

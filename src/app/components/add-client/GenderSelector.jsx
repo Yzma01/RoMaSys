@@ -3,6 +3,7 @@ import React from "react";
 import { Title } from "./BasicInformation";
 
 const GenderSelector = ({gender, setGender}) => {
+  console.log(gender)
   return (
     <div>
       <Title title={"Seleccione el Género"} />
@@ -13,8 +14,9 @@ const GenderSelector = ({gender, setGender}) => {
               type="radio"
               id="radio"
               name="gender"
-              value="male"
-              onClick={(e)=>setGender("masculino")}
+              value="masculino"
+              checked={gender === "masculino"}
+              onChange={(e)=>setGender("masculino")}
               className="peer z-10 h-full w-full cursor-pointer opacity-0"
             />
             <div className="absolute h-full w-full rounded-full bg-blue-100 p-4 shadow-sm shadow-[#00000050] ring-blue-400 duration-300 peer-checked:scale-110 peer-checked:ring-2"></div>
@@ -43,8 +45,9 @@ const GenderSelector = ({gender, setGender}) => {
               type="radio"
               id="radio"
               name="gender"
-              value="female"
-              onClick={(e)=>setGender("femenino")}
+              value="femenino"
+              checked={gender === "femenino"}
+              onChange={(e)=>setGender("femenino")}
               className="peer z-10 h-full w-full cursor-pointer opacity-0"
             />
             <div className="absolute h-full w-full rounded-full bg-pink-100 p-2 shadow-sm shadow-[#00000050] ring-pink-400 duration-300 peer-checked:scale-110 peer-checked:ring-2"></div>
@@ -68,8 +71,9 @@ const GenderSelector = ({gender, setGender}) => {
             <input
               type="radio"
               name="gender"
-              value="none-binary"
-              onClick={(e)=>setGender("otro")}
+              value="otro"
+              checked={gender === "otro"}
+              onChange={(e)=>setGender("otro")}
               className="peer z-10 h-full w-full cursor-pointer opacity-0"
             />
             <div className="absolute h-full w-full rounded-full bg-purple-100 p-2 shadow-sm shadow-[#00000050] ring-purple-400 duration-300 peer-checked:scale-110 peer-checked:ring-2"></div>
