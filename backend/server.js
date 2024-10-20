@@ -27,10 +27,10 @@ app.use("/apiWhatsApp/routes", router);
 //? Inicializa el cliente de WhatsApp
 whatsapp.initialize();
 
-// //? Manejo de promesas no capturadas
+//? Manejo de promesas no capturadas
  process.on("unhandledRejection", handleUnhandledRejection);
 
-// //? Middleware para manejar errores globales
+//? Middleware para manejar errores globales
  app.use(errorHandler);
 
 //? Inicializa el servidor

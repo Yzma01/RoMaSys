@@ -1,12 +1,19 @@
 import { db } from "../database/db.js";
-import { makeFetchWhatsapp } from "../../utils/fetchWhatsapp.js";
+import {
+  assignRutine,
+  sendRutine,
+  scheduleMessage,
+} from "./services/rutineService.js";
+import {
+  clientNotFound,
+  clientAlredyExists,
+  phoneAlredyInUse,
+  validatePhone,
+} from "./services/clientValidations.js";
+import { calculateNextPayDate } from "./services/clientUtils.js";
 
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
-const Rutine = db.Rutines;
-const MessagesAgenda = db.MessagesAgenda;
-const GENDERS = ["masculino", "femenino"];
-const MONTHLY_PAYMENT_TYPE = ["mes", "quincena", "dia"];
 
 export const clientsRepo = {
   getClients,
@@ -48,121 +55,6 @@ async function getClients(req, res) {
   }
 }
 
-function calculateAge(body) {
-  console.log("asdsaddsfds");
-  const currentDate = new Date();
-  const birthdate = new Date(body.cli_additional_data.cli_birthdate);
-  let age = currentDate.getFullYear() - birthdate.getFullYear();
-
-  if (
-    currentDate.getMonth() < birthdate.getMonth() ||
-    (currentDate.getMonth() === birthdate.getMonth() &&
-      currentDate.getDate() < birthdate.getDate())
-  ) {
-    age--;
-  }
-  console.log("age", age);
-  return age;
-}
-
-function filterByAge(filter, age) {
-  filter.rut_min_age = { $lte: age };
-  filter.rut_max_age = { $gte: age };
-}
-
-function filterByGoal(filter, additionalData) {
-  filter.rut_goal = additionalData.cli_goal;
-}
-
-function filterByGender(filter, additionalData) {
-  filter.rut_gender =
-    additionalData.cli_gender === GENDERS[0] ||
-    additionalData.cli_gender === GENDERS[1]
-      ? additionalData.cli_gender
-      : GENDERS[0];
-}
-
-async function assignRutine(body) {
-  const additionalData = body.cli_additional_data;
-  console.log("adiiiiiiiiiiiiiitional", additionalData);
-  let filter = {};
-  console.log("que es?");
-  filterByAge(filter, calculateAge(body));
-  console.log("mose");
-  filterByGoal(filter, additionalData);
-  console.log("toy loccco");
-  filterByGender(filter, additionalData);
-
-  const rutine = await Rutine.findOne(filter);
-
-  if (!rutine) {
-    return 1; //!Podemos colocar alguna que sea general que sea la 1 en caso de que no se encuentre alguna
-  }
-
-  return rutine;
-}
-
-async function sendRutine(body, rutine) {
-  if (body.cli_rutine === true) {
-    try {
-      const messageData = {
-        postalCode: "+506", //!Por ahora esta asi hasta que yzma pase el postal Code, seria body.postal_code
-        phones: [body.cli_phone],
-        mensaje: rutine,
-      };
-
-      const response = await makeFetchWhatsapp(
-        "/apiWhatsApp/routes/enviarMensaje",
-        "POST",
-        "",
-        messageData
-      );
-      //Todo: Luego probar otro throw pa este caso
-      const status = response.status === 200 ? 200 : 404; //! Eviar a izma un codigo de error cuando el numero no fue encontrado , para que lo muestre en pantalla y se den cuanta de ir a modificar el numero en el update cliente (posible)
-      console.log("Se envio el mensaje?:  ", response.status);
-    } catch (error) {
-      throw {
-        message: `Error sending message: ${error.message}`,
-        status: 408,
-      };
-    }
-  }
-}
-
-function calculateNextPayDate(body) {
-  let today = new Date();
-  let nextPaymentDate = new Date(today);
-
-  if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[0]) {
-    nextPaymentDate.setDate(today.getDate() + 30);
-  }
-  if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[1]) {
-    nextPaymentDate.setDate(today.getDate() + 15);
-  }
-  if (body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[2]) {
-    nextPaymentDate.setDate(today.getDate() + 1);
-  }
-  console.log(nextPaymentDate);
-  return nextPaymentDate;
-}
-
-async function scheduleMessage(body) {
-  try {
-    const data = {
-      msg_client_id: body.cli_id,
-      msg_sent: false,
-      msg_next_payment_date: calculateNextPayDate(body),
-    };
-    const messagesAgenda = new MessagesAgenda(data);
-    await messagesAgenda.save();
-  } catch (error) {
-    throw {
-      message: `Error schedule message: ${error.message}`,
-      status: 428,
-    };
-  }
-}
-
 //*Add client
 async function addClient(req, res) {
   const body = req.body;
@@ -174,6 +66,7 @@ async function addClient(req, res) {
     await phoneAlredyInUse(body);
 
     body.cli_next_pay_date = calculateNextPayDate(body);
+    console.log("auqi");
     body.cli_register_date = today;
 
     if (body.cli_rutine === true) {
@@ -187,6 +80,11 @@ async function addClient(req, res) {
 
       await sendRutine(body, rutine.rut_rutine); //!Si falla al enviar la rutina es porque iba despues de guardar cliente
     }
+
+    // await addFirstPayment(body, today); //!Podria llamarlo antes de guardar al cliente para que en el body Yzma pase el monto y guardarlo aqui pero eliminarlo en el body del cliente
+
+   // delete body.pay_amount;
+
     console.log("aaa", body);
     const client = new Client(body);
     await client.save();
@@ -214,6 +112,18 @@ async function addAdditionalClientData(body, rutineId) {
       status: 400,
     };
   }
+}
+
+async function addFirstPayment(body, today) {
+  const bodyPayment = {
+    pay_client_id: body.cli_id,
+    pay_date: today,
+    pay_amount: body.pay_amount, //!Cliente no tiene este dato coomo me lo pasa?
+    pay_monthly_payment_type: body.cli_monthly_payment_type,
+  };
+
+  const payment = new Payment(bodyPayment);
+  await payment.save();
 }
 
 function frozenClient(body, client) {
@@ -259,7 +169,6 @@ function unfreezeClient(body, client) {
 
 //*Update client
 async function updateClient(req, res, cli_id) {
-  //const cli_id = req.params.cli_id;
   const body = req.body;
 
   try {
@@ -320,7 +229,6 @@ async function updateAdditionalClientData(body, clientObjectId, rutineId) {
 }
 
 async function _deleteClient(req, res, cli_id) {
-  //const cli_id = req.params.cli_id;
   try {
     const client = await Client.findOne({ cli_id: cli_id });
     clientNotFound(client);
@@ -337,49 +245,5 @@ async function _deleteClient(req, res, cli_id) {
     res
       .status(error.status || 500)
       .json({ message: "Error deleting clients" + error.message });
-  }
-}
-
-//? Verificaciones
-
-function clientNotFound(client) {
-  if (!client) {
-    throw {
-      message: `"Client not found :(`,
-      status: 404,
-    };
-  }
-}
-
-async function clientAlredyExists(body) {
-  if (await Client.findOne({ cli_id: body.cli_id })) {
-    throw {
-      message: 'User with ID "' + body.cli_id + '" already exists',
-      status: 401,
-    };
-  }
-}
-
-async function phoneAlredyInUse(body) {
-  if (await Client.findOne({ cli_phone: body.cli_phone })) {
-    throw {
-      message: 'Phone "' + body.cli_phone + '" is already in use',
-      status: 406,
-    };
-  }
-}
-
-async function validatePhone(body, client) {
-  if (
-    body.cli_phone &&
-    (await Client.findOne({
-      cli_phone: body.cli_phone,
-      _id: { $ne: client._id },
-    }))
-  ) {
-    throw {
-      message: `Phone "${body.cli_phone}" is already in use`,
-      status: 406,
-    };
   }
 }
