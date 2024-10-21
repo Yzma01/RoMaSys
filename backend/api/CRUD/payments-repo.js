@@ -15,9 +15,7 @@ async function addPayment(req, res) {
   try {
     const client = await Client.findOne({ cli_id: body.pay_client_id });
     clientNotFound(client);
-
-    //!Hay que quitar las comas para los datos numericos, lo hago desde backend?
-   
+    
     body.pay_date = new Date();
 
     const payment = new Payment(body);
