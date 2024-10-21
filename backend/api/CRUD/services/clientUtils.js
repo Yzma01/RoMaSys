@@ -8,7 +8,6 @@ export function calculateNextPayDate(body) {
   let today = new Date();
   let nextPaymentDate = new Date(today);
 
-  //!Revisar el otro mes sigue funcionanado jaja
   if (
     body.cli_monthly_payment_type === MONTHLY_PAYMENT_TYPE[0] &&
     daysInMonth(today.getMonth(), today.getFullYear()) === 30
