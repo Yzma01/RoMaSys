@@ -1,6 +1,6 @@
 import { db } from "../database/db.js";
 import { clientNotFound } from "./services/clientValidations.js";
-  
+
 const Payment = db.Payments;
 const Client = db.Clients;
 
@@ -15,29 +15,30 @@ async function addPayment(req, res) {
   try {
     const client = await Client.findOne({ cli_id: body.pay_client_id });
     clientNotFound(client);
-    
+
     body.pay_date = new Date();
 
+    console.log("body: ", body);
     const payment = new Payment(body);
+    console.log("ajua: ", payment);
     await payment.save();
 
     res.status(201).json({ message: "Payment saved!", payment });
   } catch (error) {
     res
-      .status(error.status || 500)
+      .status(error.status || 403)
       .json({ message: "Error added payment  " + error.message });
   }
 }
 
 async function getPayment(req, res, pay_client_id) {
-
   try {
     const payment = await Payment.find({ pay_client_id: pay_client_id });
     console.log("payment:", payment);
     paymentNotFound(payment);
 
     res.json(payment);
-  } catch (error) {   
+  } catch (error) {
     res
       .status(error.status || 500)
       .json({ message: "Error getting payment  " + error.message });
