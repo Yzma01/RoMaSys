@@ -7,15 +7,17 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
 } from "@radix-ui/react-alert-dialog";
-import BasicInformation, { Title } from "../add-client/BasicInformation";
+import BasicInformation from "../add-client/BasicInformation";
 import { AnimatePresence, motion } from "framer-motion";
 import Routine from "../add-client/Routine";
 import Button from "../utils/Button";
+import { useToast } from "@/hooks/use-toast";
+import { makeFetch } from "../utils/fetch";
 
 const ModifyClient = ({ selectedClient }) => {
   const client = selectedClient.client;
   const [gender, setGender] = useState("");
-  const [routine, setRoutine] = useState(false);
+  const [routine, setRoutine] = useState(client.cli_rutine);
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [goal, setGoal] = useState("");
@@ -30,9 +32,10 @@ const ModifyClient = ({ selectedClient }) => {
   mType = mType.charAt(0).toUpperCase() + mType.slice(1);
   const [monthlyType, setMothlyType] = useState(mType);
   const [amount, setAmount] = useState(0);
+  const { toast } = useToast();
 
   useEffect(() => {
-    if (client.cli_rutine) {
+    if (routine) {
       setGender(client.cli_additional_data.cli_gender);
       setRoutine(client.cli_rutine);
       setHeight(client.cli_additional_data.cli_height);
@@ -41,6 +44,88 @@ const ModifyClient = ({ selectedClient }) => {
       setGoal(client.cli_additional_data.cli_goal);
     }
   }, [client]);
+
+  const validate = (message, status, code, className) => {
+    if (status == code) {
+      toast({ description: message, className: className });
+    }
+    if (code == 200) {
+      window.location.reload();
+    }
+    return;
+  };
+
+  const verifiedNull = () => {
+    if (
+      id == "" ||
+      name == "" ||
+      lastname1 == "" ||
+      lastname2 == "" ||
+      phone == "" ||
+      monthlyType == ""
+    ) {
+      return true;
+    }
+    if (routine) {
+      if (
+        height == "" ||
+        weight == "" ||
+        goal == "" ||
+        gender == "" ||
+        date == undefined ||
+        date == ""
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const doVerifications = (response) => {
+    validate(`${name} ha sido modificado.`, response.status, 200);
+    validate(
+      `Error de conexión, si el problema persiste contacte a soporte.`,
+      response.status,
+      500
+    );
+    validate(`El cliente cédula: ${id} ya existe.`, response.status, 401);
+    validate(
+      `El número de teléfono: ${phone} ya está registrado`,
+      response.status,
+      406
+    );
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const body = {
+      cli_name: name,
+      cli_last_name1: lastname1,
+      cli_last_name2: lastname2,
+      cli_monthly_payment_type: monthlyType.toLowerCase(),
+      cli_phone: phone,
+      cli_frozen: false,
+      cli_remaining_days: 0,
+      cli_register_date: new Date(),
+      cli_rutine: routine,
+      cli_next_pay_date: "",
+      cli_additional_data: !routine
+        ? null
+        : {
+            cli_goal: goal,
+            cli_gender: gender,
+            cli_height: height,
+            cli_weight: weight,
+            cli_birthdate: date,
+          },
+    };
+    if (verifiedNull()) {
+      toast({ description: "Por favor llene todos los campos." });
+    } else {
+      const response = await makeFetch("/api/clients", "PUT", id, body);
+      doVerifications(response);
+    }
+  };
 
   return (
     <div className=" w-[100w]">

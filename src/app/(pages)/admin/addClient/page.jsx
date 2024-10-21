@@ -118,8 +118,6 @@ export default function AddClient() {
             cli_birthdate: date,
           },
     };
-    console.log(body);
-    console.log(verifiedNull());
     if (verifiedNull()) {
       toast({ description: "Por favor llene todos los campos." });
     } else {

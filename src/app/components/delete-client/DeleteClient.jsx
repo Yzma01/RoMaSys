@@ -8,6 +8,8 @@ import {
 } from "@radix-ui/react-alert-dialog";
 import Button from "../utils/Button";
 import { makeFetch } from "../utils/fetch";
+import RoundButton from "../utils/RoundButton";
+import { check, x } from "@/public/icons";
 const DeleteClient = ({ selectedClient }) => {
 
   const handleSubmit = async() => {
@@ -47,14 +49,10 @@ const DeleteClient = ({ selectedClient }) => {
       <AlertDialogFooter>
         <div className="w-full items-end flex justify-between gap-4 p-3">
           <AlertDialogCancel>
-            <Button color={"red"} text={"Cancelar"} />
+            <RoundButton image={x}/>
           </AlertDialogCancel>
           <AlertDialogAction>
-            <Button
-              onClick={() => handleSubmit()}
-              color={"green"}
-              text={"Eliminar"}
-            />
+            <RoundButton image={check} onClick={()=>handleSubmit()}/>
           </AlertDialogAction>
         </div>
       </AlertDialogFooter>
