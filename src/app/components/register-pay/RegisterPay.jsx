@@ -19,7 +19,7 @@ const RegisterPay = ({ selectedClient }) => {
       pay_client_id: selectedClient.client.cli_id,
       pay_date: "",
       pay_amount: amount,
-      pay_monthly_pay_type: monthlyType.toLocaleLowerCase()
+      pay_monthly_payment_type: monthlyType.toLocaleLowerCase()
     }
     console.log(body)
     const response = await makeFetch(

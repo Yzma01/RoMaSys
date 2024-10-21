@@ -13,6 +13,7 @@ import {
   Table,
   TableBody,
   TableCaption,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -40,7 +41,7 @@ const ClientHistory = ({ selectedClient }) => {
     const fetchHistory = async () => {
       try {
         const history = await getClientHistory();
-        setClientHistory(history);
+        setClientHistory(await history.json());
       } catch (error) {
         console.error("Error fetching client history", error);
         setClientHistory(null);
@@ -49,6 +50,7 @@ const ClientHistory = ({ selectedClient }) => {
       }
     };
     fetchHistory();
+    console.log(clientHistory)
   }, [selectedClient]);
 
   const getClientHistory = async () => {
@@ -99,7 +101,7 @@ const ClientHistory = ({ selectedClient }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {/* {clientHistory.map((client, index) => (
+            {clientHistory.map((client, index) => (
               <TableRow key={index}>
                 <TableCell className="text-center hidden md:table-cell">
                   {client.pay_date}
@@ -111,7 +113,7 @@ const ClientHistory = ({ selectedClient }) => {
                   {client.pay_monthly_payment_type}
                 </TableCell>
               </TableRow>
-            ))} */}
+            ))}
           </TableBody>
         </Table>
       </div>
