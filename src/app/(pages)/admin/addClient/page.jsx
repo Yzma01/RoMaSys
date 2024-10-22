@@ -106,7 +106,7 @@ export default function AddClient() {
       cli_remaining_days: 0,
       cli_register_date: new Date(),
       cli_rutine: routine,
-      cli_pay_amount: amount.includes(",") ? amount.replace(",", "") : amount,
+      pay_amount: amount.includes(",") ? amount.replace(",", "") : amount,
       cli_next_pay_date: "2024-10-01T00:00:00.000Z",
       cli_additional_data: !routine
         ? null

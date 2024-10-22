@@ -14,6 +14,7 @@ import { calculateNextPayDate } from "./services/clientUtils.js";
 
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
+const Payment = db.Payments;
 
 export const clientsRepo = {
   getClients,
@@ -81,9 +82,10 @@ async function addClient(req, res) {
       await sendRutine(body, rutine.rut_rutine);
     }
 
-  //   await addFirstPayment(body, today);
-
-  //  delete body.pay_amount;
+    console.log("maldito");
+    await addFirstPayment(body, today);
+    console.log("que psa hp");
+    delete body.pay_amount;
 
     const client = new Client(body);
     await client.save();
@@ -114,15 +116,22 @@ async function addAdditionalClientData(body, rutineId) {
 }
 
 async function addFirstPayment(body, today) {
-  const bodyPayment = {
-    pay_client_id: body.cli_id,
-    pay_date: today,
-    pay_amount: body.pay_amount, 
-    pay_monthly_payment_type: body.cli_monthly_payment_type,
-  };
-
-  const payment = new Payment(bodyPayment);
-  await payment.save();
+  try {
+    const bodyPayment = {
+      pay_client_id: body.cli_id,
+      pay_date: today,
+      pay_amount: body.pay_amount.includes(",") ? body.pay_amount.replace(",", "") : body.pay_amount,
+      pay_monthly_payment_type: body.cli_monthly_payment_type,
+    };
+    console.log("bodyPa: ", bodyPayment);
+    const payment = new Payment(bodyPayment);
+    await payment.save();
+  } catch (error) {
+    throw {
+      message: `Error saving first payment: " + ${error.message}`,
+      status: 400,
+    };
+  }
 }
 
 function frozenClient(body, client) {

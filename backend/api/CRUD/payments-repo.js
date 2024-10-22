@@ -17,10 +17,8 @@ async function addPayment(req, res) {
     clientNotFound(client);
 
     body.pay_date = new Date();
-
-    console.log("body: ", body);
+    body.pay_amount = body.pay_amount.includes(",") ? body.pay_amount.replace(",", "") : body.pay_amount;
     const payment = new Payment(body);
-    console.log("ajua: ", payment);
     await payment.save();
 
     res.status(201).json({ message: "Payment saved!", payment });
