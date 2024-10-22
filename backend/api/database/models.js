@@ -113,7 +113,7 @@ function messagesAgendaModel() {
   const schema = new Schema({
     msg_client_id: { type: String, unique: false, required: true },
     msg_sent: { type: Boolean, unique: false, required: true },
-    // // msg_content: {type: String, unique: false, required: true},
+    // msg_content: {type: String, unique: false, required: true},
     msg_next_payment_date: { type: Date, unique: false, required: false },
   });
 
