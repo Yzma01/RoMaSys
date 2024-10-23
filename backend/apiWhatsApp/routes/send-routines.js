@@ -3,7 +3,7 @@ import {whatsapp, isAuthenticated} from '../lib/whatsapp.js';
 
 const router = Router();
 
-router.post('/enviarMensaje', async (req, res) => {
+router.post('/sendRoutine', async (req, res) => {
   try {
     console.log("Se recibio en api wasa:", req.body);
     

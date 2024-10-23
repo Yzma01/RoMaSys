@@ -2,10 +2,11 @@ import express from "express";
 import clientsRoutes from "./api/routes/clients-routes.js";
 import paymentsRoutes from "./api/routes/payments-routes.js";
 import filterRoutes from "./api/routes/filter-routes.js";
-import { whatsapp } from "./apiWhatsApp/lib/whatsapp.js";
-import sendRoutine from "./apiWhatsApp/routes/links.js";
+import whatsappRoutes from "./api/routes/whatsapp-routes.js";
+import { whatsapp, isAuthenticated } from "./apiWhatsApp/lib/whatsapp.js";
+import sendRoutine from "./apiWhatsApp/routes/send-routines.js";
 import notifyExpiration from "./apiWhatsApp/routes/notify-expiration.js";
-import { startMessageSending } from "./api/schedule-messages/membership-to-expire.js";
+
 import { validateHttpMethod } from "./api/middleware/validation.js";
 import {
   errorHandler,
@@ -27,15 +28,16 @@ app.use("/api/payments", paymentsRoutes);
 app.use("/api/filter/clients", filterRoutes);
 
 //? Rutas para enviar rutinas a WhatsApp
-app.use("/apiWhatsApp/routes", sendRoutine);
+app.use("/apiWhatsApp", sendRoutine);
 
-// Rutas para avisar caducidad de membresías
-app.use("/apiMembership", notifyExpiration);
+//? Rutas para avisar caducidad de membresías
+app.use("/apiWhatsApp", notifyExpiration);
+
+//?Ruta para el qr
+app.use("/isConnected/", whatsappRoutes);
 
 //? Inicializa el cliente de WhatsApp
 whatsapp.initialize();
-
-startMessageSending();
 
 //? Manejo de promesas no capturadas
 process.on("unhandledRejection", handleUnhandledRejection);

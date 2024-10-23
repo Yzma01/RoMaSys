@@ -21,6 +21,10 @@ async function addPayment(req, res) {
     const payment = new Payment(body);
     await payment.save();
 
+    //!Modificar la siguiente fecha de pago en Clientes
+
+    //!Y agendar el nuevo mensaje
+
     res.status(201).json({ message: "Payment saved!", payment });
   } catch (error) {
     res

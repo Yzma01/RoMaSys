@@ -39,7 +39,7 @@ export async function sendRutine(body, rutine) {
       };
 
       const response = await makeFetchWhatsapp(
-        "/apiWhatsApp/routes/enviarMensaje",
+        "/apiWhatsApp/sendRoutine",
         "POST",
         "",
         messageData
