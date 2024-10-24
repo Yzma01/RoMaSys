@@ -10,11 +10,12 @@ import Button from "../utils/Button";
 import { makeFetch } from "../utils/fetch";
 import RoundButton from "../utils/RoundButton";
 import { check, x } from "@/public/icons";
+import { emitEvent } from "@/hooks/use-event";
 const DeleteClient = ({ selectedClient }) => {
 
   const handleSubmit = async() => {
     const response = await makeFetch("/api/clients", "DELETE", selectedClient.client.cli_id);
-    window.location.reload();
+    emitEvent("refreshTable", {});
     }
   const [id, setId] = useState("");
   const [fullName, setFullName] = useState("");

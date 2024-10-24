@@ -24,8 +24,8 @@ const FormInput = ({ value, placeholder, setValue }) => {
           htmlFor="name"
           className="absolute top-0 left-0 text-gray-500 peer-placeholder-shown:top-5 peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-cyan-400 transition-all duration-200 pl-2"
         >
-          <div className="flex flex-row gap-1">
-            <PhoneChanger placeholder={placeholder} />
+          <div className="flex flex-row gap-1 pl-8">
+            {/* <PhoneChanger placeholder={placeholder} /> */}
             {placeholder}
           </div>
         </label>

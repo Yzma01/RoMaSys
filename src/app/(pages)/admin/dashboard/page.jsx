@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { makeFetch } from "@/src/app/components/utils/fetch";
 import { AnimatePresence, motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
+import { useEvent } from "@/hooks/use-event";
 
 export default function Dashboard() {
   const [clients, setClients] = useState([]);
@@ -13,23 +14,21 @@ export default function Dashboard() {
   const { toast } = useToast();
   useEffect(() => {
     setClients([]);
-    const getClients = async () => {
-      const response = await makeFetch(
-        "/api/clients",
-        "GET",
-        "",
-      );
-      console.log(process.env.BASE_URL)
-      console.log("puto jorge")
-      if (response.status === 200) {
-        const data = await response.json();
-        setClients(data);
-        setOriginalClients(data);
-      }
-      if (response.status === 500) {
-        toast("Error de conexión, si el problema persiste contacte a soporte");
-      }
-    };
+    getClients();
+  }, []);
+  const getClients = async () => {
+    const response = await makeFetch("/api/clients", "GET", "");
+    if (response.status === 200) {
+      const data = await response.json();
+      setClients(data);
+      setOriginalClients(data);
+    }
+    if (response.status === 500) {
+      toast("Error de conexión, si el problema persiste contacte a soporte");
+    }
+  };
+
+  useEvent("refreshTable", () => {
     getClients();
   }, []);
 
@@ -42,7 +41,7 @@ export default function Dashboard() {
       const response = await makeFetch(
         `/api/filter/clients?filterType=${searchValue.toLowerCase()}`,
         "GET",
-        "",
+        ""
       );
       if (response.status === 200) {
         const data = await response.json();
@@ -79,28 +78,27 @@ export default function Dashboard() {
             transition={{ duration: 1.5 }}
           >
             <div className="flex items-center justify-center h-[100vh] text-white">
-
-            <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 max-w-full w-full h-auto mx-4 md:mx-8 lg:mx-16">
-              <section>
-                <header className="flex flex-col sm:flex-row items-center justify-between">
-                  <div className="flex flex-col w-full sm:w-3/4 mb-4 sm:mb-0">
-                    <h1 className="text-xl sm:text-2xl mb-2 font-bold">
-                      DASHBOARD
-                    </h1>
-                    <p className="text-base sm:text-lg mb-4 text-gray-3 font-light">
-                      Hola Niger. ¡Bienvenido de nuevo a RoMaSys!
-                    </p>
-                  </div>
-                  <div className="w-fit sm:w-1/4">
-                    <SearchBar
-                      searchClientsByFilter={searchClientsByFilter}
-                      searchByNameOrId={searchByNameOrId}
-                    />
-                  </div>
-                </header>
-                <ClientsTable clients={clients} />
-              </section>
-            </div>
+              <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 max-w-full w-full h-auto mx-4 md:mx-8 lg:mx-16">
+                <section>
+                  <header className="flex flex-col sm:flex-row items-center justify-between">
+                    <div className="flex flex-col w-full sm:w-3/4 mb-4 sm:mb-0">
+                      <h1 className="text-xl sm:text-2xl mb-2 font-bold">
+                        DASHBOARD
+                      </h1>
+                      <p className="text-base sm:text-lg mb-4 text-gray-3 font-light">
+                        Hola Niger. ¡Bienvenido de nuevo a RoMaSys!
+                      </p>
+                    </div>
+                    <div className="w-fit sm:w-1/4">
+                      <SearchBar
+                        searchClientsByFilter={searchClientsByFilter}
+                        searchByNameOrId={searchByNameOrId}
+                      />
+                    </div>
+                  </header>
+                  <ClientsTable clients={clients} />
+                </section>
+              </div>
             </div>
           </motion.div>
         </AnimatePresence>
