@@ -10,6 +10,16 @@ import path from "path";
 let authenticated = false;
 let messageInterval;
 
+function setMessageInterval(interval) {
+  messageInterval = interval;
+}
+
+function clearMessageInterval() {
+  clearTimeout(messageInterval);
+  messageInterval = null;
+}
+
+
 const whatsapp = new Client({
   webVersionCache: {
     type: "remote",
@@ -43,7 +53,7 @@ whatsapp.on("qr", (qr) => {
 whatsapp.on("ready", () => {
   console.log("Cliente listo ✅");
   authenticated = true;
-  startMessageSending(authenticated); 
+  startMessageSending(authenticated);
 });
 
 whatsapp.on("authenticated", (session) => {
@@ -59,13 +69,12 @@ whatsapp.on("auth_failure", (msg) => {
 whatsapp.on("disconnected", async (reason) => {
   console.log("Cliente desconectado ☠️:", reason);
   authenticated = false;
-  clearInterval(messageInterval); //!Creo que esto no se ocupa
+  clearMessageInterval(messageInterval); //!Creo que esto no se ocupa
 });
 
-const isAuthenticated = (req,res) => {
+const isAuthenticated = (req, res) => {
   return res.json(authenticated);
 };
 
-
 //!Quitar la funcion is Autheticaed que se usa en otro lado
-export { whatsapp, isAuthenticated,  authenticated };
+export { whatsapp, isAuthenticated, authenticated, setMessageInterval, clearMessageInterval };

@@ -1,6 +1,6 @@
 import { makeFetchWhatsapp } from "../../utils/fetchWhatsapp.js";
 import { db } from "../database/db.js";
-import { authenticated } from "../../apiWhatsApp/lib/whatsapp.js"; //
+import { authenticated, setMessageInterval, clearMessageInterval } from "../../apiWhatsApp/lib/whatsapp.js"; //
 
 const MessageAgenda = db.MessagesAgenda;
 const Client = db.Clients;
@@ -46,10 +46,10 @@ export async function startMessageSending(isConnected) {
   }
 
   if (authenticated) {
-    messageInterval = setTimeout(() => startMessageSending(authenticated), TESTING);
+    const interval = setTimeout(() => startMessageSending(authenticated), TESTING);
+    setMessageInterval(interval); // Usa la función para configurar el intervalo
   }
 }
-
 async function sendAndMarkAsSent(client, message) {
   console.log(`Enviando mensaje a: ${message.msg_client_id}`);
   try {
