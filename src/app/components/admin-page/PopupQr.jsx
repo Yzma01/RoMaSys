@@ -15,6 +15,7 @@ import QrCodeScannerRoundedIcon from "@mui/icons-material/QrCodeScannerRounded";
 
 export default function PopupQr({ sidebarOpen }) {
   const [qrSrc, setQrSrc] = useState("");
+  const [isAuthenticate, setisAuthenticate] = useState(false);
 
   useEffect(() => {
     const timestamp = new Date().getTime();
@@ -36,9 +37,9 @@ export default function PopupQr({ sidebarOpen }) {
             variant="outline"
             className="w-full bg-transparent text-white border-none hover:bg-adminBackground hover:text-white">
             <div className="px-[8px] py-[16px]">
-              <QrCodeScannerRoundedIcon />
+              <QrCodeScannerRoundedIcon className={`${isAuthenticate?"":"text-red-0"}`}/>
             </div>
-            {sidebarOpen && <span> Mostrar QR</span>}
+            {sidebarOpen && <span className={`${isAuthenticate?"":"text-red-0"}`}> Mostrar QR</span>}
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent className="bg-blueDark">

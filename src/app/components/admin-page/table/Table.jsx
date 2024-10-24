@@ -74,16 +74,22 @@ export function ClientsTable({ clients }) {
           className="hover:bg-[#897E7E] text-white"
         />
       ),
-      child: (client) => <ClientHistory selectedClient={client}/>
+      child: (client) => <ClientHistory selectedClient={client} />,
     },
   ];
-  const activeClients = clients.filter((client) => !client.cli_frozen);
-  const frozenClients = clients.filter((client) => client.cli_frozen);
-  const pastDueClients = clients.filter(
-    (client) =>
-      !client.cli_frozen &&
-      isBefore(new Date(client.cli_next_pay_date), new Date())
-  );
+  const activeClients = [];
+  const frozenClients = [];
+  const pastDueClients = [];
+
+  clients.forEach((client) => {
+    if (client.cli_frozen) {
+      frozenClients.push(client);
+    } else if (isBefore(new Date(client.cli_next_pay_date), new Date())) {
+      pastDueClients.push(client);
+    } else {
+      activeClients.push(client);
+    }
+  });
 
   const renderActiveClients = () => {
     return activeClients.map((client, index) => (
@@ -115,7 +121,10 @@ export function ClientsTable({ clients }) {
   };
   const renderFrozenClients = () => {
     return frozenClients.map((client, index) => (
-      <TableRow key={index} className="hover:bg-[#11111199] text-[#367cff] font-bold">
+      <TableRow
+        key={index}
+        className="hover:bg-[#11111199] text-[#367cff] font-bold"
+      >
         <TableCell className="text-center hidden md:table-cell">
           {client.cli_id}
         </TableCell>
@@ -136,7 +145,7 @@ export function ClientsTable({ clients }) {
             <div className={`flex justify-center`}>
               <Popover
                 button={React.cloneElement(button, {
-                  freeze: label == "freeze" ? true : false,
+                  freeze: label === "freeze",
                 })}
                 child={child}
                 client={client}
@@ -149,7 +158,10 @@ export function ClientsTable({ clients }) {
   };
   const renderPassDueClients = () => {
     return pastDueClients.map((client, index) => (
-      <TableRow key={index} className="hover:bg-[#11111199] text-[#ff0000] font-bold">
+      <TableRow
+        key={index}
+        className="hover:bg-[#11111199] text-[#ff0000] font-bold"
+      >
         <TableCell className="text-center hidden md:table-cell">
           {client.cli_id}
         </TableCell>

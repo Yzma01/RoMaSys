@@ -14,11 +14,13 @@ import {
   TableBody,
   TableCaption,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "../../ui/table";
 import { makeFetch } from "../../utils/fetch";
+import { format } from "date-fns";
 
 const ClientHistory = ({ selectedClient }) => {
   const [id, setId] = useState("");
@@ -26,7 +28,7 @@ const ClientHistory = ({ selectedClient }) => {
   const [phone, setPhone] = useState("");
   const [clientHistory, setClientHistory] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [total, setTotal] = useState(0);
   useEffect(() => {
     const fName =
       selectedClient.client.cli_name +
@@ -50,7 +52,6 @@ const ClientHistory = ({ selectedClient }) => {
       }
     };
     fetchHistory();
-    console.log(clientHistory)
   }, [selectedClient]);
 
   const getClientHistory = async () => {
@@ -77,6 +78,7 @@ const ClientHistory = ({ selectedClient }) => {
         </p>
       );
     }
+
     return (
       <div
         className="max-h-[30vw] overflow-y-auto pt-5"
@@ -87,7 +89,7 @@ const ClientHistory = ({ selectedClient }) => {
       >
         <Table className="min-w-full">
           <TableCaption>Historial</TableCaption>
-          <TableHeader className="bg-[#18181a]">
+          <TableHeader className="bg-[#18181a] sticky">
             <TableRow>
               <TableHead className="text-white text-center hidden md:table-cell font-bold">
                 Fecha
@@ -104,13 +106,13 @@ const ClientHistory = ({ selectedClient }) => {
             {clientHistory.map((client, index) => (
               <TableRow key={index}>
                 <TableCell className="text-center hidden md:table-cell">
-                  {client.pay_date}
-                </TableCell>
-                <TableCell className="text-center hidden md:table-cell">
-                  {client.pay_amount}
+                  {format(new Date(client.pay_date), "dd-MM-yyyy")}
                 </TableCell>
                 <TableCell className="text-center hidden md:table-cell">
                   {client.pay_monthly_payment_type}
+                </TableCell>
+                <TableCell className="text-center hidden md:table-cell">
+                  {client.pay_amount}
                 </TableCell>
               </TableRow>
             ))}
@@ -128,7 +130,7 @@ const ClientHistory = ({ selectedClient }) => {
           </h1>
         </AlertDialogTitle>
         <AlertDialogDescription>
-          <div className="flex flex-row w-[500px]">
+          <div className="flex flex-row w-[500px] justify-between">
             <div className="pl-5 pb-3 flex flex-col">
               <p className="text-gray-500">Cédula</p>
               <p className="pl-5 font-bold">{id}</p>

@@ -10,6 +10,7 @@ import { check, x } from "@/public/icons";
 import RoundButton from "../utils/RoundButton";
 import { useToast } from "@/hooks/use-toast";
 import { makeFetch } from "../utils/fetch";
+import { emitEvent } from "@/hooks/use-event";
 
 const FreezeClient = ({ selectedClient }) => {
   const client = selectedClient.client;
@@ -47,7 +48,7 @@ const FreezeClient = ({ selectedClient }) => {
       toast({ description: message, className: className });
     }
     if(status == 200){
-      window.location.reload();
+      emitEvent("refreshTable", {});
     }
     return;
   };
@@ -97,7 +98,9 @@ const FreezeClient = ({ selectedClient }) => {
       <AlertDialogHeader>
         <AlertDialogTitle>
           <h1 className="text-[#367cff] flex text-center justify-center font-bold text-xl pt-5">
-            ¿Desea congelar al cliente?
+            ¿Desea 
+            {client.cli_frozen?" descongelar ":" congelar "}
+             al cliente?
           </h1>
         </AlertDialogTitle>
       </AlertDialogHeader>
