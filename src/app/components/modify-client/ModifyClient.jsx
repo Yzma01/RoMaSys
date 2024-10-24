@@ -13,6 +13,7 @@ import Routine from "../add-client/Routine";
 import Button from "../utils/Button";
 import { useToast } from "@/hooks/use-toast";
 import { makeFetch } from "../utils/fetch";
+import { emitEvent } from "@/hooks/use-event";
 
 const ModifyClient = ({ selectedClient }) => {
   const client = selectedClient.client;
@@ -50,7 +51,7 @@ const ModifyClient = ({ selectedClient }) => {
       toast({ description: message, className: className });
     }
     if (code == 200) {
-      window.location.reload();
+      emitEvent("refreshTable", {});
     }
     return;
   };
@@ -96,8 +97,7 @@ const ModifyClient = ({ selectedClient }) => {
     );
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
     const body = {
       cli_name: name,
       cli_last_name1: lastname1,
@@ -197,7 +197,7 @@ const ModifyClient = ({ selectedClient }) => {
           </AlertDialogCancel>
           <AlertDialogAction>
             <Button
-              onClick={(e) => handleSubmit(e)}
+              onClick={(e) => handleSubmit()}
               color={"green"}
               text={"Modificar"}
             />
