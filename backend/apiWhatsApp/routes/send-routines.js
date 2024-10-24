@@ -1,5 +1,5 @@
 import { Router } from 'express';  
-import {whatsapp, isAuthenticated} from '../lib/whatsapp.js';
+import {whatsapp, authenticated} from '../lib/whatsapp.js';
 
 const router = Router();
 
@@ -9,7 +9,7 @@ router.post('/sendRoutine', async (req, res) => {
     
     const { postalCode, phones, mensaje } = req.body;
 
-    if (!isAuthenticated()) {
+    if (!authenticated) {
       return res.status(403).json({ error: 'No autenticado. Por favor, verifica tu sesión de WhatsApp.' });
     }
 

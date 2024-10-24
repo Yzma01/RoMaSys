@@ -56,12 +56,12 @@ export async function sendRutine(body, rutine) {
   }
 }
 
-export async function scheduleMessage(body) {
+export async function scheduleMessage(client) {
   try {
     const data = {
-      msg_client_id: body.cli_id,
+      msg_client_id: client.cli_id,
       msg_sent: false,
-      msg_next_payment_date: calculateNextPayDate(body),
+      msg_next_payment_date: client.cli_next_pay_date,
     };
     const messagesAgenda = new MessagesAgenda(data);
     await messagesAgenda.save();

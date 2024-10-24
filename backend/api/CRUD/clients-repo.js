@@ -66,7 +66,7 @@ async function addClient(req, res) {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
 
-    body.cli_next_pay_date = calculateNextPayDate(body);
+    body.cli_next_pay_date = calculateNextPayDate(body.cli_monthly_payment_type);
     console.log("auqi");
     body.cli_register_date = today;
 
@@ -90,7 +90,7 @@ async function addClient(req, res) {
     const client = new Client(body);
     await client.save();
 
-    await scheduleMessage(body);
+    await scheduleMessage(client);
 
     res.status(201).json({ message: "Client saved!", client });
   } catch (error) {
@@ -195,7 +195,7 @@ async function updateClient(req, res, cli_id) {
 
     body.cli_additional_data = additionalData._id;
     body.cli_register_date = client.cli_register_date;
-    body.cli_next_pay_date = calculateNextPayDate(body);
+    body.cli_next_pay_date = calculateNextPayDate(body.cli_monthly_payment_type);
 
     frozenClient(body, client);
 
