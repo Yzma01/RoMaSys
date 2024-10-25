@@ -66,7 +66,9 @@ async function addClient(req, res) {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
 
-    body.cli_next_pay_date = calculateNextPayDate(body.cli_monthly_payment_type);
+    body.cli_next_pay_date = calculateNextPayDate(
+      body.cli_monthly_payment_type, today
+    );
     console.log("auqi");
     body.cli_register_date = today;
 
@@ -120,7 +122,9 @@ async function addFirstPayment(body, today) {
     const bodyPayment = {
       pay_client_id: body.cli_id,
       pay_date: today,
-      pay_amount: body.pay_amount.includes(",") ? body.pay_amount.replace(",", "") : body.pay_amount,
+      pay_amount: body.pay_amount.includes(",")
+        ? body.pay_amount.replace(",", "")
+        : body.pay_amount,
       pay_monthly_payment_type: body.cli_monthly_payment_type,
     };
     console.log("bodyPa: ", bodyPayment);
@@ -178,6 +182,7 @@ function unfreezeClient(body, client) {
 //*Update client
 async function updateClient(req, res, cli_id) {
   const body = req.body;
+  const today = new Date();
 
   try {
     const client = await Client.findOne({ cli_id: cli_id });
@@ -185,17 +190,22 @@ async function updateClient(req, res, cli_id) {
 
     await validatePhone(body, client);
 
-    const rutine = await assignRutine(body);
+    if (body.cli_rutine === true) {
+      const rutine = await assignRutine(body);
 
-    const additionalData = await updateAdditionalClientData(
-      body.cli_additional_data,
-      client.cli_additional_data,
-      rutine.rut_id
-    );
+      const additionalData = await updateAdditionalClientData(
+        body.cli_additional_data,
+        client.cli_additional_data,
+        rutine.rut_id
+      );
+      body.cli_additional_data = additionalData._id;
+      await sendRutine(body, rutine.rut_rutine);
+    }
 
-    body.cli_additional_data = additionalData._id;
     body.cli_register_date = client.cli_register_date;
-    body.cli_next_pay_date = calculateNextPayDate(body.cli_monthly_payment_type);
+    body.cli_next_pay_date = calculateNextPayDate(
+      body.cli_monthly_payment_type, today
+    );
 
     frozenClient(body, client);
 
@@ -204,12 +214,12 @@ async function updateClient(req, res, cli_id) {
     Object.assign(client, body);
     await client.save();
 
-    await sendRutine(body, rutine.rut_rutine);
+    //!Ver si esto no lo chinga, es que se agende el nuevo mensaje si se congelo, para que cuando se descongele coloque la nueva fecha
+   // await scheduleMessage(client); //?Si se chingo
 
     res.status(200).json({
       message: "Client updated successfully ",
-      client,
-      additionalData,
+      client
     });
   } catch (error) {
     res
