@@ -7,7 +7,7 @@ router.post("/notifyExpiration", async (req, res) => {
   const body = req.body;
   const phone = body.cli_phone;
   const postalCode = "506";
-  const mensaje = "le le acabo la pinci mensualidad";
+  const mensaje = "Su mesualidad se encuentra vencida";
 
   if (!phone) {
     return res.status(400).json({ error: "Faltan el phone" });

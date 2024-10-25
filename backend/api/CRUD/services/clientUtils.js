@@ -4,9 +4,9 @@ export function daysInMonth(month, year) {
   return new Date(year, month + 1, 0).getDate();
 }
 
-export function calculateNextPayDate(monthlyType) {
+export function calculateNextPayDate(monthlyType,nextPaymentDate) {
   let today = new Date();
-  let nextPaymentDate = new Date(today);
+  // let nextPaymentDate = new Date(today);
 
   if (monthlyType === MONTHLY_PAYMENT_TYPE[0]) {
     let daysInCurrentMonth = daysInMonth(today.getMonth(), today.getFullYear());

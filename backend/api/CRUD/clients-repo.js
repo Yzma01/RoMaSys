@@ -67,7 +67,7 @@ async function addClient(req, res) {
     await phoneAlredyInUse(body);
 
     body.cli_next_pay_date = calculateNextPayDate(
-      body.cli_monthly_payment_type
+      body.cli_monthly_payment_type, today
     );
     console.log("auqi");
     body.cli_register_date = today;
@@ -182,6 +182,7 @@ function unfreezeClient(body, client) {
 //*Update client
 async function updateClient(req, res, cli_id) {
   const body = req.body;
+  const today = new Date();
 
   try {
     const client = await Client.findOne({ cli_id: cli_id });
@@ -203,7 +204,7 @@ async function updateClient(req, res, cli_id) {
 
     body.cli_register_date = client.cli_register_date;
     body.cli_next_pay_date = calculateNextPayDate(
-      body.cli_monthly_payment_type
+      body.cli_monthly_payment_type, today
     );
 
     frozenClient(body, client);

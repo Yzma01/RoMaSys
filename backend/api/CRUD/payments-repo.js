@@ -16,34 +16,38 @@ async function addPayment(req, res) {
   const body = req.body;
 
   try {
+    // Busca el cliente por ID
     const client = await Client.findOne({ cli_id: body.pay_client_id });
     clientNotFound(client);
 
+    // Ajusta la fecha de pago y elimina cualquier coma del monto si es necesario
     body.pay_date = new Date();
     body.pay_amount = body.pay_amount.includes(",")
       ? body.pay_amount.replace(",", "")
       : body.pay_amount;
+
     const payment = new Payment(body);
     await payment.save();
 
-    //!Modificar la siguiente fecha de pago en Clientes
-    // console.log("sddsc: ",getDaysDifference(client.cli_next_pay_date, calculateNextPayDate(body.pay_monthly_payment_type, client.cli_next_pay_date))); 
-    console.log("dss,", calculateNextPayDate(body.pay_monthly_payment_type));
-    client.cli_next_pay_date = calculateNextPayDate(body.pay_monthly_payment_type);
-    // aux.setDate(aux.getDate() + getDaysDifference(client.cli_next_pay_date, calculateNextPayDate( body.pay_monthly_payment_type)));
+    const nextPayDate = calculateNextPayDate(
+      body.pay_monthly_payment_type,
+      client.cli_next_pay_date
+    );
+    console.log("Nueva fecha de pago calculada: ", nextPayDate);
 
-    // client.cli_next_pay_date = aux;
+    client.cli_next_pay_date = nextPayDate;
 
-    // Object.assign(client);
-    await client.save();
-    //!Y agendar el nuevo mensaje
+    console.log(client);
+
+    await Client.findByIdAndUpdate(client._id, { cli_next_pay_date: nextPayDate });
+
     await scheduleMessage(client);
 
     res.status(201).json({ message: "Payment saved!", payment });
   } catch (error) {
     res
       .status(error.status || 403)
-      .json({ message: "Error added payment  " + error.message });
+      .json({ message: "Error adding payment: " + error.message });
   }
 }
 
@@ -53,7 +57,6 @@ function getDaysDifference(date1, date2) {
   const daysDiff = timeDiff / (1000 * 3600 * 24); // Convertir milisegundos a días
   return Math.ceil(daysDiff); // Redondear hacia arriba para obtener días completos
 }
-
 
 // async function updateNextPaymentDate(client, body) {
 //   client.cli_next_pay_date = calculateNextPayDate(

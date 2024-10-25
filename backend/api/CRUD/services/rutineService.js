@@ -1,6 +1,6 @@
 import { db } from "../../database/db.js";
 import { makeFetchWhatsapp } from "../../../utils/fetchWhatsapp.js";
-import { calculateNextPayDate, calculateAge } from "./clientUtils.js";
+import { calculateAge } from "./clientUtils.js";
 import { filterByAge, filterByGoal, filterByGender } from "./clientFilters.js";
 
 const Rutine = db.Rutines;
