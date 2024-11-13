@@ -15,6 +15,7 @@ import { calculateNextPayDate } from "./services/clientUtils.js";
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
 const Payment = db.Payments;
+const MessageAgenda = db.MessagesAgenda;
 
 export const clientsRepo = {
   getClients,
@@ -60,8 +61,6 @@ async function getClients(req, res) {
 async function addClient(req, res) {
   const body = req.body;
   const today = new Date();
-  console.log("today", today);
-  console.log("El body: ", body);
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
@@ -69,7 +68,6 @@ async function addClient(req, res) {
     body.cli_next_pay_date = calculateNextPayDate(
       body.cli_monthly_payment_type, today
     );
-    console.log("auqi");
     body.cli_register_date = today;
 
     if (body.cli_rutine === true) {
@@ -78,15 +76,13 @@ async function addClient(req, res) {
         body.cli_additional_data,
         rutine.rut_id
       );
-      console.log("popopopop:", additionalData._id);
       body.cli_additional_data = additionalData._id;
 
       await sendRutine(body, rutine.rut_rutine);
     }
 
-    console.log("maldito");
-    await addFirstPayment(body, today);
-    console.log("que psa hp");
+    await addFirstPayment(body);
+ 
     delete body.pay_amount;
 
     const client = new Client(body);
@@ -117,7 +113,8 @@ async function addAdditionalClientData(body, rutineId) {
   }
 }
 
-async function addFirstPayment(body, today) {
+async function addFirstPayment(body) {
+  const today = new Date();
   try {
     const bodyPayment = {
       pay_client_id: body.cli_id,
@@ -150,11 +147,7 @@ function frozenClient(body, client) {
       const diferenciaMilisegundos = nextPayDate - today;
       const milisegundosPorDia = 1000 * 60 * 60 * 24;
       body.cli_remaining_days = diferenciaMilisegundos / milisegundosPorDia;
-      console.log("Se congelo 🥶");
     } else {
-      //!Seria que un cliente con mesualidad vencida intente congelar
-      //!ver si dejo el try-catch
-      console.log("que paho😷");
       throw {
         message: `Monthly payment due `,
         status: 402,
@@ -214,9 +207,6 @@ async function updateClient(req, res, cli_id) {
     Object.assign(client, body);
     await client.save();
 
-    //!Ver si esto no lo chinga, es que se agende el nuevo mensaje si se congelo, para que cuando se descongele coloque la nueva fecha
-   // await scheduleMessage(client); //?Si se chingo
-
     res.status(200).json({
       message: "Client updated successfully ",
       client
@@ -255,6 +245,10 @@ async function _deleteClient(req, res, cli_id) {
     if (client.cli_additional_data) {
       await AdditionalData.findByIdAndDelete(client.cli_additional_data);
     }
+
+    await Payment.deleteMany({ pay_client_id: client.cli_id});
+
+    await MessageAgenda.deleteMany({ msg_client_id: client.cli_id});
 
     //*Delete client
     await Client.findOneAndDelete({ cli_id: cli_id });

@@ -1,4 +1,3 @@
-// whatsapp.js
 import pkg from "whatsapp-web.js";
 const { Client, LocalAuth, NoAuth } = pkg;
 import { startMessageSending } from "../../api/schedule-messages/membership-to-expire.js";
@@ -9,6 +8,9 @@ import path from "path";
 
 let authenticated = false;
 let messageInterval;
+let qrReceived = null; 
+let qrInterval = null; 
+const GENERATE_QR_INTERVAL = 10000;
 
 function setMessageInterval(interval) {
   messageInterval = interval;
@@ -19,7 +21,6 @@ function clearMessageInterval() {
   messageInterval = null;
 }
 
-
 const whatsapp = new Client({
   webVersionCache: {
     type: "remote",
@@ -29,10 +30,7 @@ const whatsapp = new Client({
   authStrategy: new NoAuth(),
 });
 
-//* create QR
-whatsapp.on("qr", (qr) => {
-  // console.log("QR: ");
-  // qrcodeTerminal.generate(qr, { small: true }); //!Luego quitar esto pa que no salga en consola
+function generarQR(qr) {
 
   const qrDir = path.join(path.resolve(process.cwd(), "public"), "qrIMG");
   if (!fs.existsSync(qrDir)) {
@@ -41,7 +39,7 @@ whatsapp.on("qr", (qr) => {
 
   const qrImagePath = path.join(qrDir, "qr.png");
 
-  //! Esto era solo pa revisar, luego lo quito :)
+  //!Esto solo es pa ver si eesta bien
   qrcode.toFile(qrImagePath, qr, (err) => {
     if (err) {
       console.error("Error al generar la imagen del QR:", err);
@@ -49,11 +47,44 @@ whatsapp.on("qr", (qr) => {
       console.log(`QR guardado como imagen en ${qrImagePath}`);
     }
   });
+}
+
+// Evento 'qr' para cuando se reciba un código QR
+whatsapp.on("qr", (qr) => {
+  // Guardar el QR recibido en una variable
+  console.log("QR recibido, generando imagen...");
+  qrReceived = qr; 
+  generarQR(qr);
+
+  if (!qrInterval) {
+    qrInterval = setInterval(() => {
+      if (qrReceived) {
+        console.log("Emitiendo QR primera vez");
+        whatsapp.emit("qr", qrReceived);  
+      }
+    }, GENERATE_QR_INTERVAL); 
+  }
 });
+
+// Evento 'ready' para cuando el cliente esté listo
 whatsapp.on("ready", () => {
   console.log("Cliente listo ✅");
   authenticated = true;
   startMessageSending(authenticated);
+
+  if (qrReceived) {
+    console.log("Reemitiendo QR estando list");
+    whatsapp.emit("qr", qrReceived);  
+  }
+
+  if (!qrInterval) {
+    qrInterval = setInterval(() => {
+      if (qrReceived) {
+        console.log("Emitiendo QR de nuevo esta listo");
+        whatsapp.emit("qr", qrReceived);  
+      }
+    }, GENERATE_QR_INTERVAL);  
+  }
 });
 
 whatsapp.on("authenticated", (session) => {

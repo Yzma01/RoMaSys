@@ -59,10 +59,9 @@ async function sendAndMarkAsSent(client, message) {
       "",
       client
     );
-    //!Quitar el de modificar y que sea eliminar
-    message.msg_sent = true; 
-    await message.save();
+    await MessageAgenda.findOneAndDelete({ _id: message._id});
+
   } catch (error) {
-    console.error("Error al enviar mensaje:", error);
+    console.error("Error al enviar mensaje:", error); 
   }
 }
