@@ -233,9 +233,7 @@ export function ClientsTable({ clients }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {renderPassDueClients()}
           {renderActiveClients()}
-          {renderFrozenClients()}
         </TableBody>
       </Table>
     </div>

@@ -1,12 +1,14 @@
 // whatsapp.js
 import pkg from "whatsapp-web.js";
 const { Client, LocalAuth, NoAuth } = pkg;
+import { startMessageSending } from "../../api/schedule-messages/membership-to-expire.js";
 import qrcodeTerminal from "qrcode-terminal";
 import qrcode from "qrcode";
 import fs from "fs";
 import path from "path";
 
 let authenticated = false;
+let messageInterval;
 
 const whatsapp = new Client({
   webVersionCache: {
@@ -38,10 +40,10 @@ whatsapp.on("qr", (qr) => {
     }
   });
 });
-
 whatsapp.on("ready", () => {
   console.log("Cliente listo ✅");
   authenticated = true;
+  startMessageSending(authenticated); 
 });
 
 whatsapp.on("authenticated", (session) => {
@@ -50,20 +52,20 @@ whatsapp.on("authenticated", (session) => {
 });
 
 whatsapp.on("auth_failure", (msg) => {
-  console.error(
-    "Autenticación falló, contacte con los desarrolladores 📡:",
-    msg
-  );
+  console.error("Autenticación falló:", msg);
   authenticated = false;
 });
 
 whatsapp.on("disconnected", async (reason) => {
   console.log("Cliente desconectado ☠️:", reason);
   authenticated = false;
+  clearInterval(messageInterval); //!Creo que esto no se ocupa
 });
 
-const isAuthenticated = () => {
-  return authenticated;
+const isAuthenticated = (req,res) => {
+  return res.json(authenticated);
 };
 
-export { whatsapp, isAuthenticated };
+
+//!Quitar la funcion is Autheticaed que se usa en otro lado
+export { whatsapp, isAuthenticated,  authenticated };

@@ -12,6 +12,7 @@ import { Button } from "../ui/button";
 import { useState, useEffect } from "react";
 import ButtonContinue from "../utils/Button";
 import QrCodeScannerRoundedIcon from "@mui/icons-material/QrCodeScannerRounded";
+import { makeFetch } from "../utils/fetch";
 
 export default function PopupQr({ sidebarOpen }) {
   const [qrSrc, setQrSrc] = useState("");
@@ -21,9 +22,12 @@ export default function PopupQr({ sidebarOpen }) {
     const timestamp = new Date().getTime();
     setQrSrc(`/qrIMG/qr.png?t=${timestamp}`);
 
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
       const newTimestamp = new Date().getTime();
       setQrSrc(`/qrIMG/qr.png?t=${newTimestamp}`);
+      const response = await makeFetch("/api/isConnected","GET", "");
+      setisAuthenticate(await response.json())
+
     }, 5000);
 
     return () => clearInterval(interval);
@@ -37,9 +41,9 @@ export default function PopupQr({ sidebarOpen }) {
             variant="outline"
             className="w-full bg-transparent text-white border-none hover:bg-adminBackground hover:text-white">
             <div className="px-[8px] py-[16px]">
-              <QrCodeScannerRoundedIcon className={`${isAuthenticate?"":"text-red-0"}`}/>
+              <QrCodeScannerRoundedIcon className={`${isAuthenticate?"text-[#00FF00]":"text-red-0"}`}/>
             </div>
-            {sidebarOpen && <span className={`${isAuthenticate?"":"text-red-0"}`}> Mostrar QR</span>}
+            {sidebarOpen && <span className={`${isAuthenticate?"text-[#00FF00]":"text-red-0"}`}> Mostrar QR</span>}
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent className="bg-blueDark">
