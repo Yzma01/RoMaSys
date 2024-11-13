@@ -40,7 +40,6 @@ router.post('/sendRoutine', async (req, res) => {
           results.push({ phone: phones[i], sent: false, error: 'Número no válido' });
         }
       } catch (err) {
-        //! Manejar error por cada teléfono
         console.error(`Error enviando mensaje a ${phones[i]}:`, err);
         results.push({ phone: phones[i], sent: false, error: 'Error al enviar el mensaje' });
       }

@@ -16,11 +16,11 @@ async function addPayment(req, res) {
   const body = req.body;
 
   try {
-    // Busca el cliente por ID
     const client = await Client.findOne({ cli_id: body.pay_client_id });
     clientNotFound(client);
 
-    // Ajusta la fecha de pago y elimina cualquier coma del monto si es necesario
+    console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🐢🐢🐢")
+
     body.pay_date = new Date();
     body.pay_amount = body.pay_amount.includes(",")
       ? body.pay_amount.replace(",", "")
@@ -51,28 +51,10 @@ async function addPayment(req, res) {
   }
 }
 
-function getDaysDifference(date1, date2) {
-  console.log("date1: ", date1, " date2: ", date2);
-  const timeDiff = date2.getTime() - date1.getTime(); // Diferencia en milisegundos
-  const daysDiff = timeDiff / (1000 * 3600 * 24); // Convertir milisegundos a días
-  return Math.ceil(daysDiff); // Redondear hacia arriba para obtener días completos
-}
-
-// async function updateNextPaymentDate(client, body) {
-//   client.cli_next_pay_date = calculateNextPayDate(
-//     body.pay_monthly_payment_type
-//   );
-
-//   // Object.assign(client);
-//   await client.save();
-// }
-
 async function getPayment(req, res, pay_client_id) {
   try {
     const payment = await Payment.find({ pay_client_id: pay_client_id });
-    console.log("payment:", payment);
     paymentNotFound(payment);
-
     res.json(payment);
   } catch (error) {
     res

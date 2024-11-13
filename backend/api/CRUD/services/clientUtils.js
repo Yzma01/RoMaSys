@@ -7,9 +7,15 @@ export function daysInMonth(month, year) {
 export function calculateNextPayDate(monthlyType,nextPaymentDate) {
   let today = new Date();
   // let nextPaymentDate = new Date(today);
+  console.log("🐕🐕🐕", today);
+
+  if(nextPaymentDate < today){
+    nextPaymentDate = new Date(today);
+  }
 
   if (monthlyType === MONTHLY_PAYMENT_TYPE[0]) {
     let daysInCurrentMonth = daysInMonth(today.getMonth(), today.getFullYear());
+    console.log("opopopopopooo:", today)
     nextPaymentDate.setDate(today.getDate() + daysInCurrentMonth);
   } else if (monthlyType === MONTHLY_PAYMENT_TYPE[1]) {
     nextPaymentDate.setDate(today.getDate() + 15);

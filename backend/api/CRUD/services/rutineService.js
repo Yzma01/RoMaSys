@@ -5,11 +5,11 @@ import { filterByAge, filterByGoal, filterByGender } from "./clientFilters.js";
 
 const Rutine = db.Rutines;
 const MessagesAgenda = db.MessagesAgenda;
+const POSTAL_CODE = "+506";
 
 export async function assignRutine(body) {
   try {
     const additionalData = body.cli_additional_data;
-    console.log("adiiiiiiiiiiiiiitional", additionalData);
     let filter = {};
 
     filterByAge(filter, calculateAge(body));
@@ -33,7 +33,7 @@ export async function sendRutine(body, rutine) {
   if (body.cli_rutine) {
     try {
       const messageData = {
-        postalCode: "+506", //!Por ahora esta asi hasta que yzma pase el postal Code, seria body.postal_code
+        postalCode: POSTAL_CODE, //!Por ahora esta asi hasta que yzma pase el postal Code, seria body.postal_code
         phones: [body.cli_phone],
         mensaje: rutine,
       };
