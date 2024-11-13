@@ -15,6 +15,7 @@ import { calculateNextPayDate } from "./services/clientUtils.js";
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
 const Payment = db.Payments;
+const MessageAgenda = db.MessagesAgenda;
 
 export const clientsRepo = {
   getClients,
@@ -244,6 +245,10 @@ async function _deleteClient(req, res, cli_id) {
     if (client.cli_additional_data) {
       await AdditionalData.findByIdAndDelete(client.cli_additional_data);
     }
+
+    await Payment.deleteMany({ pay_client_id: client.cli_id});
+
+    await MessageAgenda.deleteMany({ msg_client_id: client.cli_id});
 
     //*Delete client
     await Client.findOneAndDelete({ cli_id: cli_id });
