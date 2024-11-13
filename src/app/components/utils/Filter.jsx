@@ -30,11 +30,11 @@ export function Filter({
   return (
     <Popover open={open} onOpenChange={setOpen} className="bg-transparent">
       <PopoverTrigger asChild>
-        <button className="px-4 pl-3 h-10 bg-transparent cursor-pointer">
+        <button className="px-4 pl-3 h-10 bg-transparent cursor-pointer z-10">
           {icon ? (
             <TuneOutlinedIcon sx={{ color: "#6b7280" }} />
           ) : (
-            <div className={`w-fit h-fit ${className}`}>
+            <div className={`w-fit h-fit ${className}${open?"z-10":""}`}>
               {value == "" ? text : (value.length > 10? value.substring(0,10) + "...": value)}
             </div>
           )}

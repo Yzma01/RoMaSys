@@ -213,7 +213,7 @@ export function ClientsTable({ clients }) {
               Teléfono
             </TableHead>
             <TableHead className="text-[#96E9F4] text-center hidden md:table-cell font-bold">
-              Fecha de Pago
+              Próximo Pago
             </TableHead>
             <TableHead className="text-[#367cff] text-center hidden md:table-cell font-bold">
               Congelar
@@ -233,9 +233,7 @@ export function ClientsTable({ clients }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {renderPassDueClients()}
           {renderActiveClients()}
-          {renderFrozenClients()}
         </TableBody>
       </Table>
     </div>

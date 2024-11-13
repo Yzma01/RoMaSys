@@ -97,6 +97,11 @@ const ModifyClient = ({ selectedClient }) => {
     );
   };
 
+  const verifiedNegative = ()=>{
+    const regex = /-+/;
+    return regex.test(amount) || regex.test(weight) || regex.test(height) || regex.test(phone);
+  }
+
   const handleSubmit = async () => {
     const body = {
       cli_name: name,
@@ -119,13 +124,21 @@ const ModifyClient = ({ selectedClient }) => {
             cli_birthdate: date,
           },
     };
+    doFechtVerifications(body);
+  };
+
+  const doFechtVerifications= async(body)=>{
+    if(verifiedNegative()){
+      toast({description: "Los números no pueden ser negativos"});
+      return;
+    }
     if (verifiedNull()) {
       toast({ description: "Por favor llene todos los campos." });
     } else {
       const response = await makeFetch("/api/clients", "PUT", id, body);
       doVerifications(response);
     }
-  };
+  }
 
   return (
     <div className=" w-[100w]">

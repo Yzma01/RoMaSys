@@ -50,6 +50,11 @@ export default function AddClient() {
     return;
   };
 
+  const verifiedNegative = ()=>{
+    const regex = /-+/;
+    return regex.test(amount) || regex.test(weight) || regex.test(height) || regex.test(phone);
+  }
+
   const verifiedNull = () => {
     if (
       id == "" ||
@@ -63,7 +68,6 @@ export default function AddClient() {
       return true;
     }
     if (routine) {
-      console.log("ajshdf");
       if (
         height == "" ||
         weight == "" ||
@@ -118,13 +122,21 @@ export default function AddClient() {
             cli_birthdate: date,
           },
     };
+    doFechtVerifications(body);
+  };
+
+  const doFechtVerifications= async(body)=>{
+    if(verifiedNegative()){
+      toast({description: "Los números no pueden ser negativos"});
+      return;
+    }
     if (verifiedNull()) {
       toast({ description: "Por favor llene todos los campos." });
     } else {
       const response = await makeFetch("/api/clients", "POST", "", body);
       doVerifications(response);
     }
-  };
+  }
 
   return (
     <div className="bg-adminBackground flex items-center justify-center h-[100vh] w-full">

@@ -34,7 +34,7 @@ app.use("/apiWhatsApp", sendRoutine);
 app.use("/apiWhatsApp", notifyExpiration);
 
 //?Ruta para el qr
-app.use("/isConnected/", whatsappRoutes);
+app.use("/api/isConnected", whatsappRoutes);
 
 //? Inicializa el cliente de WhatsApp
 whatsapp.initialize();
