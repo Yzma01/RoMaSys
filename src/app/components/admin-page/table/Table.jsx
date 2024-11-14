@@ -77,6 +77,7 @@ export function ClientsTable({ clients }) {
       child: (client) => <ClientHistory selectedClient={client} />,
     },
   ];
+
   const activeClients = [];
   const frozenClients = [];
   const pastDueClients = [];
