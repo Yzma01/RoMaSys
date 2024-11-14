@@ -43,7 +43,7 @@ async function addPayment(req, res) {
 
     await scheduleMessage(client);
 
-    res.status(201).json({ message: "Payment saved!", payment });
+    res.status(200).json({ message: "Payment saved!", payment });
   } catch (error) {
     res
       .status(error.status || 403)
