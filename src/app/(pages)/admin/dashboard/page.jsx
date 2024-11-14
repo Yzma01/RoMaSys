@@ -23,6 +23,7 @@ export default function Dashboard() {
   
   useEvent("refreshTable", ({filter}) => {
     getClients();
+    filterClients();
   }, []);
 
   const filterClients=()=>{
@@ -52,9 +53,6 @@ export default function Dashboard() {
   };
 
   const searchClientsByFilter = async (searchValue) => {
-    if(searchValue === 'congelado'){
-      searchValue = true;
-    }
     if (searchValue === "") {
       setClients(originalClients);
     } else {
