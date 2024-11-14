@@ -11,15 +11,13 @@ export const clientsFilter = {
 
 async function getClientsByMonthlyType(req, res) {
   const { filterType } = req.query;
-
+  console.log("hola", filterType)
   try {
-    let filter = {};
-
-    filter.filterByOverdue(filterType);
-
-    filter.filterByMonthlyType(filterType);
-
-    filter.filterByClientFrozen(filterType);
+    let filter = {
+      ...filterByOverdue(filterType),
+      ...filterByMonthlyType(filterType),
+      ...filterByClientFrozen(filterType),
+    };
 
     const clients = await Client.find(filter);
     console.log(clients);
@@ -34,8 +32,9 @@ async function getClientsByMonthlyType(req, res) {
 function filterByOverdue(filterType) {
   if (filterType === OVERDUE) {
     const currentDate = new Date();
-    return (cli_next_pay_date = { $lt: currentDate });
+    return {cli_next_pay_date: { $lt: currentDate }};
   }
+  return {};
 }
 
 function filterByMonthlyType(filterType) {
@@ -44,12 +43,14 @@ function filterByMonthlyType(filterType) {
     filterType === MONTHLY_TYPE[1] ||
     filterType === MONTHLY_TYPE[2]
   ) {
-    return (cli_monthly_payment_type = filterType); //*Isma pase mes,quincena, o dia
+    return {cli_monthly_payment_type: filterType}; //*Isma pase mes,quincena, o dia
   }
+  return {};
 }
 
 function filterByClientFrozen(filterType) {
   if (filterType === FROZEN || filterType === !FROZEN) {
-    return (cli_frozen = filterType); //*Isma pase true o false
+    return {cli_frozen: filterType}; //*Isma pase true o false
   }
+  return {};
 }
