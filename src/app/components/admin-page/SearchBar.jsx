@@ -18,6 +18,10 @@ const frameworks = [
     value: "vencido",
     label: "Vencidos",
   },
+  {
+    value: 'congelado',
+    label: 'Congelados'
+  }
 ];
 const SearchBar = ({ searchClientsByFilter, searchByNameOrId }) => {
   const [searchValue, setSearchValue] = useState("");

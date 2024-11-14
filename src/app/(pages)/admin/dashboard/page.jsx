@@ -7,6 +7,7 @@ import { makeFetch } from "@/src/app/components/utils/fetch";
 import { AnimatePresence, motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useEvent } from "@/hooks/use-event";
+import { isBefore } from "date-fns";
 
 export default function Dashboard() {
   const [clients, setClients] = useState([]);
@@ -27,15 +28,36 @@ export default function Dashboard() {
       toast("Error de conexión, si el problema persiste contacte a soporte");
     }
   };
+  const activeClients = [];
+  const frozenClients = [];
+  const pastDueClients = [];
 
-  useEvent("refreshTable", () => {
+  clients.forEach((client) => {
+    if (client.cli_frozen) {
+      frozenClients.push(client);
+    } else if (isBefore(new Date(client.cli_next_pay_date), new Date())) {
+      pastDueClients.push(client);
+    } else {
+      activeClients.push(client);
+    }
+  });
+  useEvent("refreshTable", ({filter}) => {
     getClients();
+    if(filter === 'vencidos'){
+      setClients(pastDueClients);
+    }
+    else if(filter === 'congelados'){
+      setClients(frozenClients);
+    }else{
+      setClients(activeClients);
+    }
   }, []);
 
   const searchClientsByFilter = async (searchValue) => {
-    console.log(searchValue);
+    if(searchValue === 'Congelados'){
+      searchValue = true;
+    }
     if (searchValue === "") {
-      console.log(originalClients);
       setClients(originalClients);
     } else {
       const response = await makeFetch(
