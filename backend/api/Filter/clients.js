@@ -3,7 +3,7 @@ import { db } from "../database/db.js";
 const Client = db.Clients;
 const OVERDUE = "vencido";
 const MONTHLY_TYPE = ["mes", "quincena", "dia"];
-const FROZEN = true;
+const FROZEN = "congelado";
 
 export const clientsFilter = {
   getClientsByMonthlyType,
@@ -34,7 +34,6 @@ function filterByOverdue(filterType) {
     const currentDate = new Date();
     return {cli_next_pay_date: { $lt: currentDate }};
   }
-  return {};
 }
 
 function filterByMonthlyType(filterType) {
@@ -45,12 +44,10 @@ function filterByMonthlyType(filterType) {
   ) {
     return {cli_monthly_payment_type: filterType}; //*Isma pase mes,quincena, o dia
   }
-  return {};
 }
 
 function filterByClientFrozen(filterType) {
-  if (filterType === FROZEN || filterType === !FROZEN) {
-    return {cli_frozen: filterType}; //*Isma pase true o false
+  if (filterType === FROZEN) {
+    return {cli_frozen: true}; //*Isma pase true o false
   }
-  return {};
 }
