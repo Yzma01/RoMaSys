@@ -23,7 +23,7 @@ import RegisterPay from "../../register-pay/RegisterPay";
 import FreezeClient from "../../freeze-client/FreezeClient";
 import ClientHistory from "../client-history/ClientHistory";
 
-export function ClientsTable({ clients }) {
+export function ClientsTable({activeClients, dueDateClients, frozenClients }) {
   const buttons = [
     {
       label: "freeze",
@@ -77,20 +77,6 @@ export function ClientsTable({ clients }) {
       child: (client) => <ClientHistory selectedClient={client} />,
     },
   ];
-
-  const activeClients = [];
-  const frozenClients = [];
-  const pastDueClients = [];
-
-  clients.forEach((client) => {
-    if (client.cli_frozen) {
-      frozenClients.push(client);
-    } else if (isBefore(new Date(client.cli_next_pay_date), new Date())) {
-      pastDueClients.push(client);
-    } else {
-      activeClients.push(client);
-    }
-  });
 
   const renderActiveClients = () => {
     return activeClients.map((client, index) => (
@@ -157,8 +143,8 @@ export function ClientsTable({ clients }) {
       </TableRow>
     ));
   };
-  const renderPassDueClients = () => {
-    return pastDueClients.map((client, index) => (
+  const renderpastDueClients = () => {
+    return dueDateClients.map((client, index) => (
       <TableRow
         key={index}
         className="hover:bg-[#11111199] text-[#ff0000] font-bold"
@@ -234,7 +220,9 @@ export function ClientsTable({ clients }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {renderActiveClients()}
+          {activeClients && renderActiveClients()}
+          {dueDateClients&& renderpastDueClients()}
+          {frozenClients && renderFrozenClients()}
         </TableBody>
       </Table>
     </div>

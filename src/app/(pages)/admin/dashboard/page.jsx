@@ -12,11 +12,33 @@ import { isBefore } from "date-fns";
 export default function Dashboard() {
   const [clients, setClients] = useState([]);
   const [originalClients, setOriginalClients] = useState([]);
+  const activeClients = [];
+  const frozenClients = [];
+  const dueDateClients = [];
   const { toast } = useToast();
   useEffect(() => {
     setClients([]);
     getClients();
   }, []);
+  
+  useEvent("refreshTable", ({filter}) => {
+    getClients();
+  }, []);
+
+  const filterClients=()=>{
+    clients.forEach((client) => {
+      if (client.cli_frozen) {
+        frozenClients.push(client);
+      } else if (isBefore(new Date(client.cli_next_pay_date), new Date())) {
+        dueDateClients.push(client);
+      } else {
+        activeClients.push(client);
+      }
+    });
+  }
+  
+  filterClients();
+
   const getClients = async () => {
     const response = await makeFetch("/api/clients", "GET", "");
     if (response.status === 200) {
@@ -28,33 +50,9 @@ export default function Dashboard() {
       toast("Error de conexión, si el problema persiste contacte a soporte");
     }
   };
-  const activeClients = [];
-  const frozenClients = [];
-  const pastDueClients = [];
-
-  clients.forEach((client) => {
-    if (client.cli_frozen) {
-      frozenClients.push(client);
-    } else if (isBefore(new Date(client.cli_next_pay_date), new Date())) {
-      pastDueClients.push(client);
-    } else {
-      activeClients.push(client);
-    }
-  });
-  useEvent("refreshTable", ({filter}) => {
-    getClients();
-    if(filter === 'vencidos'){
-      setClients(pastDueClients);
-    }
-    else if(filter === 'congelados'){
-      setClients(frozenClients);
-    }else{
-      setClients(activeClients);
-    }
-  }, []);
 
   const searchClientsByFilter = async (searchValue) => {
-    if(searchValue === 'Congelados'){
+    if(searchValue === 'congelado'){
       searchValue = true;
     }
     if (searchValue === "") {
@@ -68,6 +66,7 @@ export default function Dashboard() {
       if (response.status === 200) {
         const data = await response.json();
         setClients(data);
+        filterClients();
       }
       if (response.status === 500) {
         alert("Error de conexión, si el problema persiste contacte a soporte");
@@ -118,7 +117,8 @@ export default function Dashboard() {
                       />
                     </div>
                   </header>
-                  <ClientsTable clients={clients} />
+                  <ClientsTable 
+                  activeClients={activeClients} dueDateClients={dueDateClients} frozenClients={frozenClients} />
                 </section>
               </div>
             </div>
