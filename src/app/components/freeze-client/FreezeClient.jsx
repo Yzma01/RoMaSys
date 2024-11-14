@@ -60,12 +60,7 @@ const FreezeClient = ({ selectedClient }) => {
       response.status,
       500
     );
-    validate(`El cliente cédula: ${id} ya existe.`, response.status, 401);
-    validate(
-      `El número de teléfono: ${phone} ya está registrado`,
-      response.status,
-      406
-    );
+    validate(`El cliente cédula: ${id} tiene un pago pendiente.`, response.status, 402);
   };
 
   const handleSubmit = async (event) => {

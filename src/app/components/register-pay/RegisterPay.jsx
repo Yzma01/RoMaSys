@@ -56,7 +56,7 @@ const RegisterPay = ({ selectedClient }) => {
     validate(
       `Error de conexión, si el problema persiste contacte a soporte.`,
       response.status,
-      400
+      403
     );
   };
 

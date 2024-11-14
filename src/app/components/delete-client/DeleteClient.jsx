@@ -11,11 +11,17 @@ import { makeFetch } from "../utils/fetch";
 import RoundButton from "../utils/RoundButton";
 import { check, x } from "@/public/icons";
 import { emitEvent } from "@/hooks/use-event";
-const DeleteClient = ({ selectedClient }) => {
+import { useToast } from "@/hooks/use-toast";
 
+const DeleteClient = ({ selectedClient }) => {
+  const {toast} = useToast()
   const handleSubmit = async() => {
     const response = await makeFetch("/api/clients", "DELETE", selectedClient.client.cli_id);
-    emitEvent("refreshTable", {});
+    if(response.status === 200){
+      emitEvent("refreshTable", {});
+    }else{
+      toast({description: 'Error de conexión, si el problema persiste contacte a soporte.'})
+    }
     }
   const [id, setId] = useState("");
   const [fullName, setFullName] = useState("");
