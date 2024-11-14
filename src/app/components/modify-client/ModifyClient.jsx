@@ -15,27 +15,60 @@ import { useToast } from "@/hooks/use-toast";
 import { makeFetch } from "../utils/fetch";
 import { emitEvent } from "@/hooks/use-event";
 
-const ModifyClient = ({ selectedClient }) => {
-  const client = selectedClient.client;
+const ModifySelectedClient = ({ selectedClient }) => {
+  const [client, setCLient] = useState()
   const [gender, setGender] = useState("");
-  const [routine, setRoutine] = useState(client.cli_rutine);
+  const [routine, setRoutine] = useState(false);
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [goal, setGoal] = useState("");
   const [date, setDate] = useState("");
 
-  const [id, setId] = useState(client.cli_id);
-  const [name, setName] = useState(client.cli_name);
-  const [lastname1, setLastname1] = useState(client.cli_last_name1);
-  const [lastname2, setLastname2] = useState(client.cli_last_name2);
-  const [phone, setPhone] = useState(client.cli_phone);
-  let mType = client.cli_monthly_payment_type;
-  mType = mType.charAt(0).toUpperCase() + mType.slice(1);
-  const [monthlyType, setMothlyType] = useState(mType);
+  const [id, setId] = useState();
+  const [name, setName] = useState();
+  const [lastname1, setLastname1] = useState();
+  const [lastname2, setLastname2] = useState();
+  const [phone, setPhone] = useState();
+  
+  const [monthlyType, setMothlyType] = useState();
   const [amount, setAmount] = useState(0);
   const { toast } = useToast();
 
   useEffect(() => {
+    getClient(selectedClient);
+    if(client != null){
+      setBasicData();
+      setAditionalData()
+    }
+    
+  }, [selectedClient]);
+
+  const getClient =async (id)=>{
+    const response = await makeFetch("/api/clients", "GET", id);
+    if (response.status === 200) {
+      const data = await response.json();
+      setCLient(data);
+    }
+    if (response.status === 500) {
+      toast({description: "Error de conexión, si el problema persiste contacte a soporte"});
+    }
+    return null;
+  }
+
+  const setBasicData=()=>{
+    setId(client.cli_id)
+    setName(client.cli_name)
+    setLastname1(client.cli_last_name1)
+    setLastname2(client.cli_last_name2)
+    setPhone(client.cli_phone)
+    setAmount(client.cli_monthly_payment)
+
+    let mType = client.cli_monthly_payment_type;
+  mType = mType.charAt(0).toUpperCase() + mType.slice(1);
+  setMothlyType(mType)
+  }
+
+  const setAditionalData=()=>{
     if (routine) {
       setGender(client.cli_additional_data.cli_gender);
       setRoutine(client.cli_rutine);
@@ -44,7 +77,7 @@ const ModifyClient = ({ selectedClient }) => {
       setDate(client.cli_additional_data.cli_birthdate);
       setGoal(client.cli_additional_data.cli_goal);
     }
-  }, [client]);
+  }
 
   const validate = (message, status, code, className) => {
     if (status == code) {
@@ -142,9 +175,6 @@ const ModifyClient = ({ selectedClient }) => {
 
   return (
     <div className=" w-[100w]">
-      <AlertDialogHeader>
-        <AlertDialogTitle></AlertDialogTitle>
-        <AlertDialogDescription>
           <div className="flex items-center justify-center w-full">
             <AnimatePresence>
               <motion.div
@@ -201,24 +231,21 @@ const ModifyClient = ({ selectedClient }) => {
               </motion.div>
             </AnimatePresence>
           </div>
-        </AlertDialogDescription>
-      </AlertDialogHeader>
-      <AlertDialogFooter>
+       
         <div className="w-full items-end flex justify-center gap-4">
-          <AlertDialogCancel>
+         
             <Button color={"red"} text={"Cancelar"} />
-          </AlertDialogCancel>
-          <AlertDialogAction>
+          
             <Button
               onClick={(e) => handleSubmit()}
               color={"green"}
               text={"Modificar"}
             />
-          </AlertDialogAction>
+          
         </div>
-      </AlertDialogFooter>
+     
     </div>
   );
 };
 
-export default ModifyClient;
+export default ModifySelectedClient;

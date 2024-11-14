@@ -8,7 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "../../ui/table";
-import { format, isBefore } from "date-fns";
+import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 import LocalAtmOutlinedIcon from "@mui/icons-material/LocalAtmOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -17,13 +18,13 @@ import TextSnippetOutlinedIcon from "@mui/icons-material/TextSnippetOutlined";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import AcUnitRoundedIcon from "@mui/icons-material/AcUnitRounded";
 import Popover from "../../utils/Popover";
-import ModifyClient from "../../modify-client/ModifyClient";
 import DeleteClient from "../../delete-client/DeleteClient";
 import RegisterPay from "../../register-pay/RegisterPay";
 import FreezeClient from "../../freeze-client/FreezeClient";
 import ClientHistory from "../client-history/ClientHistory";
 
-export function ClientsTable({activeClients, dueDateClients, frozenClients }) {
+export function ClientsTable({ activeClients, dueDateClients, frozenClients }) {
+  const navigate = useNavigate();
   const buttons = [
     {
       label: "freeze",
@@ -52,9 +53,9 @@ export function ClientsTable({activeClients, dueDateClients, frozenClients }) {
         <ClientAction
           logo={CreateOutlinedIcon}
           className="hover:bg-[#ffff00] text-white"
+          onClick={() => navigate(`/admin/modifyClient/${client.cli_id}`)}
         />
       ),
-      child: (client) => <ModifyClient selectedClient={client} />,
     },
     {
       label: "delete",
@@ -78,6 +79,27 @@ export function ClientsTable({activeClients, dueDateClients, frozenClients }) {
     },
   ];
 
+  const renderButtons = (client) => {
+    return (
+      <>
+        {buttons.map(({ button, child, label }, btnIndex) => (
+          <TableCell className="text-center" key={btnIndex}>
+            <div className="flex justify-center">
+              {label === "modify" ? (
+                React.cloneElement(button, {
+                  onClick: () =>
+                    navigate(`/admin/modifyClient/${client.cli_id}`),
+                })
+              ) : (
+                <Popover button={button} child={child} client={client} />
+              )}
+            </div>
+          </TableCell>
+        ))}
+      </>
+    );
+  };
+
   const renderActiveClients = () => {
     return activeClients.map((client, index) => (
       <TableRow key={index} className="hover:bg-[#11111199] ">
@@ -96,13 +118,7 @@ export function ClientsTable({activeClients, dueDateClients, frozenClients }) {
         <TableCell className="text-center hidden md:table-cell">
           {format(new Date(client.cli_next_pay_date), "dd-MM-yyyy")}
         </TableCell>
-        {buttons.map(({ button, child }, btnIndex) => (
-          <TableCell className="text-center" key={btnIndex}>
-            <div className="flex justify-center">
-              <Popover button={button} child={child} client={client} />
-            </div>
-          </TableCell>
-        ))}
+        {renderButtons(client)}
       </TableRow>
     ));
   };
@@ -127,19 +143,7 @@ export function ClientsTable({activeClients, dueDateClients, frozenClients }) {
         <TableCell className="text-center hidden md:table-cell">
           {format(new Date(client.cli_next_pay_date), "dd-MM-yyyy")}
         </TableCell>
-        {buttons.map(({ label, button, child }, btnIndex) => (
-          <TableCell className="text-center" key={btnIndex}>
-            <div className={`flex justify-center`}>
-              <Popover
-                button={React.cloneElement(button, {
-                  freeze: label === "freeze",
-                })}
-                child={child}
-                client={client}
-              />
-            </div>
-          </TableCell>
-        ))}
+        {renderButtons(client)}
       </TableRow>
     ));
   };
@@ -164,13 +168,7 @@ export function ClientsTable({activeClients, dueDateClients, frozenClients }) {
         <TableCell className="text-center hidden md:table-cell">
           {format(new Date(client.cli_next_pay_date), "dd-MM-yyyy")}
         </TableCell>
-        {buttons.map(({ button, child }, btnIndex) => (
-          <TableCell className="text-center" key={btnIndex}>
-            <div className="flex justify-center">
-              <Popover button={button} child={child} client={client} />
-            </div>
-          </TableCell>
-        ))}
+        {renderButtons(client)}
       </TableRow>
     ));
   };
@@ -221,7 +219,7 @@ export function ClientsTable({activeClients, dueDateClients, frozenClients }) {
         </TableHeader>
         <TableBody>
           {activeClients && renderActiveClients()}
-          {dueDateClients&& renderpastDueClients()}
+          {dueDateClients && renderpastDueClients()}
           {frozenClients && renderFrozenClients()}
         </TableBody>
       </Table>
