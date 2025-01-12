@@ -14,7 +14,7 @@ import {
 } from "./api/middleware/errorHandler.js";
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -28,16 +28,16 @@ app.use("/api/payments", paymentsRoutes);
 app.use("/api/filter/clients", filterRoutes);
 
 //? Rutas para enviar rutinas a WhatsApp
-app.use("/apiWhatsApp", sendRoutine);
+//!app.use("/apiWhatsApp", sendRoutine);
 
 //? Rutas para avisar caducidad de membresías
-app.use("/apiWhatsApp", notifyExpiration);
+//!app.use("/apiWhatsApp", notifyExpiration);
 
 //?Ruta para el qr
-app.use("/api/isConnected", whatsappRoutes);
+//!app.use("/api/isConnected", whatsappRoutes);
 
 //? Inicializa el cliente de WhatsApp
-whatsapp.initialize();
+//!whatsapp.initialize();
 
 //? Manejo de promesas no capturadas
 process.on("unhandledRejection", handleUnhandledRejection);

@@ -8,7 +8,7 @@ const ONCE_DAY = 86400000;
 const TESTING = 10000;
 
 
-export async function startMessageSending(isConnected) {
+export async function startMessageSending(isConnected) { //!Check this function, replace this for email
   console.log("Estado de conexión: ", isConnected);
   if (!isConnected) {
     console.log("Cliente desconectado, no se enviarán mensajes.");
@@ -25,7 +25,7 @@ export async function startMessageSending(isConnected) {
 
     if (pendingMessages.length === 0) {
       console.log("No hay mensajes pendientes.");
-      setTimeout(() => startMessageSending(authenticated), TESTING); 
+      setTimeout(() => startMessageSending(authenticated), ONCE_DAY); 
       return;
     }
 
@@ -46,11 +46,11 @@ export async function startMessageSending(isConnected) {
   }
 
   if (authenticated) {
-    const interval = setTimeout(() => startMessageSending(authenticated), TESTING);
+    const interval = setTimeout(() => startMessageSending(authenticated), ONCE_DAY);
     setMessageInterval(interval); // Usa la función para configurar el intervalo
   }
 }
-async function sendAndMarkAsSent(client, message) {
+async function sendAndMarkAsSent(client, message) { //! Cahnge this for email
   console.log(`Enviando mensaje a: ${message.msg_client_id}`);
   try {
     const response = await makeFetchWhatsapp(
@@ -59,6 +59,8 @@ async function sendAndMarkAsSent(client, message) {
       "",
       client
     );
+
+    console.log("si el da un estado de OK, borrar de la agenda")
     await MessageAgenda.findOneAndDelete({ _id: message._id});
 
   } catch (error) {

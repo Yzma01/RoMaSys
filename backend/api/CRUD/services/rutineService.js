@@ -29,7 +29,7 @@ export async function assignRutine(body) { //!Revisar aqui que hacer cuando el m
   }
 }
 
-export async function sendRutine(body, rutine) {
+export async function sendRutine(body, rutine) { //!Cambiar pora que ahora sea por correo
   if (body.cli_rutine) {
     try {
       const messageData = {
