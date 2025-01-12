@@ -11,6 +11,7 @@ import {
   validatePhone,
 } from "./services/clientValidations.js";
 import { calculateNextPayDate } from "./services/clientUtils.js";
+import { sendRutineByEmail } from "../../apiResend/sendEmail.js";
 
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
@@ -78,7 +79,8 @@ async function addClient(req, res) {
       );
       body.cli_additional_data = additionalData._id;
 
-      await sendRutine(body, rutine.rut_rutine);
+     //! await sendRutine(body, rutine.rut_rutine);
+      await sendRutineByEmail(body, rutine.rut_rutine);
     }
 
     await addFirstPayment(body);
@@ -192,7 +194,8 @@ async function updateClient(req, res, cli_id) {
         rutine.rut_id
       );
       body.cli_additional_data = additionalData._id;
-      await sendRutine(body, rutine.rut_rutine);
+     //! await sendRutine(body, rutine.rut_rutine); //!Esto va a cambiar por lo del correo
+     await sendRutineByEmail(body, rutine.rut_rutine);
     }
 
     body.cli_register_date = client.cli_register_date;
@@ -201,7 +204,6 @@ async function updateClient(req, res, cli_id) {
     );
 
     frozenClient(body, client);
-
     unfreezeClient(body, client);
 
     Object.assign(client, body);

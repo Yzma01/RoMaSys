@@ -17,3 +17,8 @@ export const deleteClient = (req, res) => {
   const { cli_id } = req.params;
   clientsRepo._deleteClient(req, res, cli_id);
 };
+
+export const getClientById = (req, res) => {
+  const { cli_id } = req.params;
+  clientsRepo.getClientById(req, res, cli_id);
+}

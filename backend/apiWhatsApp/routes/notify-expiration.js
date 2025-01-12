@@ -3,7 +3,7 @@ import { whatsapp } from "../lib/whatsapp.js";
 
 const router = Router();
 
-router.post("/notifyExpiration", async (req, res) => {
+router.post("/notifyExpiration", async (req, res) => { //! Esta notificacion ahora sera por email
   const body = req.body;
   const phone = body.cli_phone;
   const postalCode = "506";
