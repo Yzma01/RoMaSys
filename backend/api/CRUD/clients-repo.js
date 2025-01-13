@@ -11,7 +11,7 @@ import {
   validatePhone,
 } from "./services/clientValidations.js";
 import { calculateNextPayDate } from "./services/clientUtils.js";
-import { sendRutineByEmail } from "../../apiResend/sendEmail.js";
+import { sendRutineByEmail } from "../../apiBrevo/sendEmail.js";
 
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
@@ -20,10 +20,26 @@ const MessageAgenda = db.MessagesAgenda;
 
 export const clientsRepo = {
   getClients,
+  getClientById,
   addClient,
   updateClient,
   _deleteClient,
 };
+
+//*Get client by id
+async function getClientById(req, res, cli_id) {
+  try {
+    const client = await Client.findOne({
+      cli_id: cli_id,
+    });
+    clientNotFound(client);
+
+    res.json(client);
+  } catch (error) {
+    res.status(500)
+    .json({ message: "Error getting client" + error.message });
+  }
+}
 
 //*Get all clients
 async function getClients(req, res) {
@@ -67,7 +83,8 @@ async function addClient(req, res) {
     await phoneAlredyInUse(body);
 
     body.cli_next_pay_date = calculateNextPayDate(
-      body.cli_monthly_payment_type, today
+      body.cli_monthly_payment_type,
+      today
     );
     body.cli_register_date = today;
 
@@ -79,18 +96,21 @@ async function addClient(req, res) {
       );
       body.cli_additional_data = additionalData._id;
 
-     //! await sendRutine(body, rutine.rut_rutine);
-      await sendRutineByEmail(body, rutine.rut_rutine);
+      //! await sendRutine(body, rutine.rut_rutine);
+     // await sendRutineByEmail(body, rutine.rut_rutine);
+     console.log("LALALALALLALAL");
+      await sendRutineByEmail();
+
     }
 
     await addFirstPayment(body);
- 
+
     delete body.pay_amount;
 
     const client = new Client(body);
     await client.save();
 
-    await scheduleMessage(client);
+    //await scheduleMessage(client);
 
     res.status(201).json({ message: "Client saved!", client });
   } catch (error) {
@@ -194,13 +214,16 @@ async function updateClient(req, res, cli_id) {
         rutine.rut_id
       );
       body.cli_additional_data = additionalData._id;
-     //! await sendRutine(body, rutine.rut_rutine); //!Esto va a cambiar por lo del correo
-     await sendRutineByEmail(body, rutine.rut_rutine);
+      //! await sendRutine(body, rutine.rut_rutine); //!Esto va a cambiar por lo del correo
+      //await sendRutineByEmail(body, rutine.rut_rutine)
+      await sendRutineByEmail();//!Colocar los parametros que tiene la de arriba para el nuevo coso de correos
+
     }
 
     body.cli_register_date = client.cli_register_date;
     body.cli_next_pay_date = calculateNextPayDate(
-      body.cli_monthly_payment_type, today
+      body.cli_monthly_payment_type,
+      today
     );
 
     frozenClient(body, client);
@@ -211,7 +234,7 @@ async function updateClient(req, res, cli_id) {
 
     res.status(200).json({
       message: "Client updated successfully ",
-      client
+      client,
     });
   } catch (error) {
     res
@@ -248,9 +271,9 @@ async function _deleteClient(req, res, cli_id) {
       await AdditionalData.findByIdAndDelete(client.cli_additional_data);
     }
 
-    await Payment.deleteMany({ pay_client_id: client.cli_id});
+    await Payment.deleteMany({ pay_client_id: client.cli_id });
 
-    await MessageAgenda.deleteMany({ msg_client_id: client.cli_id});
+    await MessageAgenda.deleteMany({ msg_client_id: client.cli_id });
 
     //*Delete client
     await Client.findOneAndDelete({ cli_id: cli_id });
