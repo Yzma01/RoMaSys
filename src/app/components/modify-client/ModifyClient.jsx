@@ -14,6 +14,7 @@ import Button from "../utils/Button";
 import { useToast } from "@/hooks/use-toast";
 import { makeFetch } from "../utils/fetch";
 import { emitEvent } from "@/hooks/use-event";
+import { useNavigate } from "react-router-dom";
 
 const ModifySelectedClient = ({ selectedClient }) => {
   const [client, setCLient] = useState()
@@ -33,6 +34,8 @@ const ModifySelectedClient = ({ selectedClient }) => {
   const [monthlyType, setMothlyType] = useState();
   const [amount, setAmount] = useState(0);
   const { toast } = useToast();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getClient(selectedClient);
@@ -174,7 +177,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
   }
 
   return (
-    <div className=" w-[100w]">
+    <div className=" flex items-center justify-center h-[100vh] w-full flex-col">
           <div className="flex items-center justify-center w-full">
             <AnimatePresence>
               <motion.div
@@ -233,8 +236,9 @@ const ModifySelectedClient = ({ selectedClient }) => {
           </div>
        
         <div className="w-full items-end flex justify-center gap-4">
-         
-            <Button color={"red"} text={"Cancelar"} />
+         {//!VOLVER AL DASHBOARD
+         }
+            <Button color={"red"} text={"Cancelar"} onClick={()=> navigate('/admin/dashboard')}/>
           
             <Button
               onClick={(e) => handleSubmit()}
