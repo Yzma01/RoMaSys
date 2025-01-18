@@ -18,24 +18,27 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }) {
   return (
     <div
       className="bg-blueDark border-r-2 text-white sticky h-full flex flex-col transition-[width] duration-300 ease-in-out hover:cursor-pointer"
-      style={{ width: sidebarOpen ? "250px" : "90px" }}>
+      style={{ width: sidebarOpen ? "250px" : "90px" }}
+    >
       <button
         className="absolute top-[48px] right-[-18px] w-8 h-8 rounded-full bg-blueDark shadow-[0_0_4px_black,0_0_7px_black] flex items-center justify-center cursor-pointer transition-all duration-500 ease-in-out"
         style={{ transform: sidebarOpen ? "initial" : "rotate(180deg)" }}
-          onClick={ModSidebaropen}
-        >
-      <ArrowBackIosRoundedIcon />
+        onClick={ModSidebaropen}
+      >
+        <ArrowBackIosRoundedIcon />
       </button>
 
       <div className="bg-bgGray-1 pb-3 grid justify-center items-center transition-all duration-300 ease-in-out">
         <div
           className="flex mt-5 mb-2 justify-center cursor-pointer transition-all duration-300 ease-in-out"
-          style={{ transform: sidebarOpen ? "scale(1.5)" : "scale(2.0)" }}>
-          <Image src={Logo} className="z-10"width={20} height={20} />
+          style={{ transform: sidebarOpen ? "scale(1.5)" : "scale(2.0)" }}
+        >
+          <Image src={Logo} className="z-10" width={20} height={20} />
         </div>
         <h2
           className="transition-opacity duration-300 ease-in-out"
-          style={{ display: sidebarOpen ? "block" : "none" }}>
+          style={{ display: sidebarOpen ? "block" : "none" }}
+        >
           RoMaSys
         </h2>
       </div>
@@ -44,21 +47,25 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }) {
         {linksArray.map(({ icon, label, to }) => (
           <div
             className="my-8 px-[25%] transition-opacity duration-300 ease-in-out hover:bg-adminBackground"
-            key={label}>
+            key={label}
+          >
             <NavLink
               to={to}
               className={({ isActive }) =>
                 `flex items-center no-underline py-[6px] text-white h-[50px]${
                   isActive ? ` active` : ``
                 }`
-              }>
+              }
+            >
               <div className="px-[8px] py-[16px]">{icon}</div>
               {sidebarOpen && <span>{label}</span>}
             </NavLink>
           </div>
         ))}
 
-        <PopupQr sidebarOpen={sidebarOpen} />
+        {
+          //<PopupQr sidebarOpen={sidebarOpen} />
+        }
       </div>
 
       <div className="h-[1px] w-full bg-white my-[24px]" />

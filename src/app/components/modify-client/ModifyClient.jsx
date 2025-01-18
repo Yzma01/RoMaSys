@@ -17,7 +17,7 @@ import { emitEvent } from "@/hooks/use-event";
 import { useNavigate } from "react-router-dom";
 
 const ModifySelectedClient = ({ selectedClient }) => {
-  const [client, setCLient] = useState()
+  const [client, setClient] = useState(null)
   const [gender, setGender] = useState("");
   const [routine, setRoutine] = useState(false);
   const [height, setHeight] = useState("");
@@ -40,24 +40,28 @@ const ModifySelectedClient = ({ selectedClient }) => {
 
   useEffect(() => {
     getClient(selectedClient);
-    if(client != null){
-      setBasicData();
-      setAditionalData()
-    }
-    
   }, [selectedClient]);
-
-  const getClient =async (id)=>{
+  
+  useEffect(() => {
+    if (client != null) {
+      console.log("shi");
+      setBasicData();
+      setAditionalData();
+    }
+  }, [client]);
+  
+  const getClient = async (id) => {
     const response = await makeFetch("/api/clients", "GET", id);
     if (response.status === 200) {
       const data = await response.json();
-      setCLient(data);
+      console.log("Datos recibidos:", data);
+      setClient(data);
     }
     if (response.status === 500) {
-      toast({description: "Error de conexión, si el problema persiste contacte a soporte"});
+      toast({ description: "Error de conexión, si el problema persiste contacte a soporte" });
     }
-    return null;
-  }
+  };
+  
 
   const setBasicData=()=>{
     setId(client.cli_id)
@@ -172,7 +176,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
   };
 
   const doFechtVerifications= async(body)=>{
-    if(!verifiedValidEmail()){
+    if(!verifiedValidEmail() && client.cli_rutine){
       toast({description: "Correo electrónico no válido"});
       return;
     }
@@ -232,11 +236,13 @@ const ModifySelectedClient = ({ selectedClient }) => {
                             goal={goal}
                             date={date}
                             gender={gender}
+                            email={email}
                             setHeight={setHeight}
                             setWeight={setWeight}
                             setGoal={setGoal}
                             setDate={setDate}
                             setGender={setGender}
+                            setEmail={setEmail}
                           />
                         </div>
                       </header>
