@@ -70,6 +70,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
     setLastname2(client.cli_last_name2)
     setPhone(client.cli_phone)
     setAmount(client.cli_monthly_payment)
+    setRoutine(client.cli_rutine)
 
     let mType = client.cli_monthly_payment_type;
   mType = mType.charAt(0).toUpperCase() + mType.slice(1);
@@ -77,9 +78,9 @@ const ModifySelectedClient = ({ selectedClient }) => {
   }
 
   const setAditionalData=()=>{
+    console.log(client.cli_additional_data.cli_goal)
     if (routine) {
       setGender(client.cli_additional_data.cli_gender);
-      setRoutine(client.cli_rutine);
       setHeight(client.cli_additional_data.cli_height);
       setWeight(client.cli_additional_data.cli_weight);
       setDate(client.cli_additional_data.cli_birthdate);
