@@ -248,8 +248,6 @@ const ModifySelectedClient = ({ selectedClient }) => {
           </div>
        
         <div className="w-full items-end flex justify-center gap-4">
-         {//!VOLVER AL DASHBOARD
-         }
             <Button color={"red"} text={"Cancelar"} onClick={()=> navigate('/admin/dashboard')}/>
           
             <Button

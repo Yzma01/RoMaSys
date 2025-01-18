@@ -75,7 +75,7 @@ const AdditionalInformation = ({
           />
           <div className="pt-10">
             <Title title={"Correo Electrónico"}/>
-            <FormInput placeholder={"email"} value={email} setValue={setEmail} />
+            <FormInput placeholder={"Email"} value={email} setValue={setEmail} />
           </div>
         </div>
       </div>
