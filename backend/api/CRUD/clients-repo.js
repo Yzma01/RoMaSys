@@ -207,13 +207,13 @@ async function updateClient(req, res, cli_id) {
 
     if (body.cli_rutine === true) {
       const rutine = await assignRutine(body);
-
+      console.log("🥶🥶🥶🥶", body);
       const additionalData = await updateAdditionalClientData(
         body.cli_additional_data,
         client.cli_additional_data,
         rutine.rut_id
       );
-      await sendRutineByEmail(subjectEmail,body.cli_additional_data, body.cli_name, rutine.rut_rutine);
+      await sendRutineByEmail(subjectEmail,body.cli_additional_data.cli_email, body.cli_name, rutine.rut_rutine);
       body.cli_additional_data = additionalData._id;
     }
 
