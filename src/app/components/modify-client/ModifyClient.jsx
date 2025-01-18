@@ -78,7 +78,6 @@ const ModifySelectedClient = ({ selectedClient }) => {
   }
 
   const setAditionalData=()=>{
-    console.log(client.cli_additional_data.cli_goal)
     if (routine) {
       setGender(client.cli_additional_data.cli_gender);
       setHeight(client.cli_additional_data.cli_height);
