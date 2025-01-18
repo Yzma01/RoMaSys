@@ -21,6 +21,7 @@ export default function AddClient() {
   const [goal, setGoal] = useState("");
   const [date, setDate] = useState("");
   const [gender, setGender] = useState("");
+  const [email, setEmail] = useState("")
 
   const { toast } = useToast();
 
@@ -38,6 +39,7 @@ export default function AddClient() {
     setGoal("");
     setDate("");
     setGender("");
+    setEmail("");
   };
 
   const validate = (message, status, code, className) => {
@@ -53,6 +55,11 @@ export default function AddClient() {
   const verifiedNegative = ()=>{
     const regex = /-+/;
     return regex.test(amount) || regex.test(weight) || regex.test(height) || regex.test(phone);
+  }
+
+  const verifiedValidEmail = ()=>{
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
   const verifiedNull = () => {
@@ -74,7 +81,8 @@ export default function AddClient() {
         goal == "" ||
         gender == "" ||
         date == undefined ||
-        date == ""
+        date == "" ||
+        email == ""
       ) {
         return true;
       }
@@ -120,12 +128,17 @@ export default function AddClient() {
             cli_height: height,
             cli_weight: weight,
             cli_birthdate: date,
+            cli_email: email,
           },
     };
     doFechtVerifications(body);
   };
 
   const doFechtVerifications= async(body)=>{
+    if(!verifiedValidEmail()){
+      toast({description: "Correo electrónico no válido"});
+      return;
+    }
     if(verifiedNegative()){
       toast({description: "Los números no pueden ser negativos"});
       return;
@@ -181,11 +194,13 @@ export default function AddClient() {
                       goal={goal}
                       date={date}
                       gender={gender}
+                      email={email}
                       setHeight={setHeight}
                       setWeight={setWeight}
                       setGoal={setGoal}
                       setDate={setDate}
                       setGender={setGender}
+                      setEmail={setEmail}
                     />
                   </div>
                 </header>

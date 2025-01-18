@@ -30,6 +30,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
   const [lastname1, setLastname1] = useState();
   const [lastname2, setLastname2] = useState();
   const [phone, setPhone] = useState();
+  const [email, setEmail] = useState()
   
   const [monthlyType, setMothlyType] = useState();
   const [amount, setAmount] = useState(0);
@@ -79,6 +80,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
       setWeight(client.cli_additional_data.cli_weight);
       setDate(client.cli_additional_data.cli_birthdate);
       setGoal(client.cli_additional_data.cli_goal);
+      setEmail(client.cli_additional_data.cli_email);
     }
   }
 
@@ -110,7 +112,8 @@ const ModifySelectedClient = ({ selectedClient }) => {
         goal == "" ||
         gender == "" ||
         date == undefined ||
-        date == ""
+        date == "" ||
+        email == ""
       ) {
         return true;
       }
@@ -136,6 +139,11 @@ const ModifySelectedClient = ({ selectedClient }) => {
   const verifiedNegative = ()=>{
     const regex = /-+/;
     return regex.test(amount) || regex.test(weight) || regex.test(height) || regex.test(phone);
+  }
+
+  const verifiedValidEmail = ()=>{
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
   const handleSubmit = async () => {
@@ -164,6 +172,10 @@ const ModifySelectedClient = ({ selectedClient }) => {
   };
 
   const doFechtVerifications= async(body)=>{
+    if(!verifiedValidEmail()){
+      toast({description: "Correo electrónico no válido"});
+      return;
+    }
     if(verifiedNegative()){
       toast({description: "Los números no pueden ser negativos"});
       return;
