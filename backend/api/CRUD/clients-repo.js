@@ -80,6 +80,7 @@ async function getClients(req, res) {
 async function addClient(req, res) {
   const body = req.body;
   const today = new Date();
+  console.log(".🏋️‍♂️🏋️‍♂️", body)
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
@@ -96,12 +97,9 @@ async function addClient(req, res) {
         body.cli_additional_data,
         rutine.rut_id
       );
+      console.log(body.cli_additional_data.cli_email);
+      await sendRutineByEmail(subjectEmail, body.cli_additional_data.cli_email, body.cli_name, rutine.rut_rutine);
       body.cli_additional_data = additionalData._id;
-
-      //! await sendRutine(body, rutine.rut_rutine);
-     console.log("LALALALALLALAL");
-     //!Falta colocar el body.cli_email que aun no existe en bd
-      await sendRutineByEmail(subjectEmail,body.cli_email, body.cli_name, rutine.rut_rutine);
 
     }
 
@@ -215,10 +213,8 @@ async function updateClient(req, res, cli_id) {
         client.cli_additional_data,
         rutine.rut_id
       );
+      await sendRutineByEmail(subjectEmail,body.cli_additional_data, body.cli_name, rutine.rut_rutine);
       body.cli_additional_data = additionalData._id;
-      //! await sendRutine(body, rutine.rut_rutine); //!Esto va a cambiar por lo del correo
-
-      await sendRutineByEmail(subjectEmail,body.cli_email, body.cli_name, rutine.rut_rutine);
     }
 
     body.cli_register_date = client.cli_register_date;

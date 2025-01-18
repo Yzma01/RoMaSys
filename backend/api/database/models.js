@@ -18,7 +18,6 @@ function clientsModel() {
     cli_last_name2: { type: String, unique: false, required: true },
     cli_monthly_payment_type: { type: String, unique: false, required: true },
     cli_phone: { type: String, unique: true, required: false },
-    cli_email: { type: String, unique: true, required: false}, 
     cli_frozen: { type: Boolean, unique: false, required: false },
     cli_remaining_days: { type: Number, unique: false, required: false },
     cli_register_date: { type: Date, unique: false, required: true },
@@ -46,6 +45,7 @@ function additionalClientsDataModel() {
   const schema = new Schema({
     cli_rutine_id: { type: Number, unique: false, required: false },
     cli_goal: { type: String, unique: false, required: false },
+    cli_email: { type: String, unique: true, required: false}, 
     cli_gender: { type: String, unique: false, required: false },
     cli_height: { type: Number, unique: false, required: false },
     cli_weight: { type: Number, unique: false, required: false },
