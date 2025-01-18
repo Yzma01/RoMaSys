@@ -135,7 +135,7 @@ export default function AddClient() {
   };
 
   const doFechtVerifications= async(body)=>{
-    if(!verifiedValidEmail() && Client.cli_rutine){
+    if(!verifiedValidEmail() && routine){
       toast({description: "Correo electrónico no válido"});
       return;
     }

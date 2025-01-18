@@ -170,13 +170,15 @@ const ModifySelectedClient = ({ selectedClient }) => {
             cli_height: height,
             cli_weight: weight,
             cli_birthdate: date,
+            cli_email: email,
           },
     };
     doFechtVerifications(body);
   };
 
   const doFechtVerifications= async(body)=>{
-    if(!verifiedValidEmail() && client.cli_rutine){
+    console.log("routine: ", routine)
+    if(!verifiedValidEmail() && routine){
       toast({description: "Correo electrónico no válido"});
       return;
     }
