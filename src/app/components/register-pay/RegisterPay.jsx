@@ -52,6 +52,10 @@ const RegisterPay = ({ selectedClient }) => {
   };
 
   const doVerifications = (response) => {
+    if(verifiedNegative()){
+      toast({description: "Los números no pueden ser negativos"});
+      return;
+    }
     validate(`Pago realizado con éxito.`, response.status, 201);
     validate(
       `Error de conexión, si el problema persiste contacte a soporte.`,
@@ -59,6 +63,11 @@ const RegisterPay = ({ selectedClient }) => {
       403
     );
   };
+
+  const verifiedNegative = ()=>{
+    const regex = /-+/;
+    return regex.test(amount);
+  }
 
   const validate = (message, status, code) => {
     if (status == code) {

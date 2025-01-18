@@ -35,6 +35,7 @@ const AdditionalInformation = ({
   setDate,
   gender,
   setGender,
+  email, setEmail,
 }) => {
   return (
     <div className="flex flex-col h-full pl-20 pr-20">
@@ -72,6 +73,10 @@ const AdditionalInformation = ({
             hideTimeZone
             showMonthAndYearPickers
           />
+          <div className="pt-10">
+            <Title title={"Correo Electrónico"}/>
+            <FormInput placeholder={"Email"} value={email} setValue={setEmail} />
+          </div>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ import { AdminRoutes } from "../../routers/routes.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { Sidebar } from "../../components/admin-page/Sidebar.jsx";
 
-function page() {
+function Page() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
@@ -39,4 +39,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

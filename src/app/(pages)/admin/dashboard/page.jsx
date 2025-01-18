@@ -1,6 +1,6 @@
 "use client";
 import SearchBar from "@/src/app/components/admin-page/SearchBar";
-import { ClientsTable } from "@/src/app/components/admin-page/table/Table";
+import { ClientsTable } from "../../../components/admin-page/table/Table";
 import React from "react";
 import { useState, useEffect } from "react";
 import { makeFetch } from "@/src/app/components/utils/fetch";
@@ -48,7 +48,7 @@ export default function Dashboard() {
       setOriginalClients(data);
     }
     if (response.status === 500) {
-      toast("Error de conexión, si el problema persiste contacte a soporte");
+      toast({description: "Error de conexión, si el problema persiste contacte a soporte"});
     }
   };
 
@@ -67,7 +67,7 @@ export default function Dashboard() {
         filterClients();
       }
       if (response.status === 500) {
-        alert("Error de conexión, si el problema persiste contacte a soporte");
+        toast({description: "Error de conexión, si el problema persiste contacte a soporte"});
       }
     }
   };
