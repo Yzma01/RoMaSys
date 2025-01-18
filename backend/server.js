@@ -27,6 +27,9 @@ app.use("/api/clients", clientsRoutes);
 app.use("/api/payments", paymentsRoutes);
 app.use("/api/filter/clients", filterRoutes);
 
+//!Al correr el server ocupo que se este llmando constantemente la funcion del archivo membership-to-expire.js
+
+
 //? Rutas para enviar rutinas a WhatsApp
 //!app.use("/apiWhatsApp", sendRoutine);
 

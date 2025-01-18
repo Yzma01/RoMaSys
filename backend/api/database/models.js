@@ -18,6 +18,7 @@ function clientsModel() {
     cli_last_name2: { type: String, unique: false, required: true },
     cli_monthly_payment_type: { type: String, unique: false, required: true },
     cli_phone: { type: String, unique: true, required: false },
+    cli_email: { type: String, unique: true, required: false}, 
     cli_frozen: { type: Boolean, unique: false, required: false },
     cli_remaining_days: { type: Number, unique: false, required: false },
     cli_register_date: { type: Date, unique: false, required: true },

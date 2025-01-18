@@ -2,6 +2,9 @@ import brevo from "@getbrevo/brevo";
 
 const apiInstance = new brevo.TransactionalEmailsApi();
 
+const COMPANY_NAME = "Niger Gym";
+const COMPANY_EMAIL = "marchena.isma@gmail.com";
+
 apiInstance.setApiKey(
   brevo.TransactionalEmailsApiApiKeys.apiKey,
   process.env.BREVO_API_KEY
@@ -9,18 +12,20 @@ apiInstance.setApiKey(
 
 const smtpEmail = new brevo.SendSmtpEmail();
 
-export async function sendRutineByEmail() {
+//?Podria usar esta para todo los contatactos con el ciente, pero quiza mejor separarlas, aunque podria hacer solo una verficacion dobre para que es y segun esto se cambie el html
+export async function sendRutineByEmail(subject, clientEmail ,clientName, rutineContent) {
   try {
 
-    smtpEmail.subject = "Hola cualio";
-    smtpEmail.to = [{ email: "jorgerojas765lt@gmail.com", name: "Rigoberto" }];
-    smtpEmail.htmlContent = `<html><body><h1> Hola pepepepep </h1></body></html>`;
+    smtpEmail.subject = subject;
+    smtpEmail.to = [{ email: clientEmail, name: clientName }];
+    smtpEmail.htmlContent = `<html><body><h1> ${rutineContent} </h1></body></html>`;
     smtpEmail.sender = {
-      name: "Niger Gym",
-      email: "marchena.isma@gmail.com", 
+      name: COMPANY_NAME,
+      email: COMPANY_EMAIL, 
     };
 
     const response = await apiInstance.sendTransacEmail(smtpEmail);
+    console.log("respuesta: ",response);
 
   } catch (error) {
     console.error("Error al enviar el correo:", error.message);

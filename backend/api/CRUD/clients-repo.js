@@ -26,6 +26,8 @@ export const clientsRepo = {
   _deleteClient,
 };
 
+const subjectEmail = "Rutina 🏋️‍♀️🏋️‍♂️"
+
 //*Get client by id
 async function getClientById(req, res, cli_id) {
   try {
@@ -97,9 +99,9 @@ async function addClient(req, res) {
       body.cli_additional_data = additionalData._id;
 
       //! await sendRutine(body, rutine.rut_rutine);
-     // await sendRutineByEmail(body, rutine.rut_rutine);
      console.log("LALALALALLALAL");
-      await sendRutineByEmail();
+     //!Falta colocar el body.cli_email que aun no existe en bd
+      await sendRutineByEmail(subjectEmail,body.cli_email, body.cli_name, rutine.rut_rutine);
 
     }
 
@@ -110,7 +112,7 @@ async function addClient(req, res) {
     const client = new Client(body);
     await client.save();
 
-    //await scheduleMessage(client);
+    await scheduleMessage(client);
 
     res.status(201).json({ message: "Client saved!", client });
   } catch (error) {
@@ -215,9 +217,8 @@ async function updateClient(req, res, cli_id) {
       );
       body.cli_additional_data = additionalData._id;
       //! await sendRutine(body, rutine.rut_rutine); //!Esto va a cambiar por lo del correo
-      //await sendRutineByEmail(body, rutine.rut_rutine)
-      await sendRutineByEmail();//!Colocar los parametros que tiene la de arriba para el nuevo coso de correos
 
+      await sendRutineByEmail(subjectEmail,body.cli_email, body.cli_name, rutine.rut_rutine);
     }
 
     body.cli_register_date = client.cli_register_date;
