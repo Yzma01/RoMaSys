@@ -45,11 +45,11 @@ function additionalClientsDataModel() {
   const schema = new Schema({
     cli_rutine_id: { type: Number, unique: false, required: false },
     cli_goal: { type: String, unique: false, required: false },
-    cli_email: { type: String, unique: true, required: false}, 
     cli_gender: { type: String, unique: false, required: false },
     cli_height: { type: Number, unique: false, required: false },
     cli_weight: { type: Number, unique: false, required: false },
     cli_birthdate: { type: Date, unique: false, required: false },
+    cli_email: { type: String, unique: true, required: false}, 
   });
 
   schema.set("toJSON", {

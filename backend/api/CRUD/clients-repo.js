@@ -26,7 +26,7 @@ export const clientsRepo = {
   _deleteClient,
 };
 
-const subjectEmail = "Rutina 🏋️‍♀️🏋️‍♂️"
+const subjectEmail = "Rutina 🏋️‍♀️🏋️‍♂️";
 
 //*Get client by id
 async function getClientById(req, res, cli_id) {
@@ -35,12 +35,13 @@ async function getClientById(req, res, cli_id) {
       cli_id: cli_id,
     });
     clientNotFound(client);
-    client.cli_additional_data =  await AdditionalData.findOne({ _id: client.cli_additional_data});
-    console.log("🐢🐢🐢🐢🐢🐢🐢",client);
+    client.cli_additional_data = await AdditionalData.findOne({
+      _id: client.cli_additional_data,
+    });
+    console.log("🐢🐢🐢🐢🐢🐢🐢", client);
     res.json(client);
   } catch (error) {
-    res.status(500)
-    .json({ message: "Error getting client" + error.message });
+    res.status(500).json({ message: "Error getting client" + error.message });
   }
 }
 
@@ -81,7 +82,7 @@ async function getClients(req, res) {
 async function addClient(req, res) {
   const body = req.body;
   const today = new Date();
-  console.log(".🏋️‍♂️🏋️‍♂️", body)
+  console.log(".🏋️‍♂️🏋️‍♂️", body);
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
@@ -99,9 +100,13 @@ async function addClient(req, res) {
         rutine.rut_id
       );
       console.log(body.cli_additional_data.cli_email);
-      await sendRutineByEmail(subjectEmail, body.cli_additional_data.cli_email, body.cli_name, rutine.rut_rutine);
+      await sendRutineByEmail(
+        subjectEmail,
+        body.cli_additional_data.cli_email,
+        body.cli_name,
+        rutine.rut_rutine
+      );
       body.cli_additional_data = additionalData._id;
-
     }
 
     await addFirstPayment(body);
@@ -123,7 +128,11 @@ async function addClient(req, res) {
 
 //*Add additional client data
 async function addAdditionalClientData(body, rutineId) {
+  console.log("✅✅✅✅", body);
+  console.log("❌❌❌❌", rutineId);
+
   body.cli_rutine_id = rutineId;
+
   try {
     const additionalData = new AdditionalData(body);
     await additionalData.save();
@@ -214,7 +223,14 @@ async function updateClient(req, res, cli_id) {
         client.cli_additional_data,
         rutine.rut_id
       );
-      await sendRutineByEmail(subjectEmail,body.cli_additional_data.cli_email, body.cli_name, rutine.rut_rutine);
+
+      await sendRutineByEmail(
+        subjectEmail,
+        body.cli_additional_data.cli_email,
+        body.cli_name,
+        rutine.rut_rutine
+      );
+
       body.cli_additional_data = additionalData._id;
     }
 
@@ -242,15 +258,19 @@ async function updateClient(req, res, cli_id) {
 }
 
 async function updateAdditionalClientData(body, clientObjectId, rutineId) {
-  const additionalData = await AdditionalData.findOne({ _id: clientObjectId });
-
-  if (!additionalData) {
-    return;
-  }
-
-  body.cli_rutine_id = rutineId;
+  let additionalData = await AdditionalData.findOne({ _id: clientObjectId });
 
   try {
+    if (!additionalData) {
+      console.log("looololoololoolol");
+      additionalData = await addAdditionalClientData(body, rutineId);
+      console.log(additionalData);
+    }
+
+    console.log("📍📍📍", additionalData);
+
+    // body.cli_rutine_id = rutineId;
+
     Object.assign(additionalData, body);
     await additionalData.save();
     return additionalData;
