@@ -2,6 +2,7 @@ import express from "express";
 import clientsRoutes from "./api/routes/clients-routes.js";
 import paymentsRoutes from "./api/routes/payments-routes.js";
 import filterRoutes from "./api/routes/filter-routes.js";
+import reportsRoutes from "./api/routes/reports-routes.js"
 import whatsappRoutes from "./api/routes/whatsapp-routes.js";
 import { whatsapp, isAuthenticated } from "./apiWhatsApp/lib/whatsapp.js";
 import sendRoutine from "./apiWhatsApp/routes/send-routines.js";
@@ -26,6 +27,7 @@ app.use(validateHttpMethod);
 app.use("/api/clients", clientsRoutes);
 app.use("/api/payments", paymentsRoutes);
 app.use("/api/filter/clients", filterRoutes);
+app.use("/api/reports", reportsRoutes);
 
 //!Al correr el server ocupo que se este llmando constantemente la funcion del archivo membership-to-expire.js
 
