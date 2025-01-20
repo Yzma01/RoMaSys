@@ -5,7 +5,7 @@ import React from "react";
 const Membership = () => {
   return (
     <div>
-      <div className="relative w-full flex justify-center items-center">
+      <div className="relative w-full flex justify-center items-center" id="Prices">
         <Image
           src={TtileBg}
           layout="intrinsic"

@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Button from "@/src/app/components/utils/Button";
 import { useToast } from "@/hooks/use-toast";
 import { makeFetch } from "@/src/app/components/utils/fetch";
+import { useNavigate } from "react-router-dom";
 
 export default function AddClient() {
   const [id, setId] = useState("");
@@ -24,6 +25,7 @@ export default function AddClient() {
   const [email, setEmail] = useState("")
 
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const clearForm = () => {
     setId("");
@@ -48,6 +50,7 @@ export default function AddClient() {
     }
     if (code == 201) {
       clearForm();
+      navigate('/admin/dashboard')
     }
     return;
   };
@@ -170,6 +173,7 @@ export default function AddClient() {
                 <header className="flex flex-col sm:flex-row items-center justify-between">
                   <div className="flex flex-row w-fit sm:w-3/4 mb-4 sm:mb-0 gap-10 -mr-28">
                     <BasicInformation
+                      modify={false}
                       id={id}
                       name={name}
                       lastname1={lastname1}

@@ -28,14 +28,14 @@ const NavBar = () => {
         </div>
         <div className="hover:cursor-pointer" onClick={() => router.push("/sign-in")}>
           <AccountCircleOutlinedIcon
-            style={{ fontSize: "2em", color: "white" }}
+            style={{ fontSize: "2em", color: "white" }} className="hover:cursor-pointer"
           />
         </div>
       </div>
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-3/4 max-w-xs bg-black transform ${
+        className={`fixed top-0 left-0 h-fit w-3/4 max-w-xs bg-black transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out lg:hidden z-50`}
       >
@@ -78,7 +78,7 @@ const NavBar = () => {
         onClick={() => router.push("/sign-in")}
       >
         <AccountCircleOutlinedIcon
-          style={{ fontSize: "2em", color: "white" }}
+          style={{ fontSize: "2em", color: "white" }} className="hover:cursor-pointer"
         />
       </div>
     </div>

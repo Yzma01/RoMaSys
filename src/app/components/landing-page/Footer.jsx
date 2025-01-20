@@ -9,7 +9,7 @@ import { Logo } from "@/public/images";
 
 const Footer = () => {
   return (
-    <div className="w-full bg-gradient-to-r from-red-0 via-black to-black flex flex-row ">
+    <div className="w-full bg-gradient-to-r from-red-0 via-black to-black flex flex-row " id="Contact">
       <div className="flex flex-col text-white pl-4 gap-6 md:pl-10 w-[70vw] xl:w-[80vw] pt-20">
         <label className="flex flex-row items-start gap-2">
           <FmdGoodOutlinedIcon className="text-xl" />

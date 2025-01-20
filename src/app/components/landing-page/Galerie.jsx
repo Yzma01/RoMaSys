@@ -6,7 +6,7 @@ import { GalerieDisplay } from "./GalerieDisplay";
 const Galerie = () => {
   return (
     <>
-      <div className="relative w-full flex justify-center items-center">
+      <div className="relative w-full flex justify-center items-center" id="Galerie">
         <Image
           src={TtileBg}
           layout="intrinsic"

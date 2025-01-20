@@ -56,7 +56,7 @@ const RegisterPay = ({ selectedClient }) => {
       toast({description: "Los números no pueden ser negativos"});
       return;
     }
-    validate(`Pago realizado con éxito.`, response.status, 201);
+    validate(`Pago realizado con éxito.`, response.status, 200);
     validate(
       `Error de conexión, si el problema persiste contacte a soporte.`,
       response.status,
@@ -70,6 +70,8 @@ const RegisterPay = ({ selectedClient }) => {
   }
 
   const validate = (message, status, code) => {
+    console.log(status)
+    console.log(code)
     if (status == code) {
       toast({ description: message });
     }

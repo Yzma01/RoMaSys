@@ -14,6 +14,7 @@ export const Title = ({ title }) => {
 
 const BasicInformation = ({
   id,
+  modify,
   name,
   lastname1,
   lastname2,
@@ -53,11 +54,13 @@ const BasicInformation = ({
             <MonthlyType value={monthlyType} setValue={setMothlyType} />
           </div>
           <div>
-            <FormInput
-              value={amount}
-              placeholder={"Monto"}
-              setValue={setAmount}
-            />
+            {!modify && (
+              <FormInput
+                value={amount}
+                placeholder={"Monto"}
+                setValue={setAmount}
+              />
+            )}
             <HasRutine checked={routine} setChecked={setRoutine} />
             <br />
             <div

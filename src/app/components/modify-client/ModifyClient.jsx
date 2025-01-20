@@ -94,6 +94,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
     }
     if (code == 200) {
       emitEvent("refreshTable", {});
+      navigate('/admin/dashboard');
     }
     return;
   };
@@ -214,6 +215,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
                       <header className="flex flex-col sm:flex-row items-center justify-between">
                         <div className="flex flex-row w-fit sm:w-3/4 mb-4 sm:mb-0 gap-10 -mr-28">
                           <BasicInformation
+                            modify={true}
                             id={id}
                             name={name}
                             lastname1={lastname1}
