@@ -128,8 +128,7 @@ async function addClient(req, res) {
 
 //*Add additional client data
 async function addAdditionalClientData(body, rutineId) {
-  console.log("✅✅✅✅", body);
-  console.log("❌❌❌❌", rutineId);
+
 
   body.cli_rutine_id = rutineId;
 
@@ -269,7 +268,6 @@ async function updateAdditionalClientData(body, clientObjectId, rutineId) {
 
     console.log("📍📍📍", additionalData);
 
-    // body.cli_rutine_id = rutineId;
 
     Object.assign(additionalData, body);
     await additionalData.save();
