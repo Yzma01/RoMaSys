@@ -20,10 +20,10 @@ import {
 } from "@/src/app/components/ui/chart";
 
 //VISITORS SON LOS QUE CAMBIO CON LO DE JORGE
-const chartData = [
-  { gender: "masc", clients: 275, fill: "#60a5fa" },
-  { gender: "fem", clients: 200, fill: "#f472b6" },
-  { gender: "other", clients: 287, fill: "#c084fc" },
+let chartData = [
+  { gender: "masc", clients: 0, fill: "#60a5fa" },
+  { gender: "fem", clients: 0, fill: "#f472b6" },
+  { gender: "other", clients: 0, fill: "#c084fc" },
 ];
 
 const chartConfig = {
@@ -41,13 +41,31 @@ const chartConfig = {
   },
 };
 
-export function GenderChart() {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.clients, 0);
-  }, []);
+const setData = (data) => {
+  if (!Array.isArray(data)) {
+    return chartData;
+  }
+
+  const updatedChartData = [...chartData];
+  data.forEach(({ count, _id }) => {
+    const id = _id.toLowerCase();
+    if (id === "masculino") updatedChartData[0].clients = count;
+    if (id === "femenino") updatedChartData[1].clients = count;
+    if (id === "otro") updatedChartData[2].clients = count;
+  });
+  return updatedChartData;
+};
+
+const getTotalVisitors = (updatedData) => {
+  return updatedData.reduce((acc, curr) => acc + curr.clients, 0);
+};
+
+export function GenderChart({ data }) {
+  const updatedData = setData(data);
+  const totalVisitors = getTotalVisitors(updatedData);
 
   return (
-    <Card className="flex flex-col w-fit bg-blueDark border-none shadow-lg ml-10 mt-10">
+    <Card className="flex flex-col w-fit bg-blueDark border-none shadow-lg">
       <CardHeader className="items-center pb-0 text-white">
         <CardTitle>Género de los Clientes</CardTitle>
       </CardHeader>
@@ -62,7 +80,7 @@ export function GenderChart() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Pie
-              data={chartData}
+              data={updatedData}
               dataKey="clients"
               nameKey="gender"
               innerRadius={60}

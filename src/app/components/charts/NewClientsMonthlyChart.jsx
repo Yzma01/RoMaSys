@@ -1,7 +1,14 @@
-"use client"
+"use client";
 
-import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
+import { TrendingUp } from "lucide-react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 import {
   Card,
@@ -18,10 +25,10 @@ import {
   ChartTooltipContent,
 } from "@/src/app/components/ui/chart";
 const chartData = [
-  { month: "Enero", clients: 186},
-  { month: "Febrero", clients: 305},
-  { month: "Marzo", clients: 237},
-]
+  { month: "", clients: 0 },
+  { month: "", clients: 0 },
+  { month: "", clients: 0 },
+];
 
 const chartConfig = {
   clients: {
@@ -31,11 +38,26 @@ const chartConfig = {
   label: {
     color: "#FFFFFF",
   },
-}
+};
 
-export function NewClientsMonthlyChart() {
+const setData = (data) => {
+  if (!Array.isArray(data)) {
+    return chartData;
+  }
+  const updatedChartData = [...chartData];
+  data.forEach(({ count, month }, index) => {
+    updatedChartData[index].clients = count;
+    updatedChartData[index].month = month;
+  });
+  const lastThreeUpdated = updatedChartData.slice(-3);
+  return lastThreeUpdated;
+};
+
+export function NewClientsMonthlyChart({ data }) {
+  const updatedData = setData(data);
+  console.log(data);
   return (
-    <Card className="bg-blueDark border-none mt-10 ml-10">
+    <Card className="bg-blueDark border-none">
       <CardHeader className="items-center text-white pb-10">
         <CardTitle>Nuevos Clientes Mensuales</CardTitle>
       </CardHeader>
@@ -64,12 +86,7 @@ export function NewClientsMonthlyChart() {
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
-            <Bar
-              dataKey="clients"
-              layout="vertical"
-              fill="#2662d9"
-              radius={4}
-            >
+            <Bar dataKey="clients" layout="vertical" fill="#2662d9" radius={4}>
               <LabelList
                 dataKey="month"
                 position="insideLeft"
@@ -94,5 +111,5 @@ export function NewClientsMonthlyChart() {
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }

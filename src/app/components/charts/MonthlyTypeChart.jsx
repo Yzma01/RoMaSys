@@ -18,9 +18,9 @@ import {
   ChartTooltipContent,
 } from "@/src/app/components/ui/chart";
 const chartData = [
-  { monthlyType: "Dia", clients: 187, fill: "#e23670" },
-  { monthlyType: "Quincena", clients: 200, fill: "#2662d9" },
-  { monthlyType: "Mes", clients: 275, fill: "#af57db" },
+  { monthlyType: "Dia", clients: 0, fill: "#e23670" },
+  { monthlyType: "Quincena", clients: 0, fill: "#2662d9" },
+  { monthlyType: "Mes", clients: 0, fill: "#af57db" },
 ];
 
 const chartConfig = {
@@ -68,15 +68,32 @@ const CustomTick = ({ x, y, payload }) => {
     );
   };
 
-export function MonthlyTypeChart() {
+  const setData = (data) => {
+    if (!Array.isArray(data)) {
+      return chartData;
+    }
+  
+    const updatedChartData = [...chartData];
+    data.forEach(({ count, _id }) => {
+      const id = _id.toLowerCase();
+      if (id === "dia") updatedChartData[0].clients = count;
+      if (id === "quincena") updatedChartData[1].clients = count;
+      if (id === "mes") updatedChartData[2].clients = count;
+    });
+    return updatedChartData;
+  };
+
+export function MonthlyTypeChart({data}) {
+  console.log(data);
+  const updatedData = setData(data);
   return (
-    <Card className="w-fit mt-10 ml-10 bg-blueDark border-none shadow-lg">
+    <Card className="w-fit bg-blueDark border-none shadow-lg">
       <CardHeader className="items-center text-white pb-10">
         <CardTitle>Tipos de Mensualidades</CardTitle>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
+          <BarChart accessibilityLayer data={updatedData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="monthlyType"
