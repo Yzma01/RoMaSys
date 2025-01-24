@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import AgricultureRoundedIcon from "@mui/icons-material/AgricultureRounded";
 import LeaderboardRoundedIcon from "@mui/icons-material/LeaderboardRounded";
@@ -9,8 +9,20 @@ import PopupQr from "./PopupQr";
 import LogOut from "./LogOut";
 import { Logo } from "@/public/images";
 import Image from "next/image";
+import { emitEvent } from "@/hooks/use-event";
+import { useEffect } from "react";
+import DevComponent from "../utils/DevComponent";
 
-export function Sidebar({ sidebarOpen, setSidebarOpen }) {
+export function Sidebar({ sidebarOpen, setSidebarOpen }){
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/admin/reports") {
+      console.log("event")
+      emitEvent("refreshReports", {});
+    }
+  }, [location.pathname]);
+
   const ModSidebaropen = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -66,6 +78,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }) {
         {
           //<PopupQr sidebarOpen={sidebarOpen} />
         }
+        <DevComponent open={sidebarOpen}/>
       </div>
 
       <div className="h-[1px] w-full bg-white my-[24px]" />

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEvent } from "@/hooks/use-event";
 import { GenderChart } from "@/src/app/components/charts/GenderChart";
 import { IncomingChart } from "@/src/app/components/charts/IncomingChart";
 import { MonthlyTypeChart } from "@/src/app/components/charts/MonthlyTypeChart";
@@ -33,6 +34,10 @@ export default function Reports() {
       });
     }
   };
+
+  useEvent("refreshReports", () => {
+      getData();
+    }, []);
 
   return (
     <div className="h-screen w-full flex flex-col">

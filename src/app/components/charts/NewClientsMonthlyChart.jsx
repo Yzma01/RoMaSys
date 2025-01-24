@@ -40,17 +40,26 @@ const chartConfig = {
   },
 };
 
+const clearData = ()=>{
+  for (let index = 0; index < chartData.length; index++){
+    chartData[index].month = "";
+    chartData[index].clients = 0;
+  }
+}
+
 const setData = (data) => {
-  if (!Array.isArray(data)) {
+  if (!Array.isArray(data) || data.length === 0) {
+    clearData()
     return chartData;
   }
+
   const updatedChartData = [...chartData];
-  data.forEach(({ count, month }, index) => {
+  const lastThreeData = data.slice(-3);
+  lastThreeData.forEach(({ count, month }, index) => {
     updatedChartData[index].clients = count;
     updatedChartData[index].month = month;
   });
-  const lastThreeUpdated = updatedChartData.slice(-3);
-  return lastThreeUpdated;
+  return updatedChartData;
 };
 
 export function NewClientsMonthlyChart({ data }) {

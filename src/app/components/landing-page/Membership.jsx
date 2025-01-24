@@ -1,6 +1,7 @@
 import { TtileBg } from "@/public/images";
 import Image from "next/image";
 import React from "react";
+import MemberShipCards from "./MemberShipCards";
 
 const Membership = () => {
   return (
@@ -16,6 +17,7 @@ const Membership = () => {
           Membresías
         </h1>
       </div>
+      <MemberShipCards />
     </div>
   );
 };

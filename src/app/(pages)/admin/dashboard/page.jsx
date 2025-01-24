@@ -6,8 +6,10 @@ import { useState, useEffect } from "react";
 import { makeFetch } from "@/src/app/components/utils/fetch";
 import { AnimatePresence, motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
-import { useEvent } from "@/hooks/use-event";
+import { emitEvent, useEvent } from "@/hooks/use-event";
 import { isBefore } from "date-fns";
+import { deleteClients, saveClients } from "../../../components/utils/DevClients";
+import DevComponent from "@/src/app/components/utils/DevComponent";
 
 export default function Dashboard() {
   const [clients, setClients] = useState([]);
@@ -85,8 +87,9 @@ export default function Dashboard() {
       );
     }
   };
+
   return (
-    <div>
+    <div >
       <div className="h-[100vh] text-white">
         <AnimatePresence>
           <motion.div

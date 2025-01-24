@@ -68,8 +68,15 @@ const CustomTick = ({ x, y, payload }) => {
     );
   };
 
+  const clearData = ()=>{
+    for (let index = 0; index < chartData.length; index++){
+      chartData[index].clients = 0;
+    }
+  }
+
   const setData = (data) => {
-    if (!Array.isArray(data)) {
+    if (!Array.isArray(data) || data.length === 0) {
+      clearData();
       return chartData;
     }
   

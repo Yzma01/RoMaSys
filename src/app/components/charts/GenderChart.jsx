@@ -41,8 +41,15 @@ const chartConfig = {
   },
 };
 
+const clearData = ()=>{
+  for (let index = 0; index < chartData.length; index++){
+    chartData[index].clients = 0;
+  }
+}
+
 const setData = (data) => {
-  if (!Array.isArray(data)) {
+  if (!Array.isArray(data) || data.length === 0) {
+    clearData();
     return chartData;
   }
 
@@ -61,6 +68,7 @@ const getTotalVisitors = (updatedData) => {
 };
 
 export function GenderChart({ data }) {
+  console.log(data)
   const updatedData = setData(data);
   const totalVisitors = getTotalVisitors(updatedData);
 
