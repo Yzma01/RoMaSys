@@ -89,7 +89,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div >
+    <div>
       <div className="h-[100vh] text-white">
         <AnimatePresence>
           <motion.div
