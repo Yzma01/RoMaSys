@@ -1,7 +1,6 @@
 import React from 'react';
 
 export const ClientAction = ({ logo: Logo, onClick, className = '', freeze }) => {
-  console.log(freeze)
   return (
     <button 
       onClick={onClick}

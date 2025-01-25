@@ -5,5 +5,5 @@ export const getReport = (req, res) => {
 };
 
 export const getIncomingByRange = (req, res) => {
-  reportsRepo.gainsByRange(req, res);
+  reportsRepo.incomingByRange(req, res);
 };
