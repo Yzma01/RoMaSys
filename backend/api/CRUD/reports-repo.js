@@ -89,7 +89,6 @@ async function getLastMonthIncoming() {
   const currentDate = new Date();
   const thirtyDaysBefore = new Date();
   thirtyDaysBefore.setDate(currentDate.getDate() - 30);
-  
 
   return await Payment.aggregate([
     {
@@ -107,6 +106,9 @@ async function getLastMonthIncoming() {
         },
         total: { $sum: { $toDouble: "$pay_amount" } },
       },
+    },
+    {
+      $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 },
     },
   ]);
 }
