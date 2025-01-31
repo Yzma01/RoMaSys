@@ -108,7 +108,7 @@ async function getLastMonthIncoming() {
       },
     },
     {
-      $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 },
+      $sort: { "_id.date": 1 },  
     },
   ]);
 }
@@ -136,7 +136,7 @@ async function incomingByRange(req, res) {
         },
       },
       {
-        $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 },
+        $sort: { "_id.date": 1 },  
       },
     ]);
 
