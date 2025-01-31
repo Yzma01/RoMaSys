@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -22,12 +22,6 @@ import {
 import FilterIncomingChart from "./FilterIncomingChart";
 import FilterBar from "./FilterBar";
 
-const chartData = [
-  { date: "", incoming: 0 },
-  { date: "", incoming: 0 },
-  { date: "", incoming: 0 },
-];
-
 const chartConfig = {
   visitors: {
     label: "Visitors",
@@ -38,61 +32,54 @@ const chartConfig = {
   },
 };
 
-const clearData = ()=>{
-  for (let index = 0; index < chartData.length; index++){
-    chartData[index].date = "";
-    chartData[index].incoming = 0;
-  }
-}
-
 const setData = (data) => {
   if (!Array.isArray(data) || data.length === 0) {
-    clearData();
-    return chartData;
+    return [];
   }
 
-  const updatedChartData = [...chartData];
-  data.forEach(({ count, _id }, index) => {
-    updatedChartData[index].date = _id.date;
-    updatedChartData[index].incoming = count;
+  const updatedChartData = data.reverse().map(({ total, _id }) => {
+    // Asegúrate de que la fecha esté en formato ISO (YYYY-MM-DD)
+    const date = new Date(_id.date + "T00:00:00"); // Agrega la hora para evitar problemas de UTC
+    const localDate = new Date(
+      date.getTime() - date.getTimezoneOffset() * 60000
+    );
+
+    return {
+      date: localDate.toISOString().split("T")[0], // Formato YYYY-MM-DD
+      incoming: total,
+    };
   });
   return updatedChartData;
 };
 
-export function IncomingChart({data}) {
-  const [timeRange, setTimeRange] = React.useState("90d");
-  console.log(data)
-  const [typeOfIncomming, settypeOfIncomming] = React.useState("")
-  const updatedData = setData(data);
-
-  const filteredData = updatedData.filter((item) => {
-    const date = new Date(item.date);
-    const referenceDate = new Date("2024-06-30");
-    let daysToSubtract = 90;
-    if (timeRange === "30d") {
-      daysToSubtract = 30;
-    } else if (timeRange === "7d") {
-      daysToSubtract = 7;
-    }
-    const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
-    return date >= startDate;
+const getDateFixed = (value) => {
+  const date = new Date(value + "T00:00:00");
+  return date.toLocaleDateString("es-ES", {
+    month: "short",
+    day: "numeric",
   });
- 
+};
+
+export function IncomingChart({ data }) {
+  console.log(data);
+  const [typeOfIncomming, settypeOfIncomming] = React.useState("");
+  const updatedData = setData(data);
+  console.log(updatedData);
+
   return (
     <Card className="bg-blueDark border-none m-10">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1 text-center sm:text-left text-white">
           <CardTitle>Ingresos</CardTitle>
         </div>
-       <FilterBar />
+        <FilterBar />
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart data={filteredData}>
+          <AreaChart data={updatedData}>
             <defs>
               <linearGradient id="fillIncoming" x1="0" y1="0" x2="0" y2="1">
                 <stop
@@ -108,30 +95,20 @@ export function IncomingChart({data}) {
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} />
+            <YAxis domain={[0, "auto"]} />
             <XAxis
               dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
               minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
-              }}
+              tickFormatter={(value) => getDateFixed(value)}
             />
             <ChartTooltip
               cursor={false}
               content={
                 <ChartTooltipContent
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("es-ES", {
-                      month: "short",
-                      day: "numeric",
-                    });
-                  }}
+                  labelFormatter={(value) => getDateFixed(value)}
                   indicator="dot"
                 />
               }
@@ -141,9 +118,11 @@ export function IncomingChart({data}) {
               type="natural"
               fill="url(#fillIncoming)"
               stroke="var(--color-incoming)"
-              stackId="a"
+              stackId={undefined}
             />
-            <ChartLegend content={<ChartLegendContent className={"text-white"}/>} />
+            <ChartLegend
+              content={<ChartLegendContent className={"text-white"} />}
+            />
           </AreaChart>
         </ChartContainer>
         <CardFooter className="flex-col gap-2 text-sm">
