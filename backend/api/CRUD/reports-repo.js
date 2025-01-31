@@ -32,7 +32,6 @@ async function basicReport(req, res) {
     const amountByMonth = await getAmountClientsByMonth();
     const lastMonthIncoming = await getLastMonthIncoming();
 
-
     res.status(200).json({
       amountByGender: amountByGender,
       amountByTypeOfMonthlyPayment: amountByTypeOfMonthlyPayment,
@@ -87,27 +86,26 @@ async function getAmountClientsByMonth() {
 }
 
 async function getLastMonthIncoming() {
-  const today = new Date();
-  const currentMonth = today.getMonth() + 1; 
-  const currentYear = today.getFullYear();
+  const currentDate = new Date();
+  const thirtyDaysBefore = new Date();
+  thirtyDaysBefore.setDate(currentDate.getDate() - 30);
+  
 
   return await Payment.aggregate([
     {
       $match: {
-        $expr: {
-          $and: [
-            { $eq: [{ $month: "$pay_date" }, currentMonth] },
-            { $eq: [{ $year: "$pay_date" }, currentYear] },
-          ],
+        pay_date: {
+          $gte: new Date(thirtyDaysBefore),
+          $lte: new Date(currentDate),
         },
       },
     },
     {
       $group: {
         _id: {
-          date: { $dateToString: { format: "%Y-%m-%d", date: "$pay_date" } }
+          date: { $dateToString: { format: "%Y-%m-%d", date: "$pay_date" } },
         },
-        total: { $sum: { $toDouble: "$pay_amount" } }
+        total: { $sum: { $toDouble: "$pay_amount" } },
       },
     },
   ]);
@@ -130,14 +128,14 @@ async function incomingByRange(req, res) {
       {
         $group: {
           _id: {
-            date: { $dateToString: { format: "%Y-%m-%d", date: "$pay_date" } }
+            date: { $dateToString: { format: "%Y-%m-%d", date: "$pay_date" } },
           },
-          total: { $sum: { $toDouble: "$pay_amount" } }
+          total: { $sum: { $toDouble: "$pay_amount" } },
         },
       },
       {
-        $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } 
-      }
+        $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 },
+      },
     ]);
 
     res.status(200).json(gainsInRange);
@@ -145,4 +143,3 @@ async function incomingByRange(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
-
