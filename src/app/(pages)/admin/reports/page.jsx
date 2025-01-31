@@ -12,6 +12,8 @@ export default function Reports() {
   const [genderData, setGenderData] = useState()
   const [monthlyTypeData, setMonthlyTypeData] = useState()
   const [newClientsData, setNewClientsData] = useState()
+  const [lastMontIncoming, setLastMontIncoming] = useState()
+
   useEffect(() => {
     getData();
   }, []);
@@ -22,10 +24,9 @@ export default function Reports() {
       const data = await response.json();
       console.log(data)
       setGenderData(data.amountByGender)
-      setNewClientsData(data.amountByMonth
-      )
-      setMonthlyTypeData(data.amountByTypeOfMonthlyPayment
-      )
+      setNewClientsData(data.amountByMonth)
+      setMonthlyTypeData(data.amountByTypeOfMonthlyPayment)
+      setLastMontIncoming(data.lastMonthIncoming)
     }
     if (response.status === 500) {
       toast({
@@ -47,7 +48,7 @@ export default function Reports() {
         <NewClientsMonthlyChart data={newClientsData}/>
       </div>
       <div>
-        <IncomingChart />
+        <IncomingChart data={lastMontIncoming}/>
       </div>
     </div>
   );
