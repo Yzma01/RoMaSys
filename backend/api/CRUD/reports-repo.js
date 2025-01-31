@@ -104,8 +104,10 @@ async function getLastMonthIncoming() {
     },
     {
       $group: {
-        _id: { $month: "$pay_date" },
-        total: { $sum: "$pay_amount" },
+        _id: {
+          date: { $dateToString: { format: "%Y-%m-%d", date: "$pay_date" } }
+        },
+        total: { $sum: { $toDouble: "$pay_amount" } }
       },
     },
   ]);
