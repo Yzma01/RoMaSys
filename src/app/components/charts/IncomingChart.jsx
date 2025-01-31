@@ -23,14 +23,9 @@ import FilterIncomingChart from "./FilterIncomingChart";
 import FilterBar from "./FilterBar";
 
 const chartData = [
-  { date: "2024-04-01", incoming: 150 },
-  { date: "2024-04-02", incoming: 180 },
-  { date: "2024-04-03", incoming: 120 },
-  { date: "2024-04-04", incoming: 260 },
-  { date: "2024-04-05", incoming: 290 },
-  { date: "2024-04-06", incoming: 340 },
-  { date: "2024-04-07", incoming: 180 },
-  { date: "2024-04-08", incoming: 320 },
+  { date: "", incoming: 0 },
+  { date: "", incoming: 0 },
+  { date: "", incoming: 0 },
 ];
 
 const chartConfig = {
@@ -43,11 +38,34 @@ const chartConfig = {
   },
 };
 
-export function IncomingChart() {
-  const [timeRange, setTimeRange] = React.useState("90d");
-  const [typeOfIncomming, settypeOfIncomming] = React.useState("")
+const clearData = ()=>{
+  for (let index = 0; index < chartData.length; index++){
+    chartData[index].date = "";
+    chartData[index].incoming = 0;
+  }
+}
 
-  const filteredData = chartData.filter((item) => {
+const setData = (data) => {
+  if (!Array.isArray(data) || data.length === 0) {
+    clearData();
+    return chartData;
+  }
+
+  const updatedChartData = [...chartData];
+  data.forEach(({ count, _id }, index) => {
+    updatedChartData[index].date = _id.date;
+    updatedChartData[index].incoming = count;
+  });
+  return updatedChartData;
+};
+
+export function IncomingChart({data}) {
+  const [timeRange, setTimeRange] = React.useState("90d");
+  console.log(data)
+  const [typeOfIncomming, settypeOfIncomming] = React.useState("")
+  const updatedData = setData(data);
+
+  const filteredData = updatedData.filter((item) => {
     const date = new Date(item.date);
     const referenceDate = new Date("2024-06-30");
     let daysToSubtract = 90;
@@ -60,7 +78,7 @@ export function IncomingChart() {
     startDate.setDate(startDate.getDate() - daysToSubtract);
     return date >= startDate;
   });
-
+ 
   return (
     <Card className="bg-blueDark border-none m-10">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
