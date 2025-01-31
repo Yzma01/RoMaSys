@@ -112,35 +112,35 @@ async function getLastMonthIncoming() {
 }
 
 async function incomingByRange(req, res) {
-  const body = req.body;
+  const { startDate, endDate, monthly_payment_type } = req.body;
 
   try {
     const gainsInRange = await Payment.aggregate([
       {
         $match: {
-          pay_monthly_payment_type: body.monthly_payment_type,
+          pay_monthly_payment_type: monthly_payment_type,
           pay_date: {
-            $gte: new Date(body.startDate),
-            $lte: new Date(body.endDate),
+            $gte: new Date(startDate),
+            $lte: new Date(endDate),
           },
         },
       },
       {
         $group: {
-          _id: { $month: "$pay_date" },
-          total: { $sum: "$pay_amount" },
+          _id: {
+            date: { $dateToString: { format: "%Y-%m-%d", date: "$pay_date" } }
+          },
+          total: { $sum: { $toDouble: "$pay_amount" } }
         },
       },
       {
-        $sort: { _id: 1 },
-      },
+        $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } 
+      }
     ]);
 
-
-    res.json({ message: gainsInRange });
+    res.status(200).json(gainsInRange);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error getting gains by range" + error.message });
+    res.status(500).json({ error: error.message });
   }
 }
+
