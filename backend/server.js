@@ -20,6 +20,7 @@ const PORT = process.env.PORT;
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+
 //? Middleware para validar métodos HTTP
 app.use(validateHttpMethod);
 
