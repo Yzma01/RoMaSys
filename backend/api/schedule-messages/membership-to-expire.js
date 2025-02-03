@@ -16,7 +16,7 @@ export async function startMessageSending() {
 
   try {
     const currentDate = new Date();
-    const pendingMessages = await MessageAgenda.find({
+    const pendingMessages = await MessageAgenda.find({ //!Esto mas bien se debe de buscar en la proxima fecha de pago del cliente
       msg_sent: false,
       msg_next_payment_date: { $lt: currentDate },
     });
@@ -24,7 +24,7 @@ export async function startMessageSending() {
 
     if (pendingMessages.length === 0) {
       console.log("No hay mensajes pendientes.");
-      setTimeout(() => startMessageSending(), TESTING);
+      setTimeout(() => startMessageSending(), ONCE_DAY);
 
       return;
     }

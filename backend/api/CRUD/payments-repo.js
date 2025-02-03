@@ -5,6 +5,7 @@ import { scheduleMessage } from "./services/rutineService.js";
 
 const Payment = db.Payments;
 const Client = db.Clients;
+const MessagesAgenda = db.MessagesAgenda;
 
 export const paymentsRepo = {
   addPayment,
@@ -41,6 +42,9 @@ async function addPayment(req, res) {
 
     await Client.findByIdAndUpdate(client._id, { cli_next_pay_date: nextPayDate });
 
+    await MessagesAgenda.findOneAndDelete({msg_client_id: client.cli_id}); //!Borro el mensage que tenia agendado antes para que ya no se le envia que la mensulidad esta vencida
+
+    console.log("😇😇😇", client)
     await scheduleMessage(client);
 
     res.status(200).json({ message: "Payment saved!", payment });

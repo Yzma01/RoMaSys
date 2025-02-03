@@ -4,23 +4,28 @@ export function daysInMonth(month, year) {
   return new Date(year, month + 1, 0).getDate();
 }
 
-export function calculateNextPayDate(monthlyType,nextPaymentDate) {
+export function calculateNextPayDate(monthlyType, nextPaymentDate) {
   let today = new Date();
 
-  if(nextPaymentDate < today){
+  if (nextPaymentDate < today) {
     nextPaymentDate = new Date(today);
   }
 
+  let newPaymentDate = new Date(nextPaymentDate);
+
   if (monthlyType === MONTHLY_PAYMENT_TYPE[0]) {
-    let daysInCurrentMonth = daysInMonth(today.getMonth(), today.getFullYear());
-    nextPaymentDate.setDate(today.getDate() + daysInCurrentMonth);
+    let daysInNextMonth = daysInMonth(
+      newPaymentDate.getMonth(),
+      newPaymentDate.getFullYear()
+    );
+    newPaymentDate.setDate(newPaymentDate.getDate() + daysInNextMonth);
   } else if (monthlyType === MONTHLY_PAYMENT_TYPE[1]) {
-    nextPaymentDate.setDate(today.getDate() + 15);
+    newPaymentDate.setDate(newPaymentDate.getDate() + 15);
   } else if (monthlyType === MONTHLY_PAYMENT_TYPE[2]) {
-    nextPaymentDate.setDate(today.getDate() + 1);
+    newPaymentDate.setDate(newPaymentDate.getDate() + 1);
   }
 
-  return nextPaymentDate;
+  return newPaymentDate;
 }
 
 export function calculateAge(body) {
