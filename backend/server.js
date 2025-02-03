@@ -3,10 +3,12 @@ import clientsRoutes from "./api/routes/clients-routes.js";
 import paymentsRoutes from "./api/routes/payments-routes.js";
 import filterRoutes from "./api/routes/filter-routes.js";
 import reportsRoutes from "./api/routes/reports-routes.js"
-import whatsappRoutes from "./api/routes/whatsapp-routes.js";
-import { whatsapp, isAuthenticated } from "./apiWhatsApp/lib/whatsapp.js";
-import sendRoutine from "./apiWhatsApp/routes/send-routines.js";
-import notifyExpiration from "./apiWhatsApp/routes/notify-expiration.js";
+// import whatsappRoutes from "./api/routes/whatsapp-routes.js";
+// import { whatsapp, isAuthenticated } from "./apiWhatsApp/lib/whatsapp.js";
+// import sendRoutine from "./apiWhatsApp/routes/send-routines.js";
+// import notifyExpiration from "./apiWhatsApp/routes/notify-expiration.js";
+
+import {startMessageSending} from "./api/schedule-messages/membership-to-expire.js"
 
 import { validateHttpMethod } from "./api/middleware/validation.js";
 import {
@@ -32,6 +34,7 @@ app.use("/api/reports", reportsRoutes);
 
 //!Al correr el server ocupo que se este llmando constantemente la funcion del archivo membership-to-expire.js
 
+await startMessageSending();
 
 //? Rutas para enviar rutinas a WhatsApp
 //!app.use("/apiWhatsApp", sendRoutine);

@@ -1,4 +1,10 @@
+import { makeFetchWhatsapp } from "../../utils/fetchWhatsapp.js";
 import { db } from "../database/db.js";
+import {
+  authenticated,
+  setMessageInterval,
+  clearMessageInterval,
+} from "../../apiWhatsApp/lib/whatsapp.js"; //
 
 import { sendEmail } from "../../apiBrevo/sendEmail.js";
 
@@ -12,7 +18,14 @@ const AdditionalClientData = db.AdditionalClientData;
 const ONCE_DAY = 86400000;
 const TESTING = 10000;
 
+// xport async function startMessageSending(isConnected) {
 export async function startMessageSending() {
+  //!Check this function, replace this for email
+  // console.log("Estado de conexión: ", isConnected);
+  // if (!isConnected) {
+  //   console.log("Cliente desconectado, no se enviarán mensajes.");
+  //   return;
+  // }
 
   try {
     const currentDate = new Date();
@@ -24,12 +37,17 @@ export async function startMessageSending() {
 
     if (pendingMessages.length === 0) {
       console.log("No hay mensajes pendientes.");
+      // setTimeout(() => startMessageSending(authenticated), ONCE_DAY);
       setTimeout(() => startMessageSending(), TESTING);
 
       return;
     }
 
     for (const message of pendingMessages) {
+      // if (!authenticated) {
+      //   console.log("Cliente desconectado durante el envío. Cancelando...");
+      //   return;
+      // }
 
       let client = await Client.findOne({ cli_id: message.msg_client_id });
 
@@ -44,10 +62,24 @@ export async function startMessageSending() {
   } catch (error) {
     console.error("Error al procesar mensajes programados:", error);
   }
+
+  // if (authenticated) {
+  //   const interval = setTimeout(() => startMessageSending(authenticated), ONCE_DAY);
+  //   setMessageInterval(interval); // Usa la función para configurar el intervalo
+  // }
 }
 async function sendAndMarkAsSent(client, clientAdditionalData, message) {
+  //! Cahnge this for email
   console.log(`Enviando mensaje a: ${message.msg_client_id}`);
   try {
+    // const response = await makeFetchWhatsapp(
+    //   "/apiWhatsApp/notifyExpiration",
+    //   "POST",
+    //   "",
+    //   client
+    // );
+
+    //!Enviar por email con la funcion de sendEmail
 
     await sendEmail(
       subjectEmail,

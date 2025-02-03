@@ -11,7 +11,7 @@ import {
   validatePhone,
 } from "./services/clientValidations.js";
 import { calculateNextPayDate } from "./services/clientUtils.js";
-import { sendRutineByEmail } from "../../apiBrevo/sendEmail.js";
+import { sendEmail } from "../../apiBrevo/sendEmail.js";
 
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
@@ -101,7 +101,7 @@ async function addClient(req, res) {
         rutine.rut_id
       );
    
-      await sendRutineByEmail(
+      await sendEmail(
         subjectEmail,
         body.cli_additional_data.cli_email,
         body.cli_name,
@@ -225,7 +225,7 @@ async function updateClient(req, res, cli_id) {
         rutine.rut_id
       );
 
-      await sendRutineByEmail(
+      await sendEmail(
         subjectEmail,
         body.cli_additional_data.cli_email,
         body.cli_name,

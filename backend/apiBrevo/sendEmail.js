@@ -13,7 +13,7 @@ apiInstance.setApiKey(
 const smtpEmail = new brevo.SendSmtpEmail();
 
 //?Podria usar esta para todo los contatactos con el ciente, pero quiza mejor separarlas, aunque podria hacer solo una verficacion dobre para que es y segun esto se cambie el html
-export async function sendRutineByEmail(
+export async function sendEmail(
   subject,
   clientEmail,
   clientName,
