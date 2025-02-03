@@ -18,6 +18,9 @@ const AdditionalData = db.AdditionalClientData;
 const Payment = db.Payments;
 const MessageAgenda = db.MessagesAgenda;
 
+const subjectEmail = "Rutina 🏋️‍♀️🏋️‍♂️";
+const typeOfEmail = "routine";
+
 export const clientsRepo = {
   getClients,
   getClientById,
@@ -25,8 +28,6 @@ export const clientsRepo = {
   updateClient,
   _deleteClient,
 };
-
-const subjectEmail = "Rutina 🏋️‍♀️🏋️‍♂️";
 
 //*Get client by id
 async function getClientById(req, res, cli_id) {
@@ -99,12 +100,13 @@ async function addClient(req, res) {
         body.cli_additional_data,
         rutine.rut_id
       );
-      console.log(body.cli_additional_data.cli_email);
+   
       await sendRutineByEmail(
         subjectEmail,
         body.cli_additional_data.cli_email,
         body.cli_name,
-        rutine.rut_rutine
+        rutine.rut_rutine,
+        typeOfEmail
       );
       body.cli_additional_data = additionalData._id;
     }
@@ -216,7 +218,7 @@ async function updateClient(req, res, cli_id) {
 
     if (body.cli_rutine === true) {
       const rutine = await assignRutine(body);
-      console.log("🥶🥶🥶🥶", body);
+   
       const additionalData = await updateAdditionalClientData(
         body.cli_additional_data,
         client.cli_additional_data,
@@ -227,7 +229,8 @@ async function updateClient(req, res, cli_id) {
         subjectEmail,
         body.cli_additional_data.cli_email,
         body.cli_name,
-        rutine.rut_rutine
+        rutine.rut_rutine,
+        typeOfEmail
       );
 
       body.cli_additional_data = additionalData._id;
