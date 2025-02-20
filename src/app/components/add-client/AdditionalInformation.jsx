@@ -50,6 +50,10 @@ const AdditionalInformation = ({
           <FormInput placeholder={"kg"} value={weight} setValue={setWeight} />
         </div>
       </div>
+          <div className="">
+            <Title title={"Correo Electrónico"}/>
+            <FormInput placeholder={"Email"} value={email} setValue={setEmail} />
+          </div>
       <div className="flex flex-col">
         <div className="flex flex-col pb-10 gap-2">
           <Title title={"Objetivos"} />
@@ -73,10 +77,6 @@ const AdditionalInformation = ({
             hideTimeZone
             showMonthAndYearPickers
           />
-          <div className="pt-10">
-            <Title title={"Correo Electrónico"}/>
-            <FormInput placeholder={"Email"} value={email} setValue={setEmail} />
-          </div>
         </div>
       </div>
     </div>
