@@ -50,6 +50,7 @@ export default function Reports() {
       <div>
         <IncomingChart data={lastMontIncoming}/>
       </div>
+     <button onClick={ ()=> alert("Descargando..")}> Download Report</button>
     </div>
   );
 };
