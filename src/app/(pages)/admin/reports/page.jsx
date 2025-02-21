@@ -7,6 +7,7 @@ import { MonthlyTypeChart } from "@/src/app/components/charts/MonthlyTypeChart";
 import { NewClientsMonthlyChart } from "@/src/app/components/charts/NewClientsMonthlyChart";
 import { makeFetch } from "@/src/app/components/utils/fetch";
 import React, { useEffect, useState } from "react";
+import { downloadReport } from "@/src/app/components/utils/DownloadReport.js";
 
 export default function Reports() {
   const [genderData, setGenderData] = useState()
@@ -50,7 +51,7 @@ export default function Reports() {
       <div>
         <IncomingChart data={lastMontIncoming}/>
       </div>
-     <button onClick={ ()=> alert("Descargando..")}> Download Report</button>
+    <button onClick={() => downloadReport(document.body)}> Download Report</button>
     </div>
   );
 };
