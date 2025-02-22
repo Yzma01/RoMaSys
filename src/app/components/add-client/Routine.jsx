@@ -12,9 +12,7 @@ const Routine = ({
   date,
   setDate,
   gender,
-  setGender,
-  email,
-  setEmail
+  setGender
 }) => {
   return (
     <div className="p-4">
@@ -34,13 +32,11 @@ const Routine = ({
                 goal={goal}
                 date={date}
                 gender={gender}
-                email={email}
                 setHeight={setHeight}
                 setWeight={setWeight}
                 setGoal={setGoal}
                 setDate={setDate}
                 setGender={setGender}
-                setEmail={setEmail}
               />
             </div>
           </motion.div>

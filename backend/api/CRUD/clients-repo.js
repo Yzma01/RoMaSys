@@ -38,7 +38,6 @@ async function getClientById(req, res, cli_id) {
     client.cli_additional_data = await AdditionalData.findOne({
       _id: client.cli_additional_data,
     });
-    console.log("🐢🐢🐢🐢🐢🐢🐢", client);
     res.json(client);
   } catch (error) {
     res.status(500).json({ message: "Error getting client" + error.message });

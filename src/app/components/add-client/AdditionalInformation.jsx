@@ -34,8 +34,7 @@ const AdditionalInformation = ({
   date,
   setDate,
   gender,
-  setGender,
-  email, setEmail,
+  setGender
 }) => {
   return (
     <div className="flex flex-col h-full pl-20 pr-20">
@@ -50,10 +49,10 @@ const AdditionalInformation = ({
           <FormInput placeholder={"kg"} value={weight} setValue={setWeight} />
         </div>
       </div>
-          <div className="">
+          {/* <div className="">
             <Title title={"Correo Electrónico"}/>
             <FormInput placeholder={"Email"} value={email} setValue={setEmail} />
-          </div>
+          </div> */}
       <div className="flex flex-col">
         <div className="flex flex-col pb-10 gap-2">
           <Title title={"Objetivos"} />

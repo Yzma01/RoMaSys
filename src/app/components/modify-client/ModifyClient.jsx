@@ -44,7 +44,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
   
   useEffect(() => {
     if (client != null) {
-      console.log("shi");
+      console.log(client)
       setBasicData();
       setAditionalData();
     }
@@ -54,7 +54,6 @@ const ModifySelectedClient = ({ selectedClient }) => {
     const response = await makeFetch("/api/clients", "GET", id);
     if (response.status === 200) {
       const data = await response.json();
-      console.log("Datos recibidos:", data);
       setClient(data);
     }
     if (response.status === 500) {
@@ -71,6 +70,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
     setPhone(client.cli_phone)
     setAmount(client.cli_monthly_payment)
     setRoutine(client.cli_rutine)
+    setEmail(client.cli_email);
 
     let mType = client.cli_monthly_payment_type;
   mType = mType.charAt(0).toUpperCase() + mType.slice(1);
@@ -84,7 +84,6 @@ const ModifySelectedClient = ({ selectedClient }) => {
       setWeight(client.cli_additional_data.cli_weight);
       setDate(client.cli_additional_data.cli_birthdate);
       setGoal(client.cli_additional_data.cli_goal);
-      setEmail(client.cli_additional_data.cli_email);
     }
   }
 
@@ -158,6 +157,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
       cli_last_name2: lastname2,
       cli_monthly_payment_type: monthlyType.toLowerCase(),
       cli_phone: phone,
+      cli_email: email,
       cli_frozen: false,
       cli_remaining_days: 0,
       cli_register_date: new Date(),
@@ -171,15 +171,13 @@ const ModifySelectedClient = ({ selectedClient }) => {
             cli_height: height,
             cli_weight: weight,
             cli_birthdate: date,
-            cli_email: email,
           },
     };
     doFechtVerifications(body);
   };
 
   const doFechtVerifications= async(body)=>{
-    console.log("routine: ", routine)
-    if(!verifiedValidEmail() && routine){
+    if(!verifiedValidEmail()){
       toast({description: "Correo electrónico no válido"});
       return;
     }
@@ -224,6 +222,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
                             amount={amount}
                             monthlyType={monthlyType}
                             routine={routine}
+                            email={email}
                             setRoutine={setRoutine}
                             setId={setId}
                             setName={setName}
@@ -232,6 +231,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
                             setPhone={setPhone}
                             setMothlyType={setMothlyType}
                             setAmount={setAmount}
+                            setEmail={setEmail}
                           />
                           <Routine
                             routine={routine}
@@ -240,13 +240,11 @@ const ModifySelectedClient = ({ selectedClient }) => {
                             goal={goal}
                             date={date}
                             gender={gender}
-                            email={email}
                             setHeight={setHeight}
                             setWeight={setWeight}
                             setGoal={setGoal}
                             setDate={setDate}
                             setGender={setGender}
-                            setEmail={setEmail}
                           />
                         </div>
                       </header>
