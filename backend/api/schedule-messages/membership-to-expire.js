@@ -51,7 +51,7 @@ async function sendAndMarkAsSent(client, clientAdditionalData, message) {
 
     await sendEmail(
       subjectEmail,
-      clientAdditionalData.cli_email,
+      client.cli_email,
       client.cli_name,
       messageToSend,
       typeOfEmail

@@ -1,7 +1,6 @@
 import { db } from "../database/db.js";
 import {
   assignRutine,
-  sendRutine,
   scheduleMessage,
 } from "./services/rutineService.js";
 import {
@@ -83,7 +82,6 @@ async function getClients(req, res) {
 async function addClient(req, res) {
   const body = req.body;
   const today = new Date();
-  console.log(".🏋️‍♂️🏋️‍♂️", body);
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
@@ -101,9 +99,9 @@ async function addClient(req, res) {
         rutine.rut_id
       );
    
-      await sendEmail(
+      await sendEmail( //!Revisar
         subjectEmail,
-        body.cli_additional_data.cli_email,
+        body.cli_email,
         body.cli_name,
         rutine.rut_rutine,
         typeOfEmail
@@ -130,7 +128,6 @@ async function addClient(req, res) {
 
 //*Add additional client data
 async function addAdditionalClientData(body, rutineId) {
-
 
   body.cli_rutine_id = rutineId;
 
@@ -227,7 +224,7 @@ async function updateClient(req, res, cli_id) {
 
       await sendEmail(
         subjectEmail,
-        body.cli_additional_data.cli_email,
+        body.cli_email,
         body.cli_name,
         rutine.rut_rutine,
         typeOfEmail

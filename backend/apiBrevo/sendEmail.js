@@ -20,6 +20,7 @@ export async function sendEmail(
   content,
   typeOfEmail
 ) {
+
   try {
     smtpEmail.subject = subject;
     smtpEmail.to = [{ email: clientEmail, name: clientName }];
@@ -31,8 +32,7 @@ export async function sendEmail(
       email: COMPANY_EMAIL,
     };
 
-    const response = await apiInstance.sendTransacEmail(smtpEmail);
-    console.log("respuesta: ", response);
+    await apiInstance.sendTransacEmail(smtpEmail);
   } catch (error) {
     console.error("Error al enviar el correo:", error.message);
     if (error.response) {

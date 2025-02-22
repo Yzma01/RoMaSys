@@ -23,6 +23,7 @@ function clientsModel() {
     cli_register_date: { type: Date, unique: false, required: true },
     cli_rutine:  { type: Boolean, unique: false, required: false },
     cli_next_pay_date: { type: Date, unique: false, require: false },
+    cli_email: { type: String, unique: true, required: false},
     cli_additional_data: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Additional_Clients_Data",
@@ -48,8 +49,7 @@ function additionalClientsDataModel() {
     cli_gender: { type: String, unique: false, required: false },
     cli_height: { type: Number, unique: false, required: false },
     cli_weight: { type: Number, unique: false, required: false },
-    cli_birthdate: { type: Date, unique: false, required: false },
-    cli_email: { type: String, unique: true, required: false}, 
+    cli_birthdate: { type: Date, unique: false, required: false }, 
   });
 
   schema.set("toJSON", {

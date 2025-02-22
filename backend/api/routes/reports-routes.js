@@ -5,6 +5,6 @@ const router = express.Router();
 
 //* Rutas para las solicitues de reportes
 router.get("/", getReport); 
-router.get("/gainsByRange", getIncomingByRange); //!Prueba
+router.get("/gainsByRange", getIncomingByRange);
 
 export default router;
