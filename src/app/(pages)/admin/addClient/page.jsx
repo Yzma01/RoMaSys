@@ -72,6 +72,7 @@ export default function AddClient() {
       lastname1 == "" ||
       lastname2 == "" ||
       phone == "" ||
+      email == "" ||
       monthlyType == "" ||
       amount == ""
     ) {
@@ -84,8 +85,7 @@ export default function AddClient() {
         goal == "" ||
         gender == "" ||
         date == undefined ||
-        date == "" ||
-        email == ""
+        date == ""
       ) {
         return true;
       }
@@ -117,6 +117,7 @@ export default function AddClient() {
       cli_last_name2: lastname2,
       cli_monthly_payment_type: monthlyType.toLowerCase(),
       cli_phone: phone,
+      cli_email: email,
       cli_frozen: false,
       cli_remaining_days: 0,
       cli_register_date: new Date(),
@@ -131,14 +132,14 @@ export default function AddClient() {
             cli_height: height,
             cli_weight: weight,
             cli_birthdate: date,
-            cli_email: email,
           },
     };
+    console.log(body)
     doFechtVerifications(body);
   };
 
   const doFechtVerifications= async(body)=>{
-    if(!verifiedValidEmail() && routine){
+    if(!verifiedValidEmail()){
       toast({description: "Correo electrónico no válido"});
       return;
     }
@@ -166,7 +167,7 @@ export default function AddClient() {
         >
           <div className="flex flex-col  text-white p-5 w-fit">
             <h1 className="text-xl sm:text-2xl mb-2 font-bold">
-              Agregar Usuario
+              Agregar Cliente
             </h1>
             <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 w-fit mx-4 md:mx-8 lg:mx-16">
               <section>
@@ -190,6 +191,8 @@ export default function AddClient() {
                       setPhone={setPhone}
                       setMothlyType={setMothlyType}
                       setAmount={setAmount}
+                      email={email}
+                      setEmail={setEmail}
                     />
                     <Routine
                       routine={routine}
