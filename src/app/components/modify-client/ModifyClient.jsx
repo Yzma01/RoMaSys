@@ -17,7 +17,7 @@ import { emitEvent } from "@/hooks/use-event";
 import { useNavigate } from "react-router-dom";
 
 const ModifySelectedClient = ({ selectedClient }) => {
-  const [client, setClient] = useState(null)
+  const [client, setClient] = useState(null);
   const [gender, setGender] = useState("");
   const [routine, setRoutine] = useState(false);
   const [height, setHeight] = useState("");
@@ -30,8 +30,8 @@ const ModifySelectedClient = ({ selectedClient }) => {
   const [lastname1, setLastname1] = useState();
   const [lastname2, setLastname2] = useState();
   const [phone, setPhone] = useState();
-  const [email, setEmail] = useState()
-  
+  const [email, setEmail] = useState();
+
   const [monthlyType, setMothlyType] = useState();
   const [amount, setAmount] = useState(0);
   const { toast } = useToast();
@@ -41,15 +41,15 @@ const ModifySelectedClient = ({ selectedClient }) => {
   useEffect(() => {
     getClient(selectedClient);
   }, [selectedClient]);
-  
+
   useEffect(() => {
     if (client != null) {
-      console.log(client)
+      console.log(client);
       setBasicData();
       setAditionalData();
     }
   }, [client]);
-  
+
   const getClient = async (id) => {
     const response = await makeFetch("/api/clients", "GET", id);
     if (response.status === 200) {
@@ -57,27 +57,29 @@ const ModifySelectedClient = ({ selectedClient }) => {
       setClient(data);
     }
     if (response.status === 500) {
-      toast({ description: "Error de conexión, si el problema persiste contacte a soporte" });
+      toast({
+        description:
+          "Error de conexión, si el problema persiste contacte a soporte",
+      });
     }
   };
-  
 
-  const setBasicData=()=>{
-    setId(client.cli_id)
-    setName(client.cli_name)
-    setLastname1(client.cli_last_name1)
-    setLastname2(client.cli_last_name2)
-    setPhone(client.cli_phone)
-    setAmount(client.cli_monthly_payment)
-    setRoutine(client.cli_rutine)
+  const setBasicData = () => {
+    setId(client.cli_id);
+    setName(client.cli_name);
+    setLastname1(client.cli_last_name1);
+    setLastname2(client.cli_last_name2);
+    setPhone(client.cli_phone);
+    setAmount(client.cli_monthly_payment);
+    setRoutine(client.cli_rutine);
     setEmail(client.cli_email);
 
     let mType = client.cli_monthly_payment_type;
-  mType = mType.charAt(0).toUpperCase() + mType.slice(1);
-  setMothlyType(mType)
-  }
+    mType = mType.charAt(0).toUpperCase() + mType.slice(1);
+    setMothlyType(mType);
+  };
 
-  const setAditionalData=()=>{
+  const setAditionalData = () => {
     if (routine) {
       setGender(client.cli_additional_data.cli_gender);
       setHeight(client.cli_additional_data.cli_height);
@@ -85,7 +87,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
       setDate(client.cli_additional_data.cli_birthdate);
       setGoal(client.cli_additional_data.cli_goal);
     }
-  }
+  };
 
   const validate = (message, status, code, className) => {
     if (status == code) {
@@ -93,7 +95,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
     }
     if (code == 200) {
       emitEvent("refreshTable", {});
-      navigate('/admin/dashboard');
+      navigate("/admin/dashboard");
     }
     return;
   };
@@ -140,15 +142,20 @@ const ModifySelectedClient = ({ selectedClient }) => {
     );
   };
 
-  const verifiedNegative = ()=>{
+  const verifiedNegative = () => {
     const regex = /-+/;
-    return regex.test(amount) || regex.test(weight) || regex.test(height) || regex.test(phone);
-  }
+    return (
+      regex.test(amount) ||
+      regex.test(weight) ||
+      regex.test(height) ||
+      regex.test(phone)
+    );
+  };
 
-  const verifiedValidEmail = ()=>{
+  const verifiedValidEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
-  }
+  };
 
   const handleSubmit = async () => {
     const body = {
@@ -176,13 +183,13 @@ const ModifySelectedClient = ({ selectedClient }) => {
     doFechtVerifications(body);
   };
 
-  const doFechtVerifications= async(body)=>{
-    if(!verifiedValidEmail()){
-      toast({description: "Correo electrónico no válido"});
+  const doFechtVerifications = async (body) => {
+    if (!verifiedValidEmail()) {
+      toast({ description: "Correo electrónico no válido" });
       return;
     }
-    if(verifiedNegative()){
-      toast({description: "Los números no pueden ser negativos"});
+    if (verifiedNegative()) {
+      toast({ description: "Los números no pueden ser negativos" });
       return;
     }
     if (verifiedNull()) {
@@ -191,81 +198,82 @@ const ModifySelectedClient = ({ selectedClient }) => {
       const response = await makeFetch("/api/clients", "PUT", id, body);
       doVerifications(response);
     }
-  }
+  };
 
   return (
     <div className=" flex items-center justify-center h-[100vh] w-full flex-col">
-          <div className="flex items-center justify-center w-full">
-            <AnimatePresence>
-              <motion.div
-                className="overflow-hidden"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 1.5 }}
-              >
-                <div className="flex flex-col  text-white p-5 w-fit">
-                  <h1 className="text-xl sm:text-2xl mb-2 font-bold">
-                    Modificar Usuario
-                  </h1>
-                  <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 w-fit mx-4 md:mx-8 lg:mx-16">
-                    <section>
-                      <header className="flex flex-col sm:flex-row items-center justify-between">
-                        <div className="flex flex-row w-fit sm:w-3/4 mb-4 sm:mb-0 gap-10 -mr-28">
-                          <BasicInformation
-                            modify={true}
-                            id={id}
-                            name={name}
-                            lastname1={lastname1}
-                            lastname2={lastname2}
-                            phone={phone}
-                            amount={amount}
-                            monthlyType={monthlyType}
-                            routine={routine}
-                            email={email}
-                            setRoutine={setRoutine}
-                            setId={setId}
-                            setName={setName}
-                            setLastname1={setLastname1}
-                            setLastname2={setLastname2}
-                            setPhone={setPhone}
-                            setMothlyType={setMothlyType}
-                            setAmount={setAmount}
-                            setEmail={setEmail}
-                          />
-                          <Routine
-                            routine={routine}
-                            height={height}
-                            weight={weight}
-                            goal={goal}
-                            date={date}
-                            gender={gender}
-                            setHeight={setHeight}
-                            setWeight={setWeight}
-                            setGoal={setGoal}
-                            setDate={setDate}
-                            setGender={setGender}
-                          />
-                        </div>
-                      </header>
-                    </section>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-       
-        <div className="w-full items-end flex justify-center gap-4">
-            <Button color={"red"} text={"Cancelar"} onClick={()=> navigate('/admin/dashboard')}/>
-          
-            <Button
-              onClick={(e) => handleSubmit()}
-              color={"green"}
-              text={"Modificar"}
-            />
-          
-        </div>
-     
+      <div className="flex items-center justify-center w-full">
+        <AnimatePresence>
+          <motion.div
+            className="overflow-hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 1.5 }}
+          >
+            <div className="flex flex-col  text-white p-5 w-fit">
+              <h1 className="text-xl sm:text-2xl mb-2 font-bold">
+                Modificar Usuario
+              </h1>
+              <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 w-fit mx-4 md:mx-8 lg:mx-16">
+                <section>
+                  <header className="flex flex-col sm:flex-row items-center justify-between">
+                    <div className="flex flex-row w-fit sm:w-3/4 mb-4 sm:mb-0 gap-10 -mr-28">
+                      <BasicInformation
+                        modify={true}
+                        id={id}
+                        name={name}
+                        lastname1={lastname1}
+                        lastname2={lastname2}
+                        phone={phone}
+                        amount={amount}
+                        monthlyType={monthlyType}
+                        routine={routine}
+                        email={email}
+                        setRoutine={setRoutine}
+                        setId={setId}
+                        setName={setName}
+                        setLastname1={setLastname1}
+                        setLastname2={setLastname2}
+                        setPhone={setPhone}
+                        setMothlyType={setMothlyType}
+                        setAmount={setAmount}
+                        setEmail={setEmail}
+                      />
+                      <Routine
+                        routine={routine}
+                        height={height}
+                        weight={weight}
+                        goal={goal}
+                        date={date}
+                        gender={gender}
+                        setHeight={setHeight}
+                        setWeight={setWeight}
+                        setGoal={setGoal}
+                        setDate={setDate}
+                        setGender={setGender}
+                      />
+                    </div>
+                  </header>
+              <div className="w-full items-end flex justify-center gap-4">
+                <Button
+                  color={"red"}
+                  text={"Cancelar"}
+                  onClick={() => navigate("/admin/dashboard")}
+                />
+
+                <Button
+                  onClick={(e) => handleSubmit()}
+                  color={"green"}
+                  text={"Modificar"}
+                />
+              </div>
+                </section>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
   );
 };
