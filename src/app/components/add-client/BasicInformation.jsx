@@ -30,10 +30,11 @@ const BasicInformation = ({
   setPhone,
   setMothlyType,
   setAmount,
+  email, setEmail
 }) => {
   return (
     <div className="flex justify-center items-center w-full">
-      <form className="flex flex-col gap-6 pl-20">
+      <form className="flex flex-col gap-0 pl-20">
         <Title title={"Datos del Cliente"} />
         <FormInput value={id} placeholder={"Cédula"} setValue={setId} />
         <FormInput value={name} placeholder={"Nombre"} setValue={setName} />
@@ -48,6 +49,9 @@ const BasicInformation = ({
           setValue={setLastname2}
         />
         <FormInput value={phone} placeholder={"Teléfono"} setValue={setPhone} />
+
+        <FormInput value={email} placeholder={"Correo Electrónico"} setValue={setEmail} />
+
         <div className="flex flex-row gap-2">
           <div className="flex flex-col">
             <Title title={"Mensualidad"} />
