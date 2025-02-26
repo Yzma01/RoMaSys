@@ -65,6 +65,12 @@ export default function AddClient() {
     return emailRegex.test(email);
   }
 
+  const verifiedBirthday = ()=>{
+    const today = new Date();
+    console.log(date + " -🙋‍♂️🙋‍♂️- " + today);
+    return date > today ? true : false;
+  }
+
   const verifiedNull = () => {
     if (
       id == "" ||
@@ -139,6 +145,10 @@ export default function AddClient() {
   };
 
   const doFechtVerifications= async(body)=>{
+    if(verifiedBirthday()){
+      toast({description: "La fecha de nacimiento es mayor a la actual"});
+      return;
+    }
     if(!verifiedValidEmail()){
       toast({description: "Correo electrónico no válido"});
       return;

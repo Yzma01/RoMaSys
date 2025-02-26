@@ -99,7 +99,7 @@ async function addClient(req, res) {
         rutine.rut_id
       );
    
-      await sendEmail( //!Revisar
+      await sendEmail( 
         subjectEmail,
         body.cli_email,
         body.cli_name,
@@ -263,11 +263,7 @@ async function updateAdditionalClientData(body, clientObjectId, rutineId) {
     if (!additionalData) {
       console.log("looololoololoolol");
       additionalData = await addAdditionalClientData(body, rutineId);
-      console.log(additionalData);
     }
-
-    console.log("📍📍📍", additionalData);
-
 
     Object.assign(additionalData, body);
     await additionalData.save();
