@@ -63,7 +63,6 @@ export const saveClients = async () => {
   return true;
 }
 
-s
 export const deleteClients = async () => {
   let data
   const response = await makeFetch("/api/clients", "GET", "");

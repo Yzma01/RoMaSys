@@ -16,8 +16,8 @@ const goals = [
     label: "Ganancia de masa muscular",
   },
   {
-    value: "tonificacion",
-    label: "tonificacion",
+    value: "Tonificación",
+    label: "Tonificación",
   },
   {
     value: "Mejora de la salud en general",
