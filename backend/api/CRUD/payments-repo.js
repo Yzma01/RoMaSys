@@ -12,7 +12,6 @@ export const paymentsRepo = {
   getPayment,
 };
 
-//!Si el men hace 3 pagos a esa persona y es de mes, se debe de sumar los 3 meses
 async function addPayment(req, res) {
   const body = req.body;
 
@@ -20,9 +19,11 @@ async function addPayment(req, res) {
     const client = await Client.findOne({ cli_id: body.pay_client_id });
     clientNotFound(client);
 
-    console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa🐢🐢🐢")
+    const now = new Date();
+    const costaRicaOffset = -6 * 60; // UTC-6 en minutos
+    const localTime = new Date(now.getTime() + costaRicaOffset * 60000);
 
-    body.pay_date = new Date();
+    body.pay_date = localTime;
     body.pay_amount = body.pay_amount.includes(",")
       ? body.pay_amount.replace(",", "")
       : body.pay_amount;
@@ -34,18 +35,16 @@ async function addPayment(req, res) {
       body.pay_monthly_payment_type,
       client.cli_next_pay_date
     );
-    console.log("Nueva fecha de pago calculada: ", nextPayDate);
 
     client.cli_next_pay_date = nextPayDate;
 
-    console.log(client);
+    await Client.findByIdAndUpdate(client._id, {
+      cli_next_pay_date: nextPayDate,
+      cli_monthly_payment_type: body.pay_monthly_payment_type,
+    });
 
-    await Client.findByIdAndUpdate(client._id, { cli_next_pay_date: nextPayDate, 
-      cli_monthly_payment_type: body.pay_monthly_payment_type });
+    await MessagesAgenda.findOneAndDelete({ msg_client_id: client.cli_id });
 
-    await MessagesAgenda.findOneAndDelete({msg_client_id: client.cli_id}); //!Borro el mensage que tenia agendado antes para que ya no se le envia que la mensulidad esta vencida
-
-    console.log("😇😇😇", client)
     await scheduleMessage(client);
 
     res.status(200).json({ message: "Payment saved!", payment });

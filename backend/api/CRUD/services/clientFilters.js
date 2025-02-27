@@ -6,7 +6,7 @@ export function filterByAge(filter, age) {
 }
 
 export function filterByGoal(filter, additionalData) { 
-  filter.rut_goal = additionalData.cli_goal.toLowerCase(); //! ver s sirvio esto
+  filter.rut_goal = additionalData.cli_goal.toLowerCase(); 
 }
 
 export function filterByGender(filter, additionalData) {

@@ -219,7 +219,6 @@ async function updateClient(req, res, cli_id) {
 
       console.log("✅✅✅", rutine);
 
-      if (rutine != null) {
         await sendEmail(
           subjectEmail,
           body.cli_email,
@@ -227,11 +226,7 @@ async function updateClient(req, res, cli_id) {
           rutine.rut_rutine,
           typeOfEmail
         );
-      }
-
-      if (rutine === null) {
-        res.status(404).json({ message: "Error getting routine" });
-      }
+      
 
       body.cli_additional_data = additionalData._id;
     }
