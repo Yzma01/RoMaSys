@@ -107,7 +107,7 @@ const RegisterPay = ({ selectedClient }) => {
               <p className="text-gray-400">Mensualidad</p>
               <MonthlyType value={monthlyType} setValue={setMothlyType} />
             </div>
-            <div className="pl-20 flex flex-col">
+            <div className="pl-[6.5rem] flex flex-col">
               <p className="text-gray-400 pl-4">Monto a cancelar</p>
               <div className="pl-5">
                 <FormInput

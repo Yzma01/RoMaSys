@@ -30,7 +30,8 @@ const BasicInformation = ({
   setPhone,
   setMothlyType,
   setAmount,
-  email, setEmail
+  email,
+  setEmail,
 }) => {
   return (
     <div className="flex justify-center items-center w-full">
@@ -50,13 +51,19 @@ const BasicInformation = ({
         />
         <FormInput value={phone} placeholder={"Teléfono"} setValue={setPhone} />
 
-        <FormInput value={email} placeholder={"Correo Electrónico"} setValue={setEmail} />
+        <FormInput
+          value={email}
+          placeholder={"Correo Electrónico"}
+          setValue={setEmail}
+        />
 
         <div className="flex flex-row gap-2">
-          <div className="flex flex-col">
-            <Title title={"Mensualidad"} />
-            <MonthlyType value={monthlyType} setValue={setMothlyType} />
-          </div>
+          {!modify && (
+            <div className="flex flex-col">
+              <Title title={"Mensualidad"} />
+              <MonthlyType value={monthlyType} setValue={setMothlyType} />
+            </div>
+          )}
           <div>
             {!modify && (
               <FormInput
