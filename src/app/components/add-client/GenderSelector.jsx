@@ -3,7 +3,6 @@ import React from "react";
 import { Title } from "./BasicInformation";
 
 const GenderSelector = ({gender, setGender}) => {
-  console.log(gender)
   return (
     <div>
       <Title title={"Seleccione el Género"} />

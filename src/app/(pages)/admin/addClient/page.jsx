@@ -67,7 +67,6 @@ export default function AddClient() {
 
   const verifiedBirthday = ()=>{
     const today = new Date();
-    console.log(date + " -🙋‍♂️🙋‍♂️- " + today);
     return date > today ? true : false;
   }
 

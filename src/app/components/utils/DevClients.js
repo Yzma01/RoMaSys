@@ -17,7 +17,7 @@ function generateClient() {
     cli_last_name1: randomElement(lastNames),
     cli_last_name2: randomElement(lastNames),
     cli_monthly_payment_type: randomElement(monthlyTypes).toLowerCase(),
-    cli_phone: `+506${Math.floor(10000000 + Math.random() * 90000000)}`,
+    cli_phone: `506${Math.floor(10000000 + Math.random() * 90000000)}`,
     cli_email: `user${id}@example.com`,
     cli_frozen: false,
     cli_remaining_days: 0,

@@ -128,7 +128,11 @@ const ModifySelectedClient = ({ selectedClient }) => {
   };
 
   const doVerifications = (response) => {
-    validate(`${name} ha sido modificado.`, response.status, 200);
+    validate(
+      `El sistema no encontró una rutina para ${name}`,
+      response.status,
+      404
+    );
     validate(
       `Error de conexión, si el problema persiste contacte a soporte.`,
       response.status,
@@ -140,6 +144,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
       response.status,
       406
     );
+    validate(`${name} ha sido modificado.`, response.status, 200);
   };
 
   const verifiedNegative = () => {
@@ -180,6 +185,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
             cli_birthdate: date,
           },
     };
+    console.log(body);
     doFechtVerifications(body);
   };
 
@@ -196,6 +202,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
       toast({ description: "Por favor llene todos los campos." });
     } else {
       const response = await makeFetch("/api/clients", "PUT", id, body);
+      console.log(response)
       doVerifications(response);
     }
   };
@@ -255,19 +262,19 @@ const ModifySelectedClient = ({ selectedClient }) => {
                       />
                     </div>
                   </header>
-              <div className="w-full items-end flex justify-center gap-4">
-                <Button
-                  color={"red"}
-                  text={"Cancelar"}
-                  onClick={() => navigate("/admin/dashboard")}
-                />
+                  <div className="w-full items-end flex justify-center gap-4">
+                    <Button
+                      color={"red"}
+                      text={"Cancelar"}
+                      onClick={() => navigate("/admin/dashboard")}
+                    />
 
-                <Button
-                  onClick={(e) => handleSubmit()}
-                  color={"green"}
-                  text={"Modificar"}
-                />
-              </div>
+                    <Button
+                      onClick={(e) => handleSubmit()}
+                      color={"green"}
+                      text={"Modificar"}
+                    />
+                  </div>
                 </section>
               </div>
             </div>

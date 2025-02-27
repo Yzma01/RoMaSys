@@ -53,10 +53,11 @@ const setData = (data) => {
 };
 
 const getDateFixed = (value) => {
-  const date = new Date(value + "T00:00:00");
+  const date = new Date(value + "T00:00:00-06:00"); // Costa Rica (UTC-6)
   return date.toLocaleDateString("es-ES", {
     month: "short",
     day: "numeric",
+    timeZone: "America/Costa_Rica",
   });
 };
 
