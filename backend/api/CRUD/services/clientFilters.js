@@ -5,8 +5,8 @@ export function filterByAge(filter, age) {
   filter.rut_max_age = { $gte: age };
 }
 
-export function filterByGoal(filter, additionalData) {
-  filter.rut_goal = additionalData.cli_goal;
+export function filterByGoal(filter, additionalData) { 
+  filter.rut_goal = additionalData.cli_goal.toLowerCase(); //! ver s sirvio esto
 }
 
 export function filterByGender(filter, additionalData) {

@@ -2,8 +2,8 @@ import brevo from "@getbrevo/brevo";
 
 const apiInstance = new brevo.TransactionalEmailsApi();
 
-const COMPANY_NAME = "Niger Gym";
-const COMPANY_EMAIL = "marchena.isma@gmail.com";
+// const COMPANY_NAME = "Niger Gym";
+// const COMPANY_EMAIL = "marchena.isma@gmail.com";
 
 apiInstance.setApiKey(
   brevo.TransactionalEmailsApiApiKeys.apiKey,
@@ -28,8 +28,8 @@ export async function sendEmail(
     typeOfEmailToSend(typeOfEmail, content);
 
     smtpEmail.sender = {
-      name: COMPANY_NAME,
-      email: COMPANY_EMAIL,
+      name: process.env.COMPANY_NAME,
+      email: process.env.COMPANY_EMAIL,
     };
 
     await apiInstance.sendTransacEmail(smtpEmail);

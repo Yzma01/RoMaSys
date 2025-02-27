@@ -24,7 +24,7 @@ export async function startMessageSending() {
 
     if (pendingMessages.length === 0) {
       console.log("No hay mensajes pendientes.");
-      setTimeout(() => startMessageSending(), TESTING);
+      setTimeout(() => startMessageSending(), ONCE_DAY);
 
       return;
     }
