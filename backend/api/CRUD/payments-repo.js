@@ -40,7 +40,8 @@ async function addPayment(req, res) {
 
     console.log(client);
 
-    await Client.findByIdAndUpdate(client._id, { cli_next_pay_date: nextPayDate });
+    await Client.findByIdAndUpdate(client._id, { cli_next_pay_date: nextPayDate, 
+      cli_monthly_payment_type: body.pay_monthly_payment_type });
 
     await MessagesAgenda.findOneAndDelete({msg_client_id: client.cli_id}); //!Borro el mensage que tenia agendado antes para que ya no se le envia que la mensulidad esta vencida
 

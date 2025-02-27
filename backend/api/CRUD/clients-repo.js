@@ -233,12 +233,16 @@ async function updateClient(req, res, cli_id) {
       body.cli_additional_data = additionalData._id;
     }
 
-    body.cli_register_date = client.cli_register_date;
-    body.cli_next_pay_date = calculateNextPayDate(
-      body.cli_monthly_payment_type,
-      today
-    );
+    body.cli_register_date = client.cli_register_date; //!Esta linea creo que no se ocupa
 
+    
+    console.log("💐💐💐,", body.cli_next_pay_date );
+    // body.cli_next_pay_date = calculateNextPayDate( 
+    //   body.cli_monthly_payment_type,
+    //   todaychat
+    // );
+
+    console.log("❌❌,", body.cli_next_pay_date );
     frozenClient(body, client);
     unfreezeClient(body, client);
 

@@ -7,7 +7,7 @@ const Rutine = db.Rutines;
 const MessagesAgenda = db.MessagesAgenda;
 // const POSTAL_CODE = "+506";
 
-export async function assignRutine(body) { //!Revisar aqui que hacer cuando el men mete una fecha de nacimieto mayor a la actual
+export async function assignRutine(body) { 
   try {
     const additionalData = body.cli_additional_data;
     let filter = {};
