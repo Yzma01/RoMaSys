@@ -55,7 +55,7 @@ async function getClientsByGender() {
   ]);
 }
 
-async function getClientsByTypeOfMonthlyPayment() {
+async function getClientsByTypeOfMonthlyPayment() { //!QUITAR ESTO Y POSIBLE COLOCAR A CLIENTES CON RUTINA Y CLIENTES SIN RUTINA
   return await Client.aggregate([
     {
       $group: {

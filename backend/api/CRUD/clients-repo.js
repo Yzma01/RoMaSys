@@ -205,7 +205,6 @@ function unfreezeClient(body, client) {
 //*Update client
 async function updateClient(req, res, cli_id) {
   const body = req.body;
-  const today = new Date();
 
   try {
     const client = await Client.findOne({ cli_id: cli_id });
@@ -233,16 +232,9 @@ async function updateClient(req, res, cli_id) {
       body.cli_additional_data = additionalData._id;
     }
 
-    body.cli_register_date = client.cli_register_date; //!Esta linea creo que no se ocupa
+    body.cli_register_date = client.cli_register_date; 
+    body.cli_next_pay_date = client.cli_next_pay_date;
 
-    
-    console.log("💐💐💐,", body.cli_next_pay_date );
-    // body.cli_next_pay_date = calculateNextPayDate( 
-    //   body.cli_monthly_payment_type,
-    //   todaychat
-    // );
-
-    console.log("❌❌,", body.cli_next_pay_date );
     frozenClient(body, client);
     unfreezeClient(body, client);
 
