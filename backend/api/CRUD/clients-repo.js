@@ -1,8 +1,5 @@
 import { db } from "../database/db.js";
-import {
-  assignRutine,
-  scheduleMessage,
-} from "./services/rutineService.js";
+import { assignRutine, scheduleMessage } from "./services/rutineService.js";
 import {
   clientNotFound,
   clientAlredyExists,
@@ -98,8 +95,8 @@ async function addClient(req, res) {
         body.cli_additional_data,
         rutine.rut_id
       );
-   
-      await sendEmail( 
+
+      await sendEmail(
         subjectEmail,
         body.cli_email,
         body.cli_name,
@@ -128,7 +125,6 @@ async function addClient(req, res) {
 
 //*Add additional client data
 async function addAdditionalClientData(body, rutineId) {
-
   body.cli_rutine_id = rutineId;
 
   try {
@@ -214,25 +210,33 @@ async function updateClient(req, res, cli_id) {
 
     if (body.cli_rutine === true) {
       const rutine = await assignRutine(body);
-   
+
       const additionalData = await updateAdditionalClientData(
         body.cli_additional_data,
         client.cli_additional_data,
         rutine.rut_id
       );
 
-      await sendEmail(
-        subjectEmail,
-        body.cli_email,
-        body.cli_name,
-        rutine.rut_rutine,
-        typeOfEmail
-      );
+      console.log("✅✅✅", rutine);
+
+      if (rutine != null) {
+        await sendEmail(
+          subjectEmail,
+          body.cli_email,
+          body.cli_name,
+          rutine.rut_rutine,
+          typeOfEmail
+        );
+      }
+
+      if (rutine === null) {
+        res.status(404).json({ message: "Error getting routine" });
+      }
 
       body.cli_additional_data = additionalData._id;
     }
 
-    body.cli_register_date = client.cli_register_date; 
+    body.cli_register_date = client.cli_register_date;
     body.cli_next_pay_date = client.cli_next_pay_date;
 
     frozenClient(body, client);
