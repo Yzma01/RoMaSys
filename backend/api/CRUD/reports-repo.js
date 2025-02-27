@@ -114,13 +114,13 @@ async function getLastMonthIncoming() {
 }
 
 async function incomingByRange(req, res) {
-  const { startDate, endDate, monthly_payment_type } = req.body;
+  const { startDate, endDate, monthlyPaymentType } = req.body;
 
   try {
     const gainsInRange = await Payment.aggregate([
       {
         $match: {
-          pay_monthly_payment_type: monthly_payment_type,
+          pay_monthly_payment_type: monthlyPaymentType,
           pay_date: {
             $gte: new Date(startDate),
             $lte: new Date(endDate),

@@ -217,8 +217,6 @@ async function updateClient(req, res, cli_id) {
         rutine.rut_id
       );
 
-      console.log("✅✅✅", rutine);
-
         await sendEmail(
           subjectEmail,
           body.cli_email,
