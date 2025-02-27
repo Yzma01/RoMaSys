@@ -63,14 +63,7 @@ export const saveClients = async () => {
   return true;
 }
 
-async function deleteClient(id) {
-  try {
-    await makeFetch("/api/clients", "DELETE", id);
-  } catch (error) {
-    console.error("Error al guardar el cliente:", error);
-  }
-}
-
+s
 export const deleteClients = async () => {
   let data
   const response = await makeFetch("/api/clients", "GET", "");
