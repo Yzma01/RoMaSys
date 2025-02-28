@@ -114,7 +114,16 @@ async function getLastMonthIncoming() {
 }
 
 async function incomingByRange(req, res) {
-  const { startDate, endDate, monthlyPaymentType } = req.body;
+
+  console.log(req.query);
+
+
+  const { startDate, endDate, monthlyPaymentType } = req.query;
+
+  let monthly_Payment_Type = monthlyPaymentType.split("/")[0];
+
+  console.log(monthly_Payment_Type);
+
 
   try {
 
@@ -125,8 +134,9 @@ async function incomingByRange(req, res) {
         },
       };
 
-      if(monthlyPaymentType != ""){
-        matchQuery.pay_monthly_payment_type = monthlyPaymentType;
+      if(monthly_Payment_Type != ""){
+        console.log("dcdscdscdscsdcdscdscdsc")
+        matchQuery.pay_monthly_payment_type = monthly_Payment_Type;
       }
 
       const gainsInRange = await Payment.aggregate([
