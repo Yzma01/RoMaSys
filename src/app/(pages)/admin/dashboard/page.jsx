@@ -22,7 +22,7 @@ export default function Dashboard() {
   const activeClients = [];
   const frozenClients = [];
   const dueDateClients = [];
-  const { toast } = useToast();
+
 
   useEffect(() => {
     setClients([]);

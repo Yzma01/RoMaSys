@@ -9,6 +9,7 @@ import { makeFetch } from "@/src/app/components/utils/fetch";
 import React, { useEffect, useState } from "react";
 import { downloadReport } from "@/src/app/components/utils/DownloadReport.js";
 import DownloadButton from "@/src/app/components/utils/DownloadButton";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Reports() {
   const [genderData, setGenderData] = useState();
@@ -17,6 +18,7 @@ export default function Reports() {
   const [lastMontIncoming, setLastMontIncoming] = useState();
   const [date, setDate] = useState("");
   const [filterSelected, setFilterSelected] = useState("");
+  const { toast } = useToast();
 
   useEffect(() => {
     getData();
@@ -94,8 +96,9 @@ export default function Reports() {
         />
       </div>
       <div className="flex w-full h-screen flex-col justify-center items-center mt-[-25px]">
-
-      <DownloadButton onClick={() => downloadReport(document.body)}/>
+        <DownloadButton
+          onClick={() =>  setTimeout(() => downloadReport(document.body), 4000)}
+        />
       </div>
     </div>
   );

@@ -5,9 +5,12 @@ import { AdminRoutes } from "../../routers/routes.jsx";
 import { BrowserRouter } from "react-router-dom";
 import { Sidebar } from "../../components/admin-page/Sidebar.jsx";
 
+
+
 function Page() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isClient, setIsClient] = useState(false);
+ 
 
   useEffect(() => {
     setIsClient(true);

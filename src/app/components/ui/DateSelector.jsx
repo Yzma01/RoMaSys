@@ -58,8 +58,8 @@ export function DatePickerWithRange({
               range: date?.from && date?.to ? { from: date.from, to: date.to } : undefined,
             }}
             modifiersClassNames={{
-              range: "bg-blueDark text-white", // Aplica color de fondo y texto a las fechas dentro del rango
-              selected: "bg-blueDark text-white", // Color más oscuro para las fechas `from` y `to`
+              range: "bg-greenDark text-white", // Aplica color de fondo y texto a las fechas dentro del rango
+              selected: "bg-greenDark text-white", // Color más oscuro para las fechas `from` y `to`
             }}
           />
         </PopoverContent>

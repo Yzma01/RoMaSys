@@ -26,14 +26,14 @@ const monthNames = [
 
 async function basicReport(req, res) {
   try {
-    const amountByGender = await getClientsByGender();
+    const amountByWithAndWithoutRoutine = await getClientsWithAndWithoutRoutine();
     const amountByTypeOfMonthlyPayment =
       await getClientsByTypeOfMonthlyPayment();
     const amountByMonth = await getAmountClientsByMonth();
     const lastMonthIncoming = await getLastMonthIncoming();
 
     res.status(200).json({
-      amountByGender: amountByGender,
+      amountByWithAndWithoutRoutine: amountByWithAndWithoutRoutine,
       amountByTypeOfMonthlyPayment: amountByTypeOfMonthlyPayment,
       amountByMonth: amountByMonth,
       lastMonthIncoming: lastMonthIncoming,
@@ -43,23 +43,12 @@ async function basicReport(req, res) {
   }
 }
 
-async function getClientsByGender() {
-  //*Se le conoce como pipeline
-  return await AdditionalData.aggregate([
-    {
-      $group: {
-        _id: "$cli_gender",
-        count: { $sum: 1 },
-      },
-    },
-  ]);
-}
-
-// async function getClientsByTypeOfMonthlyPayment() {
-//   return await Client.aggregate([
+// async function getClientsByGender() {
+//   //*Se le conoce como pipeline
+//   return await AdditionalData.aggregate([
 //     {
 //       $group: {
-//         _id: "$cli_monthly_payment_type",
+//         _id: "$cli_gender",
 //         count: { $sum: 1 },
 //       },
 //     },
@@ -67,7 +56,17 @@ async function getClientsByGender() {
 // }
 
 async function getClientsByTypeOfMonthlyPayment() {
-  //!QUITAR ESTO Y POSIBLE COLOCAR A CLIENTES CON RUTINA Y CLIENTES SIN RUTINA
+  return await Client.aggregate([
+    {
+      $group: {
+        _id: "$cli_monthly_payment_type",
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+}
+
+async function getClientsWithAndWithoutRoutine() {
   try {
     const result = await Client.aggregate([
       {
