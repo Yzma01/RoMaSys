@@ -47,7 +47,7 @@ async function saveClient(client) {
     if (response.status == 500) {
 
       console.log(client)
-      console.log(response)
+      console.log(response.message)
     }
   } catch (error) {
     console.error("Error al guardar el cliente:", error);

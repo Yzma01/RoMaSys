@@ -8,6 +8,7 @@ import { NewClientsMonthlyChart } from "@/src/app/components/charts/NewClientsMo
 import { makeFetch } from "@/src/app/components/utils/fetch";
 import React, { useEffect, useState } from "react";
 import { downloadReport } from "@/src/app/components/utils/DownloadReport.js";
+import DownloadButton from "@/src/app/components/utils/DownloadButton";
 
 export default function Reports() {
   const [genderData, setGenderData] = useState();
@@ -25,7 +26,6 @@ export default function Reports() {
     const response = await makeFetch("/api/reports", "GET", "");
     if (response.status === 200) {
       const data = await response.json();
-      console.log(data);
       setGenderData(data.amountByGender);
       setNewClientsData(data.amountByMonth);
       setMonthlyTypeData(data.amountByTypeOfMonthlyPayment);
@@ -48,25 +48,21 @@ export default function Reports() {
   );
 
   const handleFilter = async () => {
-    console.log(date)
-    console.log(filterSelected)
     const params = new URLSearchParams({
       startDate: date?.from || "",
       endDate: date?.to || "",
       monthlyPaymentType: filterSelected || "",
     });
-  
-    console.log(params.toString());
-  
-    const response = await makeFetch(`/api/reports/incomingByRange?${params}`, "GET");
+
+    const response = await makeFetch(
+      `/api/reports/incomingByRange?${params}`,
+      "GET",
+      ""
+    );
 
     if (response.status === 200) {
       const data = await response.json();
-      console.log(data);
-      setGenderData(data.amountByGender);
-      setNewClientsData(data.amountByMonth);
-      setMonthlyTypeData(data.amountByTypeOfMonthlyPayment);
-      setLastMontIncoming(data.lastMonthIncoming);
+      setLastMontIncoming(data);
     }
     if (response.status === 500) {
       toast({
@@ -78,8 +74,7 @@ export default function Reports() {
 
   useEffect(() => {
     handleFilter();
-  }, [date, filterSelected])
-  
+  }, [date, filterSelected]);
 
   return (
     <div className="h-screen w-full flex flex-col">
@@ -95,13 +90,13 @@ export default function Reports() {
           setDate={setDate}
           filterSelected={filterSelected}
           setFilterSelected={setFilterSelected}
-          handleFilter={()=>handleFilter}
+          handleFilter={() => handleFilter}
         />
       </div>
-      <button onClick={() => downloadReport(document.body)}>
-        {" "}
-        Download Report
-      </button>
+      <div className="flex w-full h-screen flex-col justify-center items-center mt-[-25px]">
+
+      <DownloadButton onClick={() => downloadReport(document.body)}/>
+      </div>
     </div>
   );
 }
