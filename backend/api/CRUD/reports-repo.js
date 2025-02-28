@@ -55,15 +55,44 @@ async function getClientsByGender() {
   ]);
 }
 
-async function getClientsByTypeOfMonthlyPayment() { //!QUITAR ESTO Y POSIBLE COLOCAR A CLIENTES CON RUTINA Y CLIENTES SIN RUTINA
-  return await Client.aggregate([
-    {
-      $group: {
-        _id: "$cli_monthly_payment_type",
-        count: { $sum: 1 },
+// async function getClientsByTypeOfMonthlyPayment() {
+//   return await Client.aggregate([
+//     {
+//       $group: {
+//         _id: "$cli_monthly_payment_type",
+//         count: { $sum: 1 },
+//       },
+//     },
+//   ]);
+// }
+
+async function getClientsByTypeOfMonthlyPayment() {
+  //!QUITAR ESTO Y POSIBLE COLOCAR A CLIENTES CON RUTINA Y CLIENTES SIN RUTINA
+  try {
+    const result = await Client.aggregate([
+      {
+        $group: {
+          _id: "$cli_rutine",
+          count: { $sum: 1 },
+        },
       },
-    },
-  ]);
+    ]);
+
+    const withRoutine = result.find((group) => group._id === true) || {
+      count: 0,
+    };
+    const withoutRoutine = result.find((group) => group._id === false) || {
+      count: 0,
+    };
+
+    return {
+      withRoutine: withRoutine.count,
+      withoutRoutine: withoutRoutine.count,
+    };
+  } catch (error) {
+    console.error("Error al obtener la cantidad de clientes:", error);
+    throw error;
+  }
 }
 
 async function getAmountClientsByMonth() {
@@ -108,51 +137,52 @@ async function getLastMonthIncoming() {
       },
     },
     {
-      $sort: { "_id.date": 1 },  
+      $sort: { "_id.date": 1 },
     },
   ]);
 }
 
 async function incomingByRange(req, res) {
-
   console.log(req.query);
-
 
   const { startDate, endDate, monthlyPaymentType } = req.query;
 
   let monthly_Payment_Type = monthlyPaymentType.split("/")[0];
 
-  console.log(monthly_Payment_Type);
-
-
   try {
+    if (startDate === "" && endDate === "" && monthly_Payment_Type === "") {
+      gainsInRange = await getLastMonthIncoming();
+      res.status(200).json(gainsInRange);
+      return;
+    }
 
-      const matchQuery = { 
-        pay_date: {
-          $gte: new Date(startDate),
-          $lte: new Date(endDate),
-        },
-      };
+    const matchQuery = {
+      pay_date: {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      },
+    };
 
-      if(monthly_Payment_Type != ""){
-        console.log("dcdscdscdscsdcdscdscdsc")
-        matchQuery.pay_monthly_payment_type = monthly_Payment_Type;
-      }
+    if (monthly_Payment_Type != "") {
+      matchQuery.pay_monthly_payment_type = monthly_Payment_Type;
+    }
 
-      const gainsInRange = await Payment.aggregate([
+    const gainsInRange = await Payment.aggregate([
       {
         $match: matchQuery,
       },
       {
         $group: {
           _id: {
-            date: { $dateToString: { format: "%Y-%m-%d", date: "$pay_date" } },
+            date: {
+              $dateToString: { format: "%Y-%m-%d", date: "$pay_date" },
+            },
           },
           total: { $sum: { $toDouble: "$pay_amount" } },
         },
       },
       {
-        $sort: { "_id.date": 1 },  
+        $sort: { "_id.date": 1 },
       },
     ]);
 

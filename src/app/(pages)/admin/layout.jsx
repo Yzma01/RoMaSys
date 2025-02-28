@@ -14,7 +14,7 @@ function Page() {
   }, []);
 
   if (!isClient) {
-    return null; //!Colocar una animacion mientras se espera que se renderice en el cliente
+    return null; 
   }
 
   return (
