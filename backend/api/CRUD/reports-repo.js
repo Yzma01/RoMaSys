@@ -117,15 +117,21 @@ async function incomingByRange(req, res) {
   const { startDate, endDate, monthlyPaymentType } = req.body;
 
   try {
-    const gainsInRange = await Payment.aggregate([
-      {
-        $match: {
-          pay_monthly_payment_type: monthlyPaymentType,
-          pay_date: {
-            $gte: new Date(startDate),
-            $lte: new Date(endDate),
-          },
+
+      const matchQuery = { 
+        pay_date: {
+          $gte: new Date(startDate),
+          $lte: new Date(endDate),
         },
+      };
+
+      if(monthlyPaymentType != ""){
+        matchQuery.pay_monthly_payment_type = monthlyPaymentType;
+      }
+
+      const gainsInRange = await Payment.aggregate([
+      {
+        $match: matchQuery,
       },
       {
         $group: {
