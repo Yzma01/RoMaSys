@@ -38,14 +38,13 @@ const setData = (data) => {
   }
 
   const updatedChartData = data.reverse().map(({ total, _id }) => {
-    // Asegúrate de que la fecha esté en formato ISO (YYYY-MM-DD)
-    const date = new Date(_id.date + "T00:00:00"); // Agrega la hora para evitar problemas de UTC
+    const date = new Date(_id.date + "T00:00:00");
     const localDate = new Date(
       date.getTime() - date.getTimezoneOffset() * 60000
     );
 
     return {
-      date: localDate.toISOString().split("T")[0], // Formato YYYY-MM-DD
+      date: localDate.toISOString().split("T")[0],
       incoming: total,
     };
   });
@@ -61,8 +60,14 @@ const getDateFixed = (value) => {
   });
 };
 
-export function IncomingChart({ data }) {
-  console.log(data);
+export function IncomingChart({
+  data,
+  date,
+  setDate,
+  filterSelected,
+  setFilterSelected,
+  handleFilter,
+}) {
   const [typeOfIncomming, settypeOfIncomming] = React.useState("");
   const updatedData = setData(data);
   console.log(updatedData);
@@ -73,7 +78,13 @@ export function IncomingChart({ data }) {
         <div className="grid flex-1 gap-1 text-center sm:text-left text-white">
           <CardTitle>Ingresos</CardTitle>
         </div>
-        <FilterBar />
+        <FilterBar
+          date={date}
+          setDate={setDate}
+          filterSelected={filterSelected}
+          setFilterSelected={setFilterSelected}
+          handleFilter={() => handleFilter}
+        />
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer

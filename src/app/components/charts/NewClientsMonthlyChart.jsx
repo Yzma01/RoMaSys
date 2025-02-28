@@ -64,7 +64,6 @@ const setData = (data) => {
 
 export function NewClientsMonthlyChart({ data }) {
   const updatedData = setData(data);
-  console.log(data);
   return (
     <Card className="bg-blueDark border-none">
       <CardHeader className="items-center text-white pb-10">

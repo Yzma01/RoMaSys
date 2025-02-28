@@ -91,7 +91,6 @@ const CustomTick = ({ x, y, payload }) => {
   };
 
 export function MonthlyTypeChart({data}) {
-  console.log(data);
   const updatedData = setData(data);
   return (
     <Card className="w-fit bg-blueDark border-none shadow-lg">

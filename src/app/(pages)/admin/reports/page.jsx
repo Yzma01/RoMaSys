@@ -10,10 +10,12 @@ import React, { useEffect, useState } from "react";
 import { downloadReport } from "@/src/app/components/utils/DownloadReport.js";
 
 export default function Reports() {
-  const [genderData, setGenderData] = useState()
-  const [monthlyTypeData, setMonthlyTypeData] = useState()
-  const [newClientsData, setNewClientsData] = useState()
-  const [lastMontIncoming, setLastMontIncoming] = useState()
+  const [genderData, setGenderData] = useState();
+  const [monthlyTypeData, setMonthlyTypeData] = useState();
+  const [newClientsData, setNewClientsData] = useState();
+  const [lastMontIncoming, setLastMontIncoming] = useState();
+  const [date, setDate] = useState("");
+  const [filterSelected, setFilterSelected] = useState("");
 
   useEffect(() => {
     getData();
@@ -23,11 +25,11 @@ export default function Reports() {
     const response = await makeFetch("/api/reports", "GET", "");
     if (response.status === 200) {
       const data = await response.json();
-      console.log(data)
-      setGenderData(data.amountByGender)
-      setNewClientsData(data.amountByMonth)
-      setMonthlyTypeData(data.amountByTypeOfMonthlyPayment)
-      setLastMontIncoming(data.lastMonthIncoming)
+      console.log(data);
+      setGenderData(data.amountByGender);
+      setNewClientsData(data.amountByMonth);
+      setMonthlyTypeData(data.amountByTypeOfMonthlyPayment);
+      setLastMontIncoming(data.lastMonthIncoming);
     }
     if (response.status === 500) {
       toast({
@@ -37,21 +39,69 @@ export default function Reports() {
     }
   };
 
-  useEvent("refreshReports", () => {
+  useEvent(
+    "refreshReports",
+    () => {
       getData();
-    }, []);
+    },
+    []
+  );
+
+  const handleFilter = async () => {
+    console.log(date)
+    console.log(filterSelected)
+    const params = new URLSearchParams({
+      startDate: date?.from || "",
+      endDate: date?.to || "",
+      monthlyPaymentType: filterSelected || "",
+    });
+  
+    console.log(params.toString());
+  
+    const response = await makeFetch(`/api/reports/incomingByRange?${params}`, "GET");
+
+    if (response.status === 200) {
+      const data = await response.json();
+      console.log(data);
+      setGenderData(data.amountByGender);
+      setNewClientsData(data.amountByMonth);
+      setMonthlyTypeData(data.amountByTypeOfMonthlyPayment);
+      setLastMontIncoming(data.lastMonthIncoming);
+    }
+    if (response.status === 500) {
+      toast({
+        description:
+          "Error de conexión, si el problema persiste contacte a soporte",
+      });
+    }
+  };
+
+  useEffect(() => {
+    handleFilter();
+  }, [date, filterSelected])
+  
 
   return (
     <div className="h-screen w-full flex flex-col">
       <div className="h-fit flex flex-row justify-between m-10 gap-10">
-        <GenderChart data={genderData}/>
-        <MonthlyTypeChart data={monthlyTypeData}/>
-        <NewClientsMonthlyChart data={newClientsData}/>
+        <GenderChart data={genderData} />
+        <MonthlyTypeChart data={monthlyTypeData} />
+        <NewClientsMonthlyChart data={newClientsData} />
       </div>
       <div>
-        <IncomingChart data={lastMontIncoming}/>
+        <IncomingChart
+          data={lastMontIncoming}
+          date={date}
+          setDate={setDate}
+          filterSelected={filterSelected}
+          setFilterSelected={setFilterSelected}
+          handleFilter={()=>handleFilter}
+        />
       </div>
-    <button onClick={() => downloadReport(document.body)}> Download Report</button>
+      <button onClick={() => downloadReport(document.body)}>
+        {" "}
+        Download Report
+      </button>
     </div>
   );
-};
+}

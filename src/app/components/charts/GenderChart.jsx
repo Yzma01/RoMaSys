@@ -68,7 +68,6 @@ const getTotalVisitors = (updatedData) => {
 };
 
 export function GenderChart({ data }) {
-  console.log(data)
   const updatedData = setData(data);
   const totalVisitors = getTotalVisitors(updatedData);
 

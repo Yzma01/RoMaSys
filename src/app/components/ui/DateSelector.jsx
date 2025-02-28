@@ -16,8 +16,8 @@ import {
 
 export function DatePickerWithRange({
   className,
+  date, setDate
 }) {
-  const [date, setDate] = React.useState()
   
   return (
     <div className={cn("grid gap-2", className)}>
@@ -54,6 +54,13 @@ export function DatePickerWithRange({
             selected={date}
             onSelect={setDate}
             numberOfMonths={2}
+            modifiers={{
+              range: date?.from && date?.to ? { from: date.from, to: date.to } : undefined,
+            }}
+            modifiersClassNames={{
+              range: "bg-blueDark text-white", // Aplica color de fondo y texto a las fechas dentro del rango
+              selected: "bg-blueDark text-white", // Color más oscuro para las fechas `from` y `to`
+            }}
           />
         </PopoverContent>
       </Popover>
