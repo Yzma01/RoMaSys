@@ -219,7 +219,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
             transition={{ duration: 1.5 }}
           >
             <div className="flex flex-col  text-white p-5 w-fit">
-              <h1 className="text-xl sm:text-2xl mb-2 font-bold">
+              <h1 className="text-xl sm:text-2xl mb-2 font-bold text-center">
                 Modificar Usuario
               </h1>
               <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 w-fit mx-4 md:mx-8 lg:mx-16">

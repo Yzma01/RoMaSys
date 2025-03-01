@@ -181,7 +181,7 @@ export function ClientsTable({ activeClients, dueDateClients, frozenClients }) {
         msOverflowStyle: "none",
       }}
     >
-      <Table className="min-w-full">
+      <Table className="w-[70vw]">
         <TableCaption>Clientes</TableCaption>
         <TableHeader>
           <TableRow>

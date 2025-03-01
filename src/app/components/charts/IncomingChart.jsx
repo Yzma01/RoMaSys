@@ -70,7 +70,6 @@ export function IncomingChart({
 }) {
   const [typeOfIncomming, settypeOfIncomming] = React.useState("");
   const updatedData = setData(data);
-  console.log(updatedData);
 
   return (
     <Card className="bg-blueDark border-none m-10">

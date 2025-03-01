@@ -7,37 +7,29 @@ import { Label, Pie, PieChart } from "recharts";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/src/app/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/src/app/components/ui/chart";
 
-//VISITORS SON LOS QUE CAMBIO CON LO DE JORGE
 let chartData = [
-  { gender: "masc", clients: 0, fill: "#60a5fa" },
-  { gender: "fem", clients: 0, fill: "#f472b6" },
-  { gender: "other", clients: 0, fill: "#c084fc" },
+  { type: "with", clients: 0, fill: "#60a5fa" },
+  { type: "without", clients: 0, fill: "#f472b6" },
 ];
 
 const chartConfig = {
-  masc: {
-    label: "Masculino",
+  with: {
+    label: "Con Rutina",
     color: "#60a5fa",
   },
-  fem: {
-    label: "Femenino",
+  without: {
+    label: "Sin Rutina",
     color: "#f472b6",
-  },
-  other: {
-    label: "Otro",
-    color: "#c084fc",
   },
 };
 
@@ -48,18 +40,15 @@ const clearData = ()=>{
 }
 
 const setData = (data) => {
-  if (!Array.isArray(data) || data.length === 0) {
+  if (data && data.length === 0) {
     clearData();
     return chartData;
   }
 
   const updatedChartData = [...chartData];
-  data.forEach(({ count, _id }) => {
-    const id = _id.toLowerCase();
-    if (id === "masculino") updatedChartData[0].clients = count;
-    if (id === "femenino") updatedChartData[1].clients = count;
-    if (id === "otro") updatedChartData[2].clients = count;
-  });
+  updatedChartData[0].clients = data? data.withRoutine: 0;
+  updatedChartData[1].clients = data? data.withoutRoutine: 0;
+  
   return updatedChartData;
 };
 
@@ -67,14 +56,14 @@ const getTotalVisitors = (updatedData) => {
   return updatedData.reduce((acc, curr) => acc + curr.clients, 0);
 };
 
-export function GenderChart({ data }) {
+export function RoutineChart({ data }) {
   const updatedData = setData(data);
   const totalVisitors = getTotalVisitors(updatedData);
 
   return (
     <Card className="flex flex-col w-fit bg-blueDark border-none shadow-lg">
       <CardHeader className="items-center pb-0 text-white">
-        <CardTitle>Género de los Clientes</CardTitle>
+        <CardTitle>Clientes con Rutinas</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -89,7 +78,7 @@ export function GenderChart({ data }) {
             <Pie
               data={updatedData}
               dataKey="clients"
-              nameKey="gender"
+              nameKey="type"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -116,7 +105,7 @@ export function GenderChart({ data }) {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Clientes
+                          Clientes Totales
                         </tspan>
                       </text>
                     );

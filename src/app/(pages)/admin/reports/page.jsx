@@ -1,7 +1,6 @@
 "use client";
 
 import { useEvent } from "@/hooks/use-event";
-import { GenderChart } from "@/src/app/components/charts/GenderChart";
 import { IncomingChart } from "@/src/app/components/charts/IncomingChart";
 import { MonthlyTypeChart } from "@/src/app/components/charts/MonthlyTypeChart";
 import { NewClientsMonthlyChart } from "@/src/app/components/charts/NewClientsMonthlyChart";
@@ -10,9 +9,10 @@ import React, { useEffect, useState } from "react";
 import { downloadReport } from "@/src/app/components/utils/DownloadReport.js";
 import DownloadButton from "@/src/app/components/utils/DownloadButton";
 import { useToast } from "@/hooks/use-toast";
+import { RoutineChart } from "@/src/app/components/charts/RoutineChart";
 
 export default function Reports() {
-  const [genderData, setGenderData] = useState();
+  const [routineData, setRoutineData] = useState();
   const [monthlyTypeData, setMonthlyTypeData] = useState();
   const [newClientsData, setNewClientsData] = useState();
   const [lastMontIncoming, setLastMontIncoming] = useState();
@@ -28,7 +28,7 @@ export default function Reports() {
     const response = await makeFetch("/api/reports", "GET", "");
     if (response.status === 200) {
       const data = await response.json();
-      setGenderData(data.amountByGender);
+      setRoutineData(data.amountByWithAndWithoutRoutine);
       setNewClientsData(data.amountByMonth);
       setMonthlyTypeData(data.amountByTypeOfMonthlyPayment);
       setLastMontIncoming(data.lastMonthIncoming);
@@ -81,7 +81,7 @@ export default function Reports() {
   return (
     <div className="h-screen w-full flex flex-col">
       <div className="h-fit flex flex-row justify-between m-10 gap-10">
-        <GenderChart data={genderData} />
+        <RoutineChart data={routineData} />
         <MonthlyTypeChart data={monthlyTypeData} />
         <NewClientsMonthlyChart data={newClientsData} />
       </div>
