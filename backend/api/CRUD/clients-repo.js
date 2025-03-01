@@ -79,6 +79,9 @@ async function getClients(req, res) {
 async function addClient(req, res) {
   const body = req.body;
   const today = new Date();
+
+
+  
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);

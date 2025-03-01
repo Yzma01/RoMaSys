@@ -26,7 +26,9 @@ const monthNames = [
 
 async function basicReport(req, res) {
   try {
-    const amountByWithAndWithoutRoutine = await getClientsWithAndWithoutRoutine();
+    const amountByWithAndWithoutRoutine =
+      await getClientsWithAndWithoutRoutine();
+
     const amountByTypeOfMonthlyPayment =
       await getClientsByTypeOfMonthlyPayment();
     const amountByMonth = await getAmountClientsByMonth();
@@ -142,19 +144,17 @@ async function getLastMonthIncoming() {
 }
 
 async function incomingByRange(req, res) {
-  console.log(req.query);
-
   const { startDate, endDate, monthlyPaymentType } = req.query;
 
   let monthly_Payment_Type = monthlyPaymentType.split("/")[0];
 
   try {
+    let gainsInRange;
     if (startDate === "" && endDate === "" && monthly_Payment_Type === "") {
       gainsInRange = await getLastMonthIncoming();
       res.status(200).json(gainsInRange);
       return;
     }
-
     const matchQuery = {
       pay_date: {
         $gte: new Date(startDate),
@@ -166,7 +166,7 @@ async function incomingByRange(req, res) {
       matchQuery.pay_monthly_payment_type = monthly_Payment_Type;
     }
 
-    const gainsInRange = await Payment.aggregate([
+    gainsInRange = await Payment.aggregate([
       {
         $match: matchQuery,
       },
@@ -187,6 +187,7 @@ async function incomingByRange(req, res) {
 
     res.status(200).json(gainsInRange);
   } catch (error) {
+    console.log("No se logro obtener lo ingresos por rango.");
     res.status(500).json({ error: error.message });
   }
 }

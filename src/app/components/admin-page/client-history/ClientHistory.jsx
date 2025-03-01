@@ -21,6 +21,7 @@ import {
 } from "../../ui/table";
 import { makeFetch } from "../../utils/fetch";
 import { format } from "date-fns";
+import Loader from "../../utils/Loader";
 
 const ClientHistory = ({ selectedClient }) => {
   const [id, setId] = useState("");
@@ -68,7 +69,7 @@ const ClientHistory = ({ selectedClient }) => {
 
   const renderClientHistory = () => {
     if (loading) {
-      return <p className="text-center pt-5 text-lg">Cargando historial...</p>;
+      return <Loader/>
     }
 
     if (!clientHistory || clientHistory.length === 0) {
