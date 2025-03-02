@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AlertDialogFooter, AlertDialogHeader } from "../ui/alert-dialog";
 import {
   AlertDialogAction,
@@ -38,33 +38,28 @@ const ModifySelectedClient = ({ selectedClient }) => {
 
   const navigate = useNavigate();
 
+  const getClient = useCallback(
+    async (id) => {
+      const response = await makeFetch("/api/clients", "GET", id);
+      if (response.status === 200) {
+        const data = await response.json();
+        setClient(data);
+      }
+      if (response.status === 500) {
+        toast({
+          description:
+            "Error de conexión, si el problema persiste contacte a soporte",
+        });
+      }
+    },
+    [toast]
+  );
+
   useEffect(() => {
     getClient(selectedClient);
-  }, [selectedClient]);
+  }, [selectedClient, getClient]);
 
-  useEffect(() => {
-    if (client != null) {
-      console.log(client);
-      setBasicData();
-      setAditionalData();
-    }
-  }, [client]);
-
-  const getClient = async (id) => {
-    const response = await makeFetch("/api/clients", "GET", id);
-    if (response.status === 200) {
-      const data = await response.json();
-      setClient(data);
-    }
-    if (response.status === 500) {
-      toast({
-        description:
-          "Error de conexión, si el problema persiste contacte a soporte",
-      });
-    }
-  };
-
-  const setBasicData = () => {
+  const setBasicData = useCallback(() => {
     setId(client.cli_id);
     setName(client.cli_name);
     setLastname1(client.cli_last_name1);
@@ -77,17 +72,45 @@ const ModifySelectedClient = ({ selectedClient }) => {
     let mType = client.cli_monthly_payment_type;
     mType = mType.charAt(0).toUpperCase() + mType.slice(1);
     setMothlyType(mType);
-  };
+  }, [client]);
 
-  const setAditionalData = () => {
+  const setAditionalData = useCallback(() => {
     if (routine) {
-      setGender(client.cli_additional_data.cli_gender);
-      setHeight(client.cli_additional_data.cli_height);
-      setWeight(client.cli_additional_data.cli_weight);
-      setDate(client.cli_additional_data.cli_birthdate);
-      setGoal(client.cli_additional_data.cli_goal);
+      setGender(
+        client.cli_additional_data?.cli_gender
+          ? client.cli_additional_data.cli_gender
+          : ""
+      );
+      setHeight(
+        client.cli_additional_data?.cli_height
+          ? client.cli_additional_data.cli_height
+          : ""
+      );
+      setWeight(
+        client.cli_additional_data?.cli_weight
+          ? client.cli_additional_data.cli_weight
+          : ""
+      );
+      setDate(
+        client.cli_additional_data?.cli_birthdate
+          ? client.cli_additional_data.cli_birthdate
+          : ""
+      );
+      setGoal(
+        client.cli_additional_data?.cli_goal
+          ? client.cli_additional_data.cli_goal
+          : ""
+      );
     }
-  };
+  }, [client, routine]);
+
+  useEffect(() => {
+    if (client != null) {
+      console.log(client);
+      setBasicData();
+      setAditionalData();
+    }
+  }, [client, setBasicData, setAditionalData]);
 
   const validate = (message, status, code, className) => {
     if (status == code) {
@@ -202,7 +225,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
       toast({ description: "Por favor llene todos los campos." });
     } else {
       const response = await makeFetch("/api/clients", "PUT", id, body);
-      console.log(response)
+      console.log(response);
       doVerifications(response);
     }
   };

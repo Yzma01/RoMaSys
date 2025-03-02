@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import ButtonContinue from "../utils/Button";
 import QrCodeScannerRoundedIcon from "@mui/icons-material/QrCodeScannerRounded";
 import { makeFetch } from "../utils/fetch";
+import Image from "next/image";
 
 export default function PopupQr({ sidebarOpen }) {
   const [qrSrc, setQrSrc] = useState("");
@@ -52,7 +53,7 @@ export default function PopupQr({ sidebarOpen }) {
               Escanea este codigo QR para vincular tu WhatsApp
             </AlertDialogTitle>
             <AlertDialogDescription>
-              <img
+              <Image
                 src={qrSrc}
                 alt="logo"
                 className="w-full h-auto object-contain mt-4 rounded-md shadow"

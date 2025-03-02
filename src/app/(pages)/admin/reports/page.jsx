@@ -5,7 +5,7 @@ import { IncomingChart } from "@/src/app/components/charts/IncomingChart";
 import { MonthlyTypeChart } from "@/src/app/components/charts/MonthlyTypeChart";
 import { NewClientsMonthlyChart } from "@/src/app/components/charts/NewClientsMonthlyChart";
 import { makeFetch } from "@/src/app/components/utils/fetch";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { downloadReport } from "@/src/app/components/utils/DownloadReport.js";
 import DownloadButton from "@/src/app/components/utils/DownloadButton";
 import { useToast } from "@/hooks/use-toast";
@@ -20,11 +20,7 @@ export default function Reports() {
   const [filterSelected, setFilterSelected] = useState("");
   const { toast } = useToast();
 
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = async () => {
+  const getData = useCallback(async () => {
     const response = await makeFetch("/api/reports", "GET", "");
     if (response.status === 200) {
       const data = await response.json();
@@ -39,7 +35,11 @@ export default function Reports() {
           "Error de conexión, si el problema persiste contacte a soporte",
       });
     }
-  };
+  }, [toast]);
+  
+  useEffect(() => {
+    getData();
+  }, [getData]);
 
   useEvent(
     "refreshReports",
@@ -49,19 +49,19 @@ export default function Reports() {
     []
   );
 
-  const handleFilter = async () => {
+  const handleFilter = useCallback(async () => {
     const params = new URLSearchParams({
       startDate: date?.from || "",
       endDate: date?.to || "",
       monthlyPaymentType: filterSelected || "",
     });
-
+  
     const response = await makeFetch(
       `/api/reports/incomingByRange?${params}`,
       "GET",
       ""
     );
-
+  
     if (response.status === 200) {
       const data = await response.json();
       setLastMontIncoming(data);
@@ -72,11 +72,11 @@ export default function Reports() {
           "Error de conexión, si el problema persiste contacte a soporte",
       });
     }
-  };
-
+  }, [date, filterSelected, toast]); // Dependencias necesarias
+  
   useEffect(() => {
     handleFilter();
-  }, [date, filterSelected]);
+  }, [handleFilter]);
 
   return (
     <div className="h-screen w-full flex flex-col">

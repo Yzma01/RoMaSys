@@ -35,7 +35,12 @@ const DeleteClient = ({ selectedClient }) => {
       " " +
       selectedClient.client.cli_last_name2;
     setFullName(fName);
-  }, []);
+  }, [
+    selectedClient.client.cli_id,
+    selectedClient.client.cli_name,
+    selectedClient.client.cli_last_name1,
+    selectedClient.client.cli_last_name2,
+  ]);
 
   return (
     <div className="p-3 bg-blueDark rounded-3xl shadow-md shadow-blue-400 border-gray-1 w-fit h-fit">

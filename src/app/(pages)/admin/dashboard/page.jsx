@@ -1,7 +1,7 @@
 "use client";
 import SearchBar from "@/src/app/components/admin-page/SearchBar";
 import { ClientsTable } from "../../../components/admin-page/table/Table";
-import React from "react";
+import React, { useCallback } from "react";
 import { useState, useEffect } from "react";
 import { makeFetch } from "@/src/app/components/utils/fetch";
 import { AnimatePresence, motion } from "framer-motion";
@@ -13,7 +13,7 @@ import {
   saveClients,
 } from "../../../components/utils/DevClients";
 import DevComponent from "@/src/app/components/utils/DevComponent";
-import Loader from "@/src/app/components/utils/loader";
+import Loader from "@/src/app/components/utils/Loader";
 
 export default function Dashboard() {
   const [clients, setClients] = useState([]);
@@ -23,11 +23,6 @@ export default function Dashboard() {
   const frozenClients = [];
   const dueDateClients = [];
   const { toast } = useToast();
-
-  useEffect(() => {
-    setClients([]);
-    getClients();
-  }, []);
 
   useEvent(
     "refreshTable",
@@ -52,7 +47,7 @@ export default function Dashboard() {
 
   filterClients();
 
-  const getClients = async () => {
+  const getClients = useCallback(async () => {
     setIsLoading(true);
     const response = await makeFetch("/api/clients", "GET", "");
     if (response.status === 200) {
@@ -67,7 +62,13 @@ export default function Dashboard() {
       });
     }
     setIsLoading(false);
-  };
+  }, [toast]);
+  
+  useEffect(() => {
+    setClients([]);
+    getClients();
+  }, [getClients]);
+  
 
   const searchClientsByFilter = async (searchValue) => {
     if (searchValue === "") {

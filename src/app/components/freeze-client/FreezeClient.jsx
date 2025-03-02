@@ -41,7 +41,7 @@ const FreezeClient = ({ selectedClient }) => {
       setDate(client.cli_additional_data.cli_birthdate);
       setGoal(client.cli_additional_data.cli_goal);
     }
-  }, [client]);
+  }, [client, routine]);
 
   const validate = (message, status, code, className) => {
     if (status == code) {

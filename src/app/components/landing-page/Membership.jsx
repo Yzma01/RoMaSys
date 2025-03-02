@@ -9,6 +9,7 @@ const Membership = () => {
       <div className="relative w-full flex justify-center items-center" id="Prices">
         <Image
           src={TtileBg}
+          alt=""
           layout="intrinsic"
           width={500}
           className="w-full h-auto object-cover md:w-[30vw] md:mx-auto"

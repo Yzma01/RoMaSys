@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react";
 import { SignIn } from "@clerk/nextjs";
-import Loader from "@/src/app/components/utils/loader";
+import Loader from "@/src/app/components/utils/Loader";
 
 export default function Page() {
   const [isLoading, setIsLoading] = useState(true);

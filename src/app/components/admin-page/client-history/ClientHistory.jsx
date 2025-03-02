@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import {
   AlertDialogAction,
@@ -30,6 +30,19 @@ const ClientHistory = ({ selectedClient }) => {
   const [clientHistory, setClientHistory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
+  
+  const getClientHistory = useCallback(async () => {
+    const response = await makeFetch(
+      "/api/payments",
+      "GET",
+      selectedClient.client.cli_id
+    );
+    if (response.status === 404) {
+      return null;
+    }
+    return response;
+  }, [selectedClient.client.cli_id]);
+
   useEffect(() => {
     const fName =
       selectedClient.client.cli_name +
@@ -53,19 +66,7 @@ const ClientHistory = ({ selectedClient }) => {
       }
     };
     fetchHistory();
-  }, [selectedClient]);
-
-  const getClientHistory = async () => {
-    const response = await makeFetch(
-      "/api/payments",
-      "GET",
-      selectedClient.client.cli_id
-    );
-    if (response.status === 404) {
-      return null;
-    }
-    return response;
-  };
+  }, [selectedClient, getClientHistory]);
 
   const renderClientHistory = () => {
     if (loading) {

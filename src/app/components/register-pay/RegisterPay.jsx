@@ -34,11 +34,18 @@ const RegisterPay = ({ selectedClient }) => {
     setNextPayDate(
       format(new Date(selectedClient.client.cli_next_pay_date), "dd-MM-yyyy")
     );
-
+  
     let mType = selectedClient.client.cli_monthly_payment_type;
     mType = mType.charAt(0).toUpperCase() + mType.slice(1);
     setMothlyType(mType);
-  }, []);
+  }, [
+    selectedClient.client.cli_id,
+    selectedClient.client.cli_last_name1,
+    selectedClient.client.cli_last_name2,
+    selectedClient.client.cli_monthly_payment_type,
+    selectedClient.client.cli_name,
+    selectedClient.client.cli_next_pay_date
+  ]);
 
   const handleSubmit = async () => {
     const body = {
