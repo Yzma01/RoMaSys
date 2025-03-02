@@ -26,7 +26,7 @@ export function Filter({
   setValue,
 }) {
   const [open, setOpen] = React.useState(false);
-
+  
   return (
     <Popover open={open} onOpenChange={setOpen} className="bg-transparent">
       <PopoverTrigger asChild>
@@ -50,6 +50,9 @@ export function Filter({
                   value={framework.value}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
+                    console.log("current: ", value)
+                    console.log("current: ",currentValue)
+                    console.log("current: ",currentValue === value)
                     setOpen(false);
                     icon &&
                       searchClientsByFilter(

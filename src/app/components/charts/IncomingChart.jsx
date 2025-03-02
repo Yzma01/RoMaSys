@@ -56,6 +56,7 @@ const getDateFixed = (value) => {
   return date.toLocaleDateString("es-ES", {
     month: "short",
     day: "numeric",
+    year: "numeric",
     timeZone: "America/Costa_Rica",
   });
 };

@@ -22,6 +22,7 @@ export default function Dashboard() {
   const activeClients = [];
   const frozenClients = [];
   const dueDateClients = [];
+  const { toast } = useToast();
 
 
   useEffect(() => {
@@ -70,6 +71,7 @@ export default function Dashboard() {
   };
 
   const searchClientsByFilter = async (searchValue) => {
+    console.log(searchValue)
     if (searchValue === "") {
       setClients(originalClients);
     } else {
@@ -99,11 +101,15 @@ export default function Dashboard() {
       setClients(originalClients);
     } else {
       setClients(
-        originalClients.filter(
-          (client) =>
-            client.cli_name.toLowerCase().includes(searchValue.toLowerCase()) ||
-            client.cli_id.toLowerCase().includes(searchValue.toLowerCase())
-        )
+        originalClients.filter((client) => {
+          const fullName = `${client.cli_name} ${client.cli_last_name1} ${client.cli_last_name2}`.toLowerCase();
+          const searchTerm = searchValue.toLowerCase();
+
+          return (
+            fullName.includes(searchTerm) ||
+            client.cli_id.toLowerCase().includes(searchTerm)
+          );
+        })
       );
     }
   };
