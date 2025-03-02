@@ -22,7 +22,10 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: `${process.env.BASE_URL_WHATSAPP}/api/:path*`,
+        destination: process.env.BASE_URL_WHATSAPP
+  ? `${process.env.BASE_URL_WHATSAPP}/api/:path*`
+  : "http://localhost:5000/api/:path*", // Valor por defecto para evitar undefined
+
       },
     ];
   },
