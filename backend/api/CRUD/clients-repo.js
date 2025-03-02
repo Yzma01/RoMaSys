@@ -79,9 +79,6 @@ async function getClients(req, res) {
 async function addClient(req, res) {
   const body = req.body;
   const today = new Date();
-
-
-  
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
@@ -143,11 +140,14 @@ async function addAdditionalClientData(body, rutineId) {
 }
 
 async function addFirstPayment(body) {
-  const today = new Date();
+  const now = new Date();
+  const costaRicaOffset = -6 * 60; // UTC-6 en minutos
+  const localTimeToday = new Date(now.getTime() + costaRicaOffset * 60000);
+
   try {
     const bodyPayment = {
       pay_client_id: body.cli_id,
-      pay_date: today,
+      pay_date: localTimeToday,
       pay_amount: body.pay_amount.includes(",")
         ? body.pay_amount.replace(",", "")
         : body.pay_amount,
@@ -220,14 +220,13 @@ async function updateClient(req, res, cli_id) {
         rutine.rut_id
       );
 
-        await sendEmail(
-          subjectEmail,
-          body.cli_email,
-          body.cli_name,
-          rutine.rut_rutine,
-          typeOfEmail
-        );
-      
+      await sendEmail(
+        subjectEmail,
+        body.cli_email,
+        body.cli_name,
+        rutine.rut_rutine,
+        typeOfEmail
+      );
 
       body.cli_additional_data = additionalData._id;
     }
@@ -279,7 +278,7 @@ async function _deleteClient(req, res, cli_id) {
       await AdditionalData.findByIdAndDelete(client.cli_additional_data);
     }
 
-    await Payment.deleteMany({ pay_client_id: client.cli_id });
+    // await Payment.deleteMany({ pay_client_id: client.cli_id });
 
     await MessageAgenda.deleteMany({ msg_client_id: client.cli_id });
 

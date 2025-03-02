@@ -47,7 +47,7 @@ const DownloadButton = ({ onClick }) => {
           <div className="square"></div>
         </span>
         <p className="title">Descargar</p>
-        <p className="title">Open</p>
+        <p className="title">Abrir</p>
       </label>
     </div>
   );
