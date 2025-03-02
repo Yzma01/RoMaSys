@@ -14,7 +14,7 @@ const nextConfig = {
     apiUrl:
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000"
-        : "https://ro-ma-sys.vercel.app",
+        : "https://ro-ma-sys-server.vercel.app",
   },
 
   //!Este es un proxy en el que source especifico que cuando este la ruta api, redireccione al puerto 5000
