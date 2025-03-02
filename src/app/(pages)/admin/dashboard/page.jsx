@@ -24,7 +24,6 @@ export default function Dashboard() {
   const dueDateClients = [];
   const { toast } = useToast();
 
-
   useEffect(() => {
     setClients([]);
     getClients();
@@ -71,11 +70,10 @@ export default function Dashboard() {
   };
 
   const searchClientsByFilter = async (searchValue) => {
-    console.log(searchValue)
     if (searchValue === "") {
       setClients(originalClients);
+      return;
     } else {
-      setIsLoading(true);
       const response = await makeFetch(
         `/api/filter/clients?filterType=${searchValue.toLowerCase()}`,
         "GET",
@@ -92,7 +90,6 @@ export default function Dashboard() {
             "Error de conexión, si el problema persiste contacte a soporte",
         });
       }
-      setIsLoading(false);
     }
   };
 
@@ -102,7 +99,8 @@ export default function Dashboard() {
     } else {
       setClients(
         originalClients.filter((client) => {
-          const fullName = `${client.cli_name} ${client.cli_last_name1} ${client.cli_last_name2}`.toLowerCase();
+          const fullName =
+            `${client.cli_name} ${client.cli_last_name1} ${client.cli_last_name2}`.toLowerCase();
           const searchTerm = searchValue.toLowerCase();
 
           return (
@@ -115,49 +113,52 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="h-[100vh] text-white flex items-center justify-center">
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <div>
-          <AnimatePresence>
-            <motion.div
-              className="overflow-hidden"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 1.5 }}>
-              <div className="flex items-center justify-center h-[100vh] text-white">
-                <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 max-w-full w-full h-auto mx-4 md:mx-8 lg:mx-16">
-                  <section>
-                    <header className="flex flex-col sm:flex-row items-center justify-between">
-                      <div className="flex flex-col w-full sm:w-3/4 mb-4 sm:mb-0">
-                        <h1 className="text-xl sm:text-2xl mb-2 font-bold">
-                          DASHBOARD
-                        </h1>
-                        <p className="text-base sm:text-lg mb-4 text-gray-3 font-light">
-                          Hola Niger. ¡Bienvenido de nuevo a RoMaSys!
-                        </p>
-                      </div>
-                      <div className="w-fit sm:w-1/4">
-                        <SearchBar
-                          searchClientsByFilter={searchClientsByFilter}
-                          searchByNameOrId={searchByNameOrId}
-                        />
-                      </div>
-                    </header>
-                    <ClientsTable
-                      activeClients={activeClients}
-                      dueDateClients={dueDateClients}
-                      frozenClients={frozenClients}
-                    />
-                  </section>
+    <div>
+      <div className="h-[100vh] text-white flex items-center justify-center">
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <div>
+            <AnimatePresence>
+              <motion.div
+                className="overflow-hidden"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 1.5 }}
+              >
+                <div className="flex items-center justify-center h-[100vh] text-white">
+                  <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 max-w-full w-full h-auto mx-4 md:mx-8 lg:mx-16">
+                    <section>
+                      <header className="flex flex-col sm:flex-row items-center justify-between">
+                        <div className="flex flex-col w-full sm:w-3/4 mb-4 sm:mb-0">
+                          <h1 className="text-xl sm:text-2xl mb-2 font-bold">
+                            DASHBOARD
+                          </h1>
+                          <p className="text-base sm:text-lg mb-4 text-gray-3 font-light">
+                            Hola Niger. ¡Bienvenido de nuevo a RoMaSys!
+                          </p>
+                        </div>
+                        <div className="w-fit sm:w-1/4">
+                          <SearchBar
+                            searchClientsByFilter={searchClientsByFilter}
+                            searchByNameOrId={searchByNameOrId}
+                          />
+                        </div>
+                      </header>
+                      <ClientsTable
+                        activeClients={activeClients}
+                        dueDateClients={dueDateClients}
+                        frozenClients={frozenClients}
+                      />
+                    </section>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

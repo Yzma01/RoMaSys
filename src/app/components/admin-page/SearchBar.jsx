@@ -1,4 +1,4 @@
-'use client'
+
 import React, { useState } from "react";
 import { Filter } from "../utils/Filter";
 
@@ -26,7 +26,7 @@ const frameworks = [
 ];
 const SearchBar = ({ searchClientsByFilter, searchByNameOrId }) => {
   const [searchValue, setSearchValue] = useState("");
-  const [value, setValue] = useState("");
+  const [value, setValue] = React.useState("");
 
   return (
     <div className="flex items-center justify-center h-10 bg-transparent rounded-lg overflow-hidden cursor-pointer pl-4 shadow-md border border-gray-3">

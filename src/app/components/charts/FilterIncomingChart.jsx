@@ -21,7 +21,7 @@ const FilterIncomingChart = ({
         value={filterSelected}
         setValue={setFilterSelected}
         className={"w-40 bg-adminBackground h-10"}
-        icon={outlinedInputClasses}
+        icon={true}
       />
     </div>
   );

@@ -48,7 +48,7 @@ export function Filter({
                 <CommandItem
                   key={framework.value}
                   value={framework.value}
-                  onSelect={(currentValue) => {
+                  onSelect={(currentValue) => { 
                     setValue(currentValue === value ? "" : currentValue);
                     console.log("current: ", value)
                     console.log("current: ",currentValue)
