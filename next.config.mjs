@@ -17,15 +17,14 @@ const nextConfig = {
         : "ro-ma-sys.vercel.app",
   },
 
-  //!Este es un proxy en el que source especifico que cuando este la ruta api, redireccione al puerto 5000
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: process.env.BASE_URL_WHATSAPP,
-      },
-    ];
-  },
-};
+    async rewrites() {
+      return [
+        {
+          source: "/api/:path*",
+          destination: "https://ro-ma-sys-server.vercel.app/api/:path*", // URL del backend
+        },
+      ];
+    },
+  };
 
 export default nextConfig;

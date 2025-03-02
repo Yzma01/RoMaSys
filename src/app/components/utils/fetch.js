@@ -13,7 +13,6 @@ export const makeFetch = async (url, method, params, body) => {
     },
     body: JSON.stringify(body),
     cache: "default",
-    mode: 'no-cors',
   });
   return response;
 };
