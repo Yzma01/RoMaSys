@@ -8,11 +8,11 @@ const Client = db.Clients;
 const MessagesAgenda = db.MessagesAgenda;
 
 export const paymentsRepo = {
-  addPayment,
-  getPayment,
+  _addPayment,
+  _getPayment,
 };
 
-async function addPayment(req, res) {
+async function _addPayment(req, res) {
   const body = req.body;
 
   try {
@@ -55,7 +55,9 @@ async function addPayment(req, res) {
   }
 }
 
-async function getPayment(req, res, pay_client_id) {
+//*Get payment history of the client
+async function _getPayment(req, res) {
+  const { pay_client_id } = req.query; 
   try {
     const payment = await Payment.find({ pay_client_id: pay_client_id });
     paymentNotFound(payment);

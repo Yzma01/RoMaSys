@@ -27,7 +27,8 @@ export const clientsRepo = {
 };
 
 //*Get client by id
-async function _getClientById(req, res, cli_id) {
+async function _getClientById(req, res) {
+  const {cli_id} = req.query; 
   try {
     console.log("💐💐💐💐💐")
     const client = await Client.findOne({
@@ -212,7 +213,8 @@ function unfreezeClient(body, client) {
 }
 
 //*Update client
-async function _updateClient(req, res, cli_id) {
+async function _updateClient(req, res) {
+  const {cli_id} = req.query; 
   const body = req.body;
 
   try {
@@ -284,7 +286,8 @@ async function updateAdditionalClientData(body, clientObjectId, rutineId) {
   }
 }
 
-async function _deleteClient(req, res, cli_id) {
+async function _deleteClient(req, res) {
+  const {cli_id} = req.query; 
   try {
     const client = await Client.findOne({ cli_id: cli_id });
     clientNotFound(client);
