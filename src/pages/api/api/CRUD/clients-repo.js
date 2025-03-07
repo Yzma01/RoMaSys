@@ -29,6 +29,7 @@ export const clientsRepo = {
 //*Get client by id
 async function getClientById(req, res, cli_id) {
   try {
+    console.log("💐💐💐💐💐")
     const client = await Client.findOne({
       cli_id: cli_id,
     });
@@ -45,9 +46,10 @@ async function getClientById(req, res, cli_id) {
 
 //*Get all clients
 async function getClients(req, res) {
+
   try {
+
     const clients = await Client.find();
-    console.log("cle", clients);
 
     for (let client of clients) {
       if (client.cli_additional_data) {
