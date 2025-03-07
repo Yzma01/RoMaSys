@@ -45,17 +45,6 @@ async function basicReport(req, res) {
   }
 }
 
-// async function getClientsByGender() {
-//   //*Se le conoce como pipeline
-//   return await AdditionalData.aggregate([
-//     {
-//       $group: {
-//         _id: "$cli_gender",
-//         count: { $sum: 1 },
-//       },
-//     },
-//   ]);
-// }
 
 async function getClientsByTypeOfMonthlyPayment() {
   return await Client.aggregate([
@@ -221,6 +210,7 @@ async function fetchIncomingByDateRange(
 
 async function incomingByRange(req, res) {
   const { startDate, endDate, monthlyPaymentType } = req.query;
+
   const monthly_Payment_Type = monthlyPaymentType?.split("/")[0] || "";
 
   try {

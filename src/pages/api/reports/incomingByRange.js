@@ -1,6 +1,4 @@
-import { getReport } from "../api/controllers/reports-controller.js";
 import reportsRoutes from "../api/routes/reports-routes.js"
-
 
 export default async function handler(req, res) {
 
@@ -11,7 +9,7 @@ export default async function handler(req, res) {
     }
   
     try {
-      await getReport(req, res);
+      await reportsRoutes(req, res);
     } catch (error) {
       console.error("Error in /api/reportsRoutes:", error);
       res.status(500).json({ message: "Internal Server Error" });
