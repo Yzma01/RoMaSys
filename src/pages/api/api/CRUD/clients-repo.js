@@ -19,15 +19,15 @@ const subjectEmail = "Rutina 🏋️‍♀️🏋️‍♂️";
 const typeOfEmail = "routine";
 
 export const clientsRepo = {
-  getClients,
-  getClientById,
-  addClient,
-  updateClient,
+  _getClients,
+  _getClientById,
+  _addClient,
+  _updateClient,
   _deleteClient,
 };
 
 //*Get client by id
-async function getClientById(req, res, cli_id) {
+async function _getClientById(req, res, cli_id) {
   try {
     console.log("💐💐💐💐💐")
     const client = await Client.findOne({
@@ -45,7 +45,7 @@ async function getClientById(req, res, cli_id) {
 }
 
 //*Get all clients
-async function getClients(req, res) {
+async function _getClients(req, res) {
 
   try {
 
@@ -79,7 +79,7 @@ async function getClients(req, res) {
 }
 
 //*Add client
-async function addClient(req, res) {
+async function _addClient(req, res) {
   const body = req.body;
   const today = new Date();
   try {
@@ -212,7 +212,7 @@ function unfreezeClient(body, client) {
 }
 
 //*Update client
-async function updateClient(req, res, cli_id) {
+async function _updateClient(req, res, cli_id) {
   const body = req.body;
 
   try {
