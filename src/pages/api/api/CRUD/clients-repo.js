@@ -7,7 +7,7 @@ import {
   validatePhone,
 } from "./services/clientValidations.js";
 import { calculateNextPayDate } from "./services/clientUtils.js";
-import sendEmail from "../sendEmail.js";
+import { sendEmail } from "../sendEmail.js";
 
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
@@ -209,7 +209,7 @@ async function _updateClient(req, res) {
     clientNotFound(client);
 
     await validatePhone(body, client);
-
+    console.log("ano3", body.cli_rutine)
     if (body.cli_rutine === true) {
       //const rutine = await assignRutine(body);
       const rutine = `<!DOCTYPE html>
@@ -295,9 +295,10 @@ async function _updateClient(req, res) {
         client.cli_additional_data,
         rutine.rut_id
       );
-
-      await sendEmail(subjectEmail, cli_email, client.cli_name, rutine, typeOfEmail)
-
+      console.log("ano1")
+      const response = await sendEmail(subject, cli_email, client.cli_name, rutine, typeOfEmail)
+      console.log("ano", response)
+s
       body.cli_additional_data = additionalData._id;
     }
 
