@@ -8,16 +8,13 @@ export default async function handler(req, res) {
     switch (req.method) {
       case "GET":
         if (query.incomingByRange) {
-          // Si se solicita incomingByRange, llama a la función correspondiente
           await getIncomingByRange(req, res);
         } else {
-          // Si no, obtén el reporte general
           await getReport(req, res);
         }
         break;
 
       default:
-        // Método no permitido
         res.status(405).json({ message: "Method Not Allowed" });
         break;
     }
