@@ -1,20 +1,17 @@
-import clientsRoutes from "../api/routes/clients-routes.js"
-
+import paymentsRoutes from "../api/routes/payments-routes.js"
 
 export default async function handler(req, res) {
 
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   
-    // Manejar solicitudes OPTIONS (preflight)
     if (req.method === "OPTIONS") {
       return res.status(200).end();
     }
   
     try {
-      console.log("Tamos en el try");
-      await clientsRoutes(req, res);
+      await paymentsRoutes(req, res);
     } catch (error) {
-      console.error("Error in /api/clients:", error);
+      console.error("Error in /api/paymentsRoutes/cli_payment_id:", error);
       res.status(500).json({ message: "Internal Server Error" });
     }
   }

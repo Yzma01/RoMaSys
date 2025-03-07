@@ -2,12 +2,12 @@
 import { getClients, addClient, updateClient, deleteClient, getClientById } from "../controllers/clients-controller.js";
 
 export default async function handler(req, res) {
-  const {cli_id} = req.query; 
+
   try {
     switch (req.method) {
       case "GET":
         if (cli_id) {
-          await getClientById(req, res, cli_id);
+          await getClientById(req, res);
         } else {
           await getClients(req, res);
         }
@@ -18,11 +18,11 @@ export default async function handler(req, res) {
         break;
 
       case "PUT":
-        await updateClient(req, res, cli_id);
+        await updateClient(req, res);
         break;
 
       case "DELETE":
-        await deleteClient(req, res, cli_id);
+        await deleteClient(req, res);
         break;
 
       default:

@@ -6,10 +6,10 @@ const MONTHLY_TYPE = ["mes", "quincena", "dia"];
 const FROZEN = "congelado";
 
 export const clientsFilter = {
-  getClientsByMonthlyType,
+  _getClientsByMonthlyType,
 };
 
-async function getClientsByMonthlyType(req, res) {
+async function _getClientsByMonthlyType(req, res) {
   const { filterType } = req.query;
   console.log("hola", filterType)
   try {
