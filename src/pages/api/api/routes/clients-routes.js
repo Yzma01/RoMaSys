@@ -2,7 +2,7 @@
 import { getClients, addClient, updateClient, deleteClient, getClientById } from "../controllers/clients-controller.js";
 
 export default async function handler(req, res) {
-
+  const {cli_id} = req.query; 
   try {
     switch (req.method) {
       case "GET":
