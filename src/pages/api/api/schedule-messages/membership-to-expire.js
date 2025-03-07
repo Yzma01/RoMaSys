@@ -1,7 +1,7 @@
 import { db } from "../database/db.js";
 
 // import { sendEmail } from "../../apiBrevo/sendEmail.js";
-import sendEmail from "../sendEmail.js"
+import sendEmail from "../apiBrevo/sendEmail.js"
 
 const subjectEmail = "Reminder 📍";
 const typeOfEmail = "reminder";
