@@ -7,8 +7,7 @@ import {
   validatePhone,
 } from "./services/clientValidations.js";
 import { calculateNextPayDate } from "./services/clientUtils.js";
-// import { sendEmail } from "../../apiBrevo/sendEmail.js";
-import sendEmail from "../sendEmail.js";
+import { sendEmail } from "../sendEmail.js";
 
 const Client = db.Clients;
 const AdditionalData = db.AdditionalClientData;
@@ -100,19 +99,7 @@ async function _addClient(req, res) {
         rutine.rut_id
       );
 
-      const response = await fetch("https://ro-ma-sys-server.vercel.app/api/sendEmail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          subject: "Reminder 📍",
-          clientEmail: client.cli_email,
-          clientName: client.cli_name,
-          content: "Su mensualidad se encuentra vencida",
-          typeOfEmail: "reminder",
-        }),
-      });
+      await sendEmail(subjectEmail, cli_email, client.cli_name, content, typeOfEmail)
 
       body.cli_additional_data = additionalData._id;
     }
@@ -222,30 +209,96 @@ async function _updateClient(req, res) {
     clientNotFound(client);
 
     await validatePhone(body, client);
-
+    console.log("ano3", body.cli_rutine)
     if (body.cli_rutine === true) {
-      const rutine = await assignRutine(body);
+      //const rutine = await assignRutine(body);
+      const rutine = `<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; margin: 20px; }
+        .container { max-width: 800px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1, h2 { color: #007BFF; }
+        h3 { color: #0056b3; }
+        ul { list-style: none; padding: 0; }
+        li { margin-bottom: 5px; }
+        .section { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #ddd; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Plan de Ejercicios</h1>
+        <h2>Edad: 0-20 años</h2>
+        
+        <div class="section">
+            <h2>Hombres</h2>
+            <p><strong>Días por semana:</strong> 5 días</p>
+            
+            <h3>Lunes: Fuerza + Cardio</h3>
+            <p><strong>Calentamiento:</strong> 5-10 min de saltos o carrera suave</p>
+            <p><strong>Circuito (3 rondas):</strong></p>
+            <ul>
+                <li>Flexiones (3x10)</li>
+                <li>Sentadillas (3x15)</li>
+                <li>Plancha (3x30 seg)</li>
+                <li>Burpees (3x8)</li>
+            </ul>
+            <p><strong>Cardio:</strong> 15-20 min de carrera o bicicleta</p>
+            
+            <h3>Martes: Cardio</h3>
+            <p>30-45 min de natación o ciclismo</p>
+            
+            <h3>Miércoles: Fuerza + Cardio</h3>
+            <p>Repite el lunes</p>
+            
+            <h3>Jueves: Cardio</h3>
+            <p>30-45 min de caminar rápido</p>
+            
+            <h3>Viernes: Fuerza + Cardio</h3>
+            <p>Repite el lunes</p>
+        </div>
+        
+        <div class="section">
+            <h2>Mujeres</h2>
+            <p><strong>Días por semana:</strong> 5 días</p>
+            
+            <h3>Lunes: Fuerza + Cardio</h3>
+            <p><strong>Calentamiento:</strong> 5-10 min de saltos o carrera suave</p>
+            <p><strong>Circuito (3 rondas):</strong></p>
+            <ul>
+                <li>Flexiones (3x8-10)</li>
+                <li>Sentadillas (3x15)</li>
+                <li>Plancha (3x30 seg)</li>
+                <li>Zancadas (3x10 por pierna)</li>
+            </ul>
+            <p><strong>Cardio:</strong> 15-20 min de carrera o bicicleta</p>
+            
+            <h3>Martes: Cardio</h3>
+            <p>30-45 min de danza o aerobic</p>
+            
+            <h3>Miércoles: Fuerza + Cardio</h3>
+            <p>Repite el lunes</p>
+            
+            <h3>Jueves: Cardio</h3>
+            <p>30-45 min de caminar rápido</p>
+            
+            <h3>Viernes: Fuerza + Cardio</h3>
+            <p>Repite el lunes</p>
+        </div>
+    </div>
+</body>
+</html>
+`
 
       const additionalData = await updateAdditionalClientData(
         body.cli_additional_data,
         client.cli_additional_data,
         rutine.rut_id
       );
-
-    const response = await fetch("https://ro-ma-sys-server.vercel.app/api/sendEmail", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        subject: "Reminder 📍",
-        clientEmail: client.cli_email,
-        clientName: client.cli_name,
-        content: "Su mensualidad se encuentra vencida",
-        typeOfEmail: "reminder",
-      }),
-    });
-
+      console.log("ano1")
+      const response = await sendEmail(subject, cli_email, client.cli_name, rutine, typeOfEmail)
+      console.log("ano", response)
+s
       body.cli_additional_data = additionalData._id;
     }
 
