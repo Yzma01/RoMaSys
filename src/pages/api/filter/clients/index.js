@@ -1,4 +1,4 @@
-import filterRoutes from "../../api/routes/filter-routes.js"
+import filterRoutes from "../../backend/routes/filter-routes.js"
 
 console.log("Enter a clientes");
 

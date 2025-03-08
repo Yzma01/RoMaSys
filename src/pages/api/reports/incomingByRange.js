@@ -1,4 +1,4 @@
-import reportsRoutes from "../api/routes/reports-routes.js"
+import reportsRoutes from "../backend/routes/reports-routes.js"
 
 export default async function handler(req, res) {
 

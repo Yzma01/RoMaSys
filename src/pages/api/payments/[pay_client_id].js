@@ -1,4 +1,4 @@
-import paymentsRoutes from "../api/routes/payments-routes.js"
+import paymentsRoutes from "../backend/routes/payments-routes.js"
 
 export default async function handler(req, res) {
 

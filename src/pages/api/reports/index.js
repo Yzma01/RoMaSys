@@ -1,5 +1,5 @@
-import { getReport } from "../api/controllers/reports-controller.js";
-import reportsRoutes from "../api/routes/reports-routes.js"
+import { getReport } from "../backend/controllers/reports-controller.js";
+import reportsRoutes from "../backend/routes/reports-routes.js"
 
 
 export default async function handler(req, res) {

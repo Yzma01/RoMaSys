@@ -1,7 +1,8 @@
 import { db } from "../database/db.js";
+import { sendEmail } from "../sendEmail.js";
 
 // import { sendEmail } from "../../apiBrevo/sendEmail.js";
-import sendEmail from "../apiBrevo/sendEmail.js"
+
 
 const subjectEmail = "Reminder 📍";
 const typeOfEmail = "reminder";
@@ -17,7 +18,7 @@ export async function startMessageSending() {
 
   try {
     const currentDate = new Date();
-    const pendingMessages = await MessageAgenda.find({ //!Esto mas bien se debe de buscar en la proxima fecha de pago del cliente
+    const pendingMessages = await MessageAgenda.find({
       msg_sent: false,
       msg_next_payment_date: { $lt: currentDate },
     });
@@ -51,27 +52,11 @@ export async function startMessageSending() {
 async function sendAndMarkAsSent(client, clientAdditionalData, message) {
   console.log(`Enviando mensaje a: ${message.msg_client_id}`);
   try {
-    const response = await fetch("https://ro-ma-sys-server.vercel.app/api/sendEmail", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        subject: "Reminder 📍",
-        clientEmail: client.cli_email,
-        clientName: client.cli_name,
-        content: "Su mensualidad se encuentra vencida",
-        typeOfEmail: "reminder",
-      }),
-    });
+   await sendEmail(subjectEmail, client.cli_email, client.cli_name.cli_name, messageToSend, typeOfEmail);
 
-    const data = await response.json();
-    if (response.ok) {
-      console.log("Correo enviado con éxito:", data);
-      await MessageAgenda.findOneAndDelete({ _id: message._id });
-    } else {
-      console.error("Error al enviar el correo:", data);
-    }
+    console.log("Correo enviado con éxito:");
+    await MessageAgenda.findOneAndDelete({ _id: message._id });
+  
   } catch (error) {
     console.error("Error al enviar mensaje:", error);
   }

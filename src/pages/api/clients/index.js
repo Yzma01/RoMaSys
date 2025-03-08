@@ -1,4 +1,4 @@
-import clientsRoutes from "../api/routes/clients-routes.js"
+import clientsRoutes from "../backend/routes/clients-routes.js"
 
 
 export default async function handler(req, res) {

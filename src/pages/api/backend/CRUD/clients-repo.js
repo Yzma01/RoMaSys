@@ -151,7 +151,7 @@ async function addFirstPayment(body) {
         : body.pay_amount,
       pay_monthly_payment_type: body.cli_monthly_payment_type,
     };
-    console.log("bodyPa: ", bodyPayment);
+
     const payment = new Payment(bodyPayment);
     await payment.save();
   } catch (error) {
