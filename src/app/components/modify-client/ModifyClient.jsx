@@ -80,33 +80,13 @@ const ModifySelectedClient = ({ selectedClient }) => {
   }, [routine]);
 
   const setAditionalData = useCallback(() => {
-    if (routineRef.current) {
-      setGender(
-        client.cli_additional_data?.cli_gender
-          ? client.cli_additional_data.cli_gender
-          : ""
-      );
-      setHeight(
-        client.cli_additional_data?.cli_height
-          ? client.cli_additional_data.cli_height
-          : ""
-      );
-      setWeight(
-        client.cli_additional_data?.cli_weight
-          ? client.cli_additional_data.cli_weight
-          : ""
-      );
-      setDate(
-        client.cli_additional_data?.cli_birthdate
-          ? client.cli_additional_data.cli_birthdate
-          : ""
-      );
-      setGoal(
-        client.cli_additional_data?.cli_goal
-          ? client.cli_additional_data.cli_goal
-          : ""
-      );
-    }
+    if (routineRef.current && client?.cli_additional_data) {
+        setGender((prev) => prev !== client.cli_additional_data.cli_gender ? client.cli_additional_data.cli_gender : prev);
+        setHeight((prev) => prev !== client.cli_additional_data.cli_height ? client.cli_additional_data.cli_height : prev);
+        setWeight((prev) => prev !== client.cli_additional_data.cli_weight ? client.cli_additional_data.cli_weight : prev);
+        setDate((prev) => prev !== client.cli_additional_data.cli_birthdate ? client.cli_additional_data.cli_birthdate : prev);
+        setGoal((prev) => prev !== client.cli_additional_data.cli_goal ? client.cli_additional_data.cli_goal : prev);
+      }
   }, [client]);
 
   useEffect(() => {
