@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AlertDialogFooter, AlertDialogHeader } from "../ui/alert-dialog";
 import {
   AlertDialogAction,
@@ -74,15 +74,17 @@ const ModifySelectedClient = ({ selectedClient }) => {
     setMothlyType(mType);
   }, [client]);
 
-  useEffect(() => {
-    if (routine) {
-      setGender(client.cli_additional_data?.cli_gender || "");
-      setHeight(client.cli_additional_data?.cli_height || "");
-      setWeight(client.cli_additional_data?.cli_weight || "");
-      setDate(client.cli_additional_data?.cli_birthdate || "");
-      setGoal(client.cli_additional_data?.cli_goal || "");
-    }
-  }, [client, routine]);
+  const setAditionalData = useMemo(() => {
+    return () => {
+      if (client.cli_rutine) {
+        setGender(client.cli_additional_data?.cli_gender || "");
+        setHeight(client.cli_additional_data?.cli_height || "");
+        setWeight(client.cli_additional_data?.cli_weight || "");
+        setDate(client.cli_additional_data?.cli_birthdate || "");
+        setGoal(client.cli_additional_data?.cli_goal || "");
+      }
+    };
+  }, [client, client.cli_rutine]);
 
   useEffect(() => {
     if (client != null) {
