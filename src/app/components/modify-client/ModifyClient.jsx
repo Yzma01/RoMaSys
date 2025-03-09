@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AlertDialogFooter, AlertDialogHeader } from "../ui/alert-dialog";
 import {
   AlertDialogAction,
@@ -36,6 +36,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
   const [amount, setAmount] = useState(0);
   const { toast } = useToast();
 
+  const routineRef = useRef(routine);
   const navigate = useNavigate();
 
   const getClient = useCallback(
@@ -74,8 +75,12 @@ const ModifySelectedClient = ({ selectedClient }) => {
     setMothlyType(mType);
   }, [client]);
 
+  useEffect(() => {
+    routineRef.current = routine;
+  }, [routine]);
+
   const setAditionalData = useCallback(() => {
-    if (routine) {
+    if (routineRef.current) {
       setGender(
         client.cli_additional_data?.cli_gender
           ? client.cli_additional_data.cli_gender
@@ -102,7 +107,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
           : ""
       );
     }
-  }, [client, routine]);
+  }, [client]);
 
   useEffect(() => {
     if (client != null) {
