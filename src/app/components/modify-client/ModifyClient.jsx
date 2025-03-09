@@ -76,8 +76,8 @@ const ModifySelectedClient = ({ selectedClient }) => {
 
   const setAditionalData = useMemo(() => {
     return () => {
-      const aux = client.cli_rutine;
-      if (aux) {
+      const routineAux = client.cli_rutine;
+      if (routineAux) {
         setGender(client.cli_additional_data?.cli_gender || "");
         setHeight(client.cli_additional_data?.cli_height || "");
         setWeight(client.cli_additional_data?.cli_weight || "");
