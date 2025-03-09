@@ -77,21 +77,22 @@ async function _getClients(req, res) {
       .json({ message: "Error retrieving clients" + error.message });
   }
 }
-
 //*Add client
 async function _addClient(req, res) {
   const body = req.body;
   const today = new Date();
+
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
-    try {
-      await emailAlreadyInUse(body);
-    } catch (error) {
-      console.log("❌ Email en uso:", error);
-       return res
-      .status(error.status)
+
+    // Verifica si el email ya está en uso
+    if (await Client.findOne({ cli_email: body.cli_email })) {
+      console.log("pppppppppppppppppppp");
+      return res.status(407).json({ message: 'Email "' + body.cli_email + '" is already in use' });
     }
+
+    // Si el email no está en uso, continúa con el proceso
     body.cli_next_pay_date = calculateNextPayDate(
       body.cli_monthly_payment_type,
       today
@@ -125,11 +126,12 @@ async function _addClient(req, res) {
 
     await scheduleMessage(client);
 
-    res.status(201).json({ message: "Client saved!", client });
+    return res.status(201).json({ message: "Client saved!", client }); // Asegúrate de usar return aquí
   } catch (error) {
-    res
+    console.error("Error adding client:", error); // Debug: Imprime el error en la consola
+    return res
       .status(error.status || 500)
-      .json({ message: "Error added  clients  " + error.message });
+      .json({ message: "Error adding clients: " + error.message });
   }
 }
 
@@ -215,13 +217,13 @@ function unfreezeClient(body, client) {
 async function _updateClient(req, res) {
   const { cli_id } = req.query;
   const body = req.body;
-  console.log("🚀🚀🚀🚀🚀 ~ _updateClient ~ body:", body)
+  console.log("🚀🚀🚀🚀🚀 ~ _updateClient ~ body:", body);
 
   try {
     console.log("popopopopopoopoppp");
     const client = await Client.findOne({ cli_id: cli_id });
     console.log("iiiiiiiiiiiiiiiiiiiiiiiiii");
-    console.log("🚀 ~ _updateClient ~ client:", client)
+    console.log("🚀 ~ _updateClient ~ client:", client);
 
     clientNotFound(client);
     console.log("dsadddsdsdsdsdsd");
@@ -230,8 +232,9 @@ async function _updateClient(req, res) {
     await validatePhone(body, client);
     console.log("📍📍📍📍📍📍");
 
-    if (body.cli_rutine === true) { //!Revisar si cuando se congela un cliente con rutina se le evia la rutina, podria colocar que cuando sea true no se jecute y si es false se le vuelva a enviar
-      
+    if (body.cli_rutine === true) {
+      //!Revisar si cuando se congela un cliente con rutina se le evia la rutina, podria colocar que cuando sea true no se jecute y si es false se le vuelva a enviar
+
       const rutine = await assignRutine(body);
 
       const additionalData = await updateAdditionalClientData(
@@ -239,7 +242,7 @@ async function _updateClient(req, res) {
         client.cli_additional_data,
         rutine.rut_id
       );
-     
+
       await sendEmail(
         subjectEmail,
         client.cli_email,
