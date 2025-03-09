@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AlertDialogFooter, AlertDialogHeader } from "../ui/alert-dialog";
 import {
   AlertDialogAction,
@@ -37,8 +37,6 @@ const ModifySelectedClient = ({ selectedClient }) => {
   const { toast } = useToast();
 
   const navigate = useNavigate();
-  const routineRef = useRef(routine);
-
 
   const getClient = useCallback(
     async (id) => {
@@ -77,20 +75,14 @@ const ModifySelectedClient = ({ selectedClient }) => {
   }, [client]);
 
   useEffect(() => {
-    routineRef.current = routine;
-  }, [routine]);
-
-  const setAditionalData = useMemo(() => {
-    return () => {
-      if (routineRef.current) {
-        setGender(client.cli_additional_data?.cli_gender || "");
-        setHeight(client.cli_additional_data?.cli_height || "");
-        setWeight(client.cli_additional_data?.cli_weight || "");
-        setDate(client.cli_additional_data?.cli_birthdate || "");
-        setGoal(client.cli_additional_data?.cli_goal || "");
-      }
-    };
-  }, [client]);
+    if (routine) {
+      setGender(client.cli_additional_data?.cli_gender || "");
+      setHeight(client.cli_additional_data?.cli_height || "");
+      setWeight(client.cli_additional_data?.cli_weight || "");
+      setDate(client.cli_additional_data?.cli_birthdate || "");
+      setGoal(client.cli_additional_data?.cli_goal || "");
+    }
+  }, [client, routine]);
 
   useEffect(() => {
     if (client != null) {
