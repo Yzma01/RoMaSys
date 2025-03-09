@@ -6,7 +6,7 @@ export const getClients = (req, res) => {
 };
 
 export const addClient = (req, res) => {
-  clientsRepo._addClient(req, res);
+  clientsRepo.addClient(req, res);
 };
 
 export const updateClient = (req, res) => {

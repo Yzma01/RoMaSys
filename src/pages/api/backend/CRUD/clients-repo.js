@@ -22,7 +22,7 @@ const typeOfEmail = "routine";
 export const clientsRepo = {
   _getClients,
   _getClientById,
-  _addClient,
+  addClient,
   _updateClient,
   _deleteClient,
 };
@@ -79,19 +79,20 @@ async function _getClients(req, res) {
 }
 
 //*Add client
-async function _addClient(req, res) {
+async function addClient(req, res) {
   const body = req.body;
   const today = new Date();
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
-    try {
-      await emailAlreadyInUse(body);
-    } catch (error) {
-      console.log("❌ Email en uso:", error);
-       return res
-      .status(error.status)
-    }
+    // try {
+    //   await emailAlreadyInUse(body);
+    // } catch (error) {
+    //   console.log("❌ Email en uso:", error);
+    //    return res
+    //   .status(error.status)
+    // }
+
     body.cli_next_pay_date = calculateNextPayDate(
       body.cli_monthly_payment_type,
       today
@@ -215,23 +216,18 @@ function unfreezeClient(body, client) {
 async function _updateClient(req, res) {
   const { cli_id } = req.query;
   const body = req.body;
-  console.log("🚀🚀🚀🚀🚀 ~ _updateClient ~ body:", body)
+  console.log("🚀🚀🚀🚀🚀 ~ _updateClient ~ body:", body);
 
   try {
-    console.log("popopopopopoopoppp");
     const client = await Client.findOne({ cli_id: cli_id });
-    console.log("iiiiiiiiiiiiiiiiiiiiiiiiii");
-    console.log("🚀 ~ _updateClient ~ client:", client)
 
     clientNotFound(client);
-    console.log("dsadddsdsdsdsdsd");
-    await emailAlreadyInUseForUpdate(body, client);
+    // await emailAlreadyInUseForUpdate(body, client);
 
     await validatePhone(body, client);
     console.log("📍📍📍📍📍📍");
 
-    if (body.cli_rutine === true) { //!Revisar si cuando se congela un cliente con rutina se le evia la rutina, podria colocar que cuando sea true no se jecute y si es false se le vuelva a enviar
-      
+    if (body.cli_rutine === true) {
       const rutine = await assignRutine(body);
 
       const additionalData = await updateAdditionalClientData(
@@ -239,14 +235,16 @@ async function _updateClient(req, res) {
         client.cli_additional_data,
         rutine.rut_id
       );
-     
-      await sendEmail(
-        subjectEmail,
-        client.cli_email,
-        client.cli_name,
-        rutine.rut_rutine,
-        typeOfEmail
-      );
+
+      if (body.cli_frozen === false) {
+        await sendEmail(
+          subjectEmail,
+          client.cli_email,
+          client.cli_name,
+          rutine.rut_rutine,
+          typeOfEmail
+        );
+      }
 
       body.cli_additional_data = additionalData._id;
     }
