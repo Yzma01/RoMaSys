@@ -16,8 +16,13 @@ export async function assignRutine(body) {
     filterByGoal(filter, additionalData);
     filterByGender(filter, additionalData);
 
-    const rutine = await Rutine.findOne(filter);
+    console.log("😇😇😇😇😇😇", filter)
 
+    const rutine = await Rutine.findOne(filter);
+    console.log("🚀 ~ assignRutine ~ rutine:", rutine)
+
+
+    
     if (!rutine) {
       return 1;
     }

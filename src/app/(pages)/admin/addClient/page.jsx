@@ -111,6 +111,11 @@ export default function AddClient() {
       response.status,
       406
     );
+    validate(
+      `El correo eléctronico ${email} ya está registrado`,
+      response.status,
+      407
+    );
   };
 
   const handleSubmit = async (event) => {
@@ -159,7 +164,9 @@ export default function AddClient() {
     if (verifiedNull()) {
       toast({ description: "Por favor llene todos los campos." });
     } else {
+      console.log("🐕🐕🐕")
       const response = await makeFetch("/api/clients", "POST", "", body);
+      console.log("🚀 ~ doFechtVerifications ~ response:", response)
       doVerifications(response);
     }
   }

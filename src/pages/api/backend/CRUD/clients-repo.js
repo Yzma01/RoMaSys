@@ -5,6 +5,8 @@ import {
   clientAlredyExists,
   phoneAlredyInUse,
   validatePhone,
+  emailAlreadyInUse,
+  emailAlreadyInUseForUpdate,
 } from "./services/clientValidations.js";
 import { calculateNextPayDate } from "./services/clientUtils.js";
 import { sendEmail } from "../sendEmail.js";
@@ -27,9 +29,9 @@ export const clientsRepo = {
 
 //*Get client by id
 async function _getClientById(req, res) {
-  const {cli_id} = req.query; 
+  const { cli_id } = req.query;
   try {
-    console.log("💐💐💐💐💐")
+    console.log("💐💐💐💐💐");
     const client = await Client.findOne({
       cli_id: cli_id,
     });
@@ -46,9 +48,7 @@ async function _getClientById(req, res) {
 
 //*Get all clients
 async function _getClients(req, res) {
-
   try {
-
     const clients = await Client.find();
 
     for (let client of clients) {
@@ -85,7 +85,13 @@ async function _addClient(req, res) {
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
-
+    try {
+      await emailAlreadyInUse(body);
+    } catch (error) {
+      console.log("❌ Email en uso:", error);
+       return res
+      .status(error.status)
+    }
     body.cli_next_pay_date = calculateNextPayDate(
       body.cli_monthly_payment_type,
       today
@@ -99,7 +105,13 @@ async function _addClient(req, res) {
         rutine.rut_id
       );
 
-      await sendEmail(subjectEmail, cli_email, client.cli_name, content, typeOfEmail)
+      await sendEmail(
+        subjectEmail,
+        body.cli_email,
+        body.cli_name,
+        rutine.rut_rutine,
+        typeOfEmail
+      );
 
       body.cli_additional_data = additionalData._id;
     }
@@ -201,104 +213,41 @@ function unfreezeClient(body, client) {
 
 //*Update client
 async function _updateClient(req, res) {
-  const {cli_id} = req.query; 
+  const { cli_id } = req.query;
   const body = req.body;
+  console.log("🚀🚀🚀🚀🚀 ~ _updateClient ~ body:", body)
 
   try {
+    console.log("popopopopopoopoppp");
     const client = await Client.findOne({ cli_id: cli_id });
+    console.log("iiiiiiiiiiiiiiiiiiiiiiiiii");
+    console.log("🚀 ~ _updateClient ~ client:", client)
+
     clientNotFound(client);
+    console.log("dsadddsdsdsdsdsd");
+    await emailAlreadyInUseForUpdate(body, client);
 
     await validatePhone(body, client);
-    console.log("ano3", body.cli_rutine)
-    if (body.cli_rutine === true) {
-      //const rutine = await assignRutine(body);
-      const rutine = `<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; margin: 20px; }
-        .container { max-width: 800px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h1, h2 { color: #007BFF; }
-        h3 { color: #0056b3; }
-        ul { list-style: none; padding: 0; }
-        li { margin-bottom: 5px; }
-        .section { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #ddd; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Plan de Ejercicios</h1>
-        <h2>Edad: 0-20 años</h2>
-        
-        <div class="section">
-            <h2>Hombres</h2>
-            <p><strong>Días por semana:</strong> 5 días</p>
-            
-            <h3>Lunes: Fuerza + Cardio</h3>
-            <p><strong>Calentamiento:</strong> 5-10 min de saltos o carrera suave</p>
-            <p><strong>Circuito (3 rondas):</strong></p>
-            <ul>
-                <li>Flexiones (3x10)</li>
-                <li>Sentadillas (3x15)</li>
-                <li>Plancha (3x30 seg)</li>
-                <li>Burpees (3x8)</li>
-            </ul>
-            <p><strong>Cardio:</strong> 15-20 min de carrera o bicicleta</p>
-            
-            <h3>Martes: Cardio</h3>
-            <p>30-45 min de natación o ciclismo</p>
-            
-            <h3>Miércoles: Fuerza + Cardio</h3>
-            <p>Repite el lunes</p>
-            
-            <h3>Jueves: Cardio</h3>
-            <p>30-45 min de caminar rápido</p>
-            
-            <h3>Viernes: Fuerza + Cardio</h3>
-            <p>Repite el lunes</p>
-        </div>
-        
-        <div class="section">
-            <h2>Mujeres</h2>
-            <p><strong>Días por semana:</strong> 5 días</p>
-            
-            <h3>Lunes: Fuerza + Cardio</h3>
-            <p><strong>Calentamiento:</strong> 5-10 min de saltos o carrera suave</p>
-            <p><strong>Circuito (3 rondas):</strong></p>
-            <ul>
-                <li>Flexiones (3x8-10)</li>
-                <li>Sentadillas (3x15)</li>
-                <li>Plancha (3x30 seg)</li>
-                <li>Zancadas (3x10 por pierna)</li>
-            </ul>
-            <p><strong>Cardio:</strong> 15-20 min de carrera o bicicleta</p>
-            
-            <h3>Martes: Cardio</h3>
-            <p>30-45 min de danza o aerobic</p>
-            
-            <h3>Miércoles: Fuerza + Cardio</h3>
-            <p>Repite el lunes</p>
-            
-            <h3>Jueves: Cardio</h3>
-            <p>30-45 min de caminar rápido</p>
-            
-            <h3>Viernes: Fuerza + Cardio</h3>
-            <p>Repite el lunes</p>
-        </div>
-    </div>
-</body>
-</html>
-`
+    console.log("📍📍📍📍📍📍");
+
+    if (body.cli_rutine === true) { //!Revisar si cuando se congela un cliente con rutina se le evia la rutina, podria colocar que cuando sea true no se jecute y si es false se le vuelva a enviar
+      
+      const rutine = await assignRutine(body);
 
       const additionalData = await updateAdditionalClientData(
         body.cli_additional_data,
         client.cli_additional_data,
         rutine.rut_id
       );
-      console.log("ano1")
-      const response = await sendEmail(subject, cli_email, client.cli_name, rutine, typeOfEmail)
-      console.log("ano", response)
-s
+     
+      await sendEmail(
+        subjectEmail,
+        client.cli_email,
+        client.cli_name,
+        rutine.rut_rutine,
+        typeOfEmail
+      );
+
       body.cli_additional_data = additionalData._id;
     }
 
@@ -340,7 +289,7 @@ async function updateAdditionalClientData(body, clientObjectId, rutineId) {
 }
 
 async function _deleteClient(req, res) {
-  const {cli_id} = req.query; 
+  const { cli_id } = req.query;
   try {
     const client = await Client.findOne({ cli_id: cli_id });
     clientNotFound(client);

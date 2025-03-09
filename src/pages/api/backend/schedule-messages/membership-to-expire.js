@@ -39,7 +39,7 @@ export async function startMessageSending() {
         let clientAdditionalData = await AdditionalClientData.findOne({
           _id: client.cli_additional_data,
         });
-        await sendAndMarkAsSent(client, clientAdditionalData, message);
+        await sendAndMarkAsSent(client, clientAdditionalData, message); //!Creo que ya no se ocupa
       }
     }
     await startMessageSending();

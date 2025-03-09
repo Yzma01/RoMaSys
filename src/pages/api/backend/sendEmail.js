@@ -9,7 +9,6 @@ apiInstance.setApiKey(
 
 const smtpEmail = new brevo.SendSmtpEmail();
 
-//?Podria usar esta para todo los contatactos con el ciente, pero quiza mejor separarlas, aunque podria hacer solo una verficacion dobre para que es y segun esto se cambie el html
 export async function sendEmail(
   subject,
   clientEmail,
@@ -17,8 +16,17 @@ export async function sendEmail(
   content,
   typeOfEmail
 ) {
+  console.log("🚀 ~ typeOfEmail:", typeOfEmail)
+  console.log("🚀 ~ content:", content)
+  console.log("🚀 ~ clientName:", clientName)
+  console.log("🚀 ~ clientEmail:", clientEmail)
+  console.log("🚀 ~ subject:", subject)
+ 
 
   try {
+
+
+    
     smtpEmail.subject = subject;
     smtpEmail.to = [{ email: clientEmail, name: clientName }];
 
@@ -30,6 +38,7 @@ export async function sendEmail(
     };
 
     await apiInstance.sendTransacEmail(smtpEmail);
+    console.log("se envio la rutina");
   } catch (error) {
     console.error("Error al enviar el correo:", error.message);
     if (error.response) {
@@ -46,15 +55,29 @@ function typeOfEmailToSend(typeOfEmail, content) {
     case "reminder":
       sendReminder(content);
       break;
+    default:
+      throw new Error("Tipo de correo no válido");
   }
 }
 
-//!hacer Diseno para email de rutina
+//!hacer Diseño para email de rutina
 function sendRutine(content) {
-  smtpEmail.htmlContent = <html><body><h1> ${content} </h1></body></html>;
+  smtpEmail.htmlContent = `
+    <html>
+      <body>
+        <h1>${content}</h1>
+      </body>
+    </html>
+  `;
 }
 
-//! hacer Diseno para email de recordatorio
+//! hacer Diseño para email de recordatorio
 function sendReminder(content) {
-  smtpEmail.htmlContent = <html><body><h1> ${content} </h1></body></html>;
+  smtpEmail.htmlContent = `
+    <html>
+      <body>
+        <h1>${content}</h1>
+      </body>
+    </html>
+  `;
 }

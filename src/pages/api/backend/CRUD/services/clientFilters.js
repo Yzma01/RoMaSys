@@ -6,6 +6,7 @@ export function filterByAge(filter, age) {
 }
 
 export function filterByGoal(filter, additionalData) { 
+  console.log("🏠🏠🏠🏠",additionalData.cli_goal.toLowerCase() )
   filter.rut_goal = additionalData.cli_goal.toLowerCase(); 
 }
 
