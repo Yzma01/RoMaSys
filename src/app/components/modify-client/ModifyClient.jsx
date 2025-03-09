@@ -102,7 +102,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
           : ""
       );
     }
-  }, [client]);
+  }, [client, routine]);
 
   useEffect(() => {
     if (client != null) {
