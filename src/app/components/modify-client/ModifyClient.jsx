@@ -79,6 +79,12 @@ const ModifySelectedClient = ({ selectedClient }) => {
     routineRef.current = routine;
   }, [routine]);
 
+  useEffect(() => {
+    if (client.cli_additional_data) {
+      setAditionalData();
+    }
+  }, [client.cli_additional_data]); 
+
   const setAditionalData = useCallback(() => {
     if (routineRef.current && client?.cli_additional_data) {
         setGender((prev) => prev !== client.cli_additional_data.cli_gender ? client.cli_additional_data.cli_gender : prev);
