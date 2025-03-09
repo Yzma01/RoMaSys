@@ -76,7 +76,8 @@ const ModifySelectedClient = ({ selectedClient }) => {
 
   const setAditionalData = useMemo(() => {
     return () => {
-      if (client.cli_rutine) {
+      const aux = client.cli_rutine;
+      if (aux) {
         setGender(client.cli_additional_data?.cli_gender || "");
         setHeight(client.cli_additional_data?.cli_height || "");
         setWeight(client.cli_additional_data?.cli_weight || "");
@@ -84,7 +85,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
         setGoal(client.cli_additional_data?.cli_goal || "");
       }
     };
-  }, [client, client.cli_rutine]);
+  }, [client]);
 
   useEffect(() => {
     if (client != null) {
