@@ -84,7 +84,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
         setGoal(client.cli_additional_data?.cli_goal || "");
       }
     };
-  }, [client.cli_additional_data, routine]);
+  }, [client, routine]);
 
   useEffect(() => {
     if (client != null) {
