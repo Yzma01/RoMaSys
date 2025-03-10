@@ -34,7 +34,7 @@ const RegisterPay = ({ selectedClient }) => {
     setNextPayDate(
       format(new Date(selectedClient.client.cli_next_pay_date), "dd-MM-yyyy")
     );
-  
+
     let mType = selectedClient.client.cli_monthly_payment_type;
     mType = mType.charAt(0).toUpperCase() + mType.slice(1);
     setMothlyType(mType);
@@ -44,12 +44,12 @@ const RegisterPay = ({ selectedClient }) => {
     selectedClient.client.cli_last_name2,
     selectedClient.client.cli_monthly_payment_type,
     selectedClient.client.cli_name,
-    selectedClient.client.cli_next_pay_date
+    selectedClient.client.cli_next_pay_date,
   ]);
 
   const handleSubmit = async () => {
-    if(!amount){
-      toast({description: "El monto no puede estar vacío"})
+    if (!amount) {
+      toast({ description: "El monto no puede estar vacío", title: "Error" });
       return;
     }
     const body = {
@@ -63,26 +63,26 @@ const RegisterPay = ({ selectedClient }) => {
   };
 
   const doVerifications = (response) => {
-    if(verifiedNegative()){
-      toast({description: "Los números no pueden ser negativos"});
+    if (verifiedNegative()) {
+      toast({ description: "Los números no pueden ser negativos", title:"Error" });
       return;
     }
     validate(`Pago realizado con éxito.`, response.status, 200);
     validate(
       `Error de conexión, si el problema persiste contacte a soporte.`,
       response.status,
-      403
+      403, "Error"
     );
   };
 
-  const verifiedNegative = ()=>{
+  const verifiedNegative = () => {
     const regex = /-+/;
     return regex.test(amount);
-  }
+  };
 
-  const validate = (message, status, code) => {
+  const validate = (message, status, code, title) => {
     if (status == code) {
-      toast({ description: message });
+      toast({ description: message, title:title });
     }
     if (code == 200) {
       emitEvent("refreshTable", {});
