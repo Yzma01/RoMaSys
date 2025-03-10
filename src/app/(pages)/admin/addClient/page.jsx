@@ -47,6 +47,7 @@ export default function AddClient() {
   const validate = (message, status, code, className) => {
     if (status == code) {
       toast({ description: message, className: className });
+      return;
     }
     if (code == 201) {
       clearForm();
@@ -144,8 +145,7 @@ export default function AddClient() {
             cli_birthdate: date,
           },
     };
-    console.log(body)
-    doFechtVerifications(body);
+    await doFechtVerifications(body);
   };
 
   const doFechtVerifications= async(body)=>{
@@ -164,9 +164,7 @@ export default function AddClient() {
     if (verifiedNull()) {
       toast({ description: "Por favor llene todos los campos." });
     } else {
-      console.log("🐕🐕🐕")
       const response = await makeFetch("/api/clients", "POST", "", body);
-      console.log("🚀 ~ doFechtVerifications ~ response:", response)
       doVerifications(response);
     }
   }
