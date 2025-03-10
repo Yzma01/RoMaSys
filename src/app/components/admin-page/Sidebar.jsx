@@ -76,8 +76,8 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }){
 
         {
           //<PopupQr sidebarOpen={sidebarOpen} />
+          //<DevComponent open={sidebarOpen}/>
         }
-        <DevComponent open={sidebarOpen}/>
       </div>
 
       <div className="h-[1px] w-full bg-white my-[24px]" />
