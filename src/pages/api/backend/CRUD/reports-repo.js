@@ -86,7 +86,16 @@ async function getClientsWithAndWithoutRoutine() {
 }
 
 async function getAmountClientsByMonth() {
+  const currentDate = new Date();
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
+
   const amountByMonth = await Client.aggregate([
+    {
+      $match: {
+        cli_register_date: { $gte: threeMonthsAgo, $lte: currentDate }
+      }
+    },
     {
       $group: {
         _id: { $month: "$cli_register_date" },
