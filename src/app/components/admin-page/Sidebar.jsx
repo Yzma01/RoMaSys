@@ -18,7 +18,6 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }){
 
   useEffect(() => {
     if (location.pathname === "/admin/reports") {
-      console.log("event")
       emitEvent("refreshReports", {});
     }
   }, [location.pathname]);

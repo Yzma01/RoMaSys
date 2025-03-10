@@ -43,9 +43,9 @@ const FreezeClient = ({ selectedClient }) => {
     }
   }, [client, routine]);
 
-  const validate = (message, status, code, className) => {
+  const validate = (message, status, code, title) => {
     if (status == code) {
-      toast({ description: message, className: className });
+      toast({ description: message, title: title });
     }
     if(status == 200){
       emitEvent("refreshTable", {});
@@ -58,9 +58,9 @@ const FreezeClient = ({ selectedClient }) => {
     validate(
       `Error de conexión, si el problema persiste contacte a soporte.`,
       response.status,
-      500
+      500, "Error"
     );
-    validate(`El cliente cédula: ${id} tiene un pago pendiente.`, response.status, 402);
+    validate(`El cliente cédula: ${id} tiene un pago pendiente.`, response.status, 402, "Error");
   };
 
   const handleSubmit = async (event) => {

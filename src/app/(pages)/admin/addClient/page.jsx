@@ -44,11 +44,12 @@ export default function AddClient() {
     setEmail("");
   };
 
-  const validate = (message, status, code, className) => {
+  const validate = (message, status, code, title) => {
     if (status == code) {
-      toast({ description: message, className: className });
+      toast({ description: message, title:title });
+      return;
     }
-    if (code == 201) {
+    if (status == 201) {
       clearForm();
       navigate('/admin/dashboard')
     }
@@ -103,18 +104,18 @@ export default function AddClient() {
     validate(
       `Error de conexión, si el problema persiste contacte a soporte.`,
       response.status,
-      500
+      500, "Error"
     );
-    validate(`El cliente cédula: ${id} ya existe.`, response.status, 401);
+    validate(`El cliente cédula: ${id} ya existe.`, response.status, 401, "Error");
     validate(
       `El número de teléfono: ${phone} ya está registrado`,
       response.status,
-      406
+      406, "Error"
     );
     validate(
       `El correo eléctronico ${email} ya está registrado`,
       response.status,
-      407
+      407, "Error"
     );
   };
 
@@ -144,29 +145,26 @@ export default function AddClient() {
             cli_birthdate: date,
           },
     };
-    console.log(body)
-    doFechtVerifications(body);
+    await doFechtVerifications(body);
   };
 
   const doFechtVerifications= async(body)=>{
     if(verifiedBirthday()){
-      toast({description: "La fecha de nacimiento es mayor a la actual"});
+      toast({description: "La fecha de nacimiento es mayor a la actual", title:"Error"});
       return;
     }
     if(!verifiedValidEmail()){
-      toast({description: "Correo electrónico no válido"});
+      toast({description: "Correo electrónico no válido", title:"Error"});
       return;
     }
     if(verifiedNegative()){
-      toast({description: "Los números no pueden ser negativos"});
+      toast({description: "Los números no pueden ser negativos", title:"Error"});
       return;
     }
     if (verifiedNull()) {
-      toast({ description: "Por favor llene todos los campos." });
+      toast({ description: "Por favor llene todos los campos.", title:"Error"});
     } else {
-      console.log("🐕🐕🐕")
       const response = await makeFetch("/api/clients", "POST", "", body);
-      console.log("🚀 ~ doFechtVerifications ~ response:", response)
       doVerifications(response);
     }
   }
