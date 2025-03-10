@@ -48,11 +48,7 @@ const RegisterPay = ({ selectedClient }) => {
   ]);
 
   const handleSubmit = async () => {
-    console.log("amoutn", !amount);
-    console.log("amoutn", amount);
-    console.log(!amount?"no":"sí");
     if(!amount){
-      console.log("aqui")
       toast({description: "El monto no puede estar vacío"})
       return;
     }
