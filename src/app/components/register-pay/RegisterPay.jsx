@@ -48,6 +48,14 @@ const RegisterPay = ({ selectedClient }) => {
   ]);
 
   const handleSubmit = async () => {
+    console.log("amoutn", !amount);
+    console.log("amoutn", amount);
+    console.log(!amount?"no":"sí");
+    if(!amount){
+      console.log("aqui")
+      toast({description: "El monto no puede estar vacío"})
+      return;
+    }
     const body = {
       pay_client_id: selectedClient.client.cli_id,
       pay_date: "",
@@ -77,8 +85,6 @@ const RegisterPay = ({ selectedClient }) => {
   }
 
   const validate = (message, status, code) => {
-    console.log(status)
-    console.log(code)
     if (status == code) {
       toast({ description: message });
     }

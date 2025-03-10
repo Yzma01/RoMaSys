@@ -49,7 +49,7 @@ export default function AddClient() {
       toast({ description: message, className: className });
       return;
     }
-    if (code == 201) {
+    if (status == 201) {
       clearForm();
       navigate('/admin/dashboard')
     }
