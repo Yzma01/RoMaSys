@@ -21,7 +21,7 @@ const DeleteClient = ({ selectedClient }) => {
       emitEvent("refreshTable", {});
       toast({description: `Cliente eliminado con éxito`})
     }else{
-      toast({description: 'Error de conexión, si el problema persiste contacte a soporte.'})
+      toast({description: 'Error de conexión, si el problema persiste contacte a soporte.', title:"Error"})
     }
     }
   const [id, setId] = useState("");

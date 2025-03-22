@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"next dev\" \"node ./backend/server.js\"",
+    "dev": "next dev",
     "dev:next": "next dev",
     "dev:server": "node --watch backend/server.js",
     "dev:frontend": "next dev",
@@ -40,8 +40,7 @@
     "framer-motion": "11.11.0",
     "html2canvas": "1.4.1",
     "lucide-react": "0.427.0",
-    "mongodb": "6.9.0",
-    "mongoose": "8.6.2",
+    "mongoose": "^8.12.1",
     "next": "14.2.12",
     "qrcode": "1.5.4",
     "qrcode-terminal": "0.12.0",

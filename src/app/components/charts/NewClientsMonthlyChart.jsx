@@ -54,8 +54,7 @@ const setData = (data) => {
   }
 
   const updatedChartData = [...chartData];
-  const lastThreeData = data.slice(-3);
-  lastThreeData.forEach(({ count, month }, index) => {
+  data.forEach(({ count, month }, index) => {
     updatedChartData[index].clients = count;
     updatedChartData[index].month = month;
   });
