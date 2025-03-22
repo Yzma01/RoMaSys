@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { AlertDialogFooter, AlertDialogHeader } from "../ui/alert-dialog";
 import {
   AlertDialogAction,
@@ -48,7 +48,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
       if (response.status === 500) {
         toast({
           description:
-            "Error de conexión, si el problema persiste contacte a soporte",
+            "Error de conexión, si el problema persiste contacte a soporte", title:"Error"
         });
       }
     },
@@ -74,34 +74,17 @@ const ModifySelectedClient = ({ selectedClient }) => {
     setMothlyType(mType);
   }, [client]);
 
-  const setAditionalData = useCallback(() => {
-    if (routine) {
-      setGender(
-        client.cli_additional_data?.cli_gender
-          ? client.cli_additional_data.cli_gender
-          : ""
-      );
-      setHeight(
-        client.cli_additional_data?.cli_height
-          ? client.cli_additional_data.cli_height
-          : ""
-      );
-      setWeight(
-        client.cli_additional_data?.cli_weight
-          ? client.cli_additional_data.cli_weight
-          : ""
-      );
-      setDate(
-        client.cli_additional_data?.cli_birthdate
-          ? client.cli_additional_data.cli_birthdate
-          : ""
-      );
-      setGoal(
-        client.cli_additional_data?.cli_goal
-          ? client.cli_additional_data.cli_goal
-          : ""
-      );
-    }
+  const setAditionalData = useMemo(() => {
+    return () => {
+      const routineAux = client.cli_rutine;
+      if (routineAux) {
+        setGender(client.cli_additional_data?.cli_gender || "");
+        setHeight(client.cli_additional_data?.cli_height || "");
+        setWeight(client.cli_additional_data?.cli_weight || "");
+        setDate(client.cli_additional_data?.cli_birthdate || "");
+        setGoal(client.cli_additional_data?.cli_goal || "");
+      }
+    };
   }, [client]);
 
   useEffect(() => {
@@ -112,9 +95,9 @@ const ModifySelectedClient = ({ selectedClient }) => {
     }
   }, [client, setBasicData, setAditionalData]);
 
-  const validate = (message, status, code, className) => {
+  const validate = (message, status, code, title) => {
     if (status == code) {
-      toast({ description: message, className: className });
+      toast({ description: message, title: title });
     }
     if (code == 200) {
       emitEvent("refreshTable", {});
@@ -154,18 +137,18 @@ const ModifySelectedClient = ({ selectedClient }) => {
     validate(
       `El sistema no encontró una rutina para ${name}`,
       response.status,
-      404
+      404, "Error"
     );
     validate(
       `Error de conexión, si el problema persiste contacte a soporte.`,
       response.status,
-      500
+      500, "Error"
     );
-    validate(`El cliente cédula: ${id} ya existe.`, response.status, 401);
+    validate(`El cliente cédula: ${id} ya existe.`, response.status, 401, "Error");
     validate(
       `El número de teléfono: ${phone} ya está registrado`,
       response.status,
-      406
+      406, "Error"
     );
     validate(`${name} ha sido modificado.`, response.status, 200);
   };
@@ -214,15 +197,15 @@ const ModifySelectedClient = ({ selectedClient }) => {
 
   const doFechtVerifications = async (body) => {
     if (!verifiedValidEmail()) {
-      toast({ description: "Correo electrónico no válido" });
+      toast({ description: "Correo electrónico no válido" , title:"Error"});
       return;
     }
     if (verifiedNegative()) {
-      toast({ description: "Los números no pueden ser negativos" });
+      toast({ description: "Los números no pueden ser negativos", title:"Error" });
       return;
     }
     if (verifiedNull()) {
-      toast({ description: "Por favor llene todos los campos." });
+      toast({ description: "Por favor llene todos los campos." , title:"Error"});
     } else {
       const response = await makeFetch("/api/clients", "PUT", id, body);
       console.log(response);

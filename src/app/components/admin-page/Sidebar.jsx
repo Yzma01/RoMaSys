@@ -18,7 +18,6 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }){
 
   useEffect(() => {
     if (location.pathname === "/admin/reports") {
-      console.log("event")
       emitEvent("refreshReports", {});
     }
   }, [location.pathname]);
@@ -77,8 +76,8 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }){
 
         {
           //<PopupQr sidebarOpen={sidebarOpen} />
+          //<DevComponent open={sidebarOpen}/>
         }
-        <DevComponent open={sidebarOpen}/>
       </div>
 
       <div className="h-[1px] w-full bg-white my-[24px]" />

@@ -32,7 +32,7 @@ export default function Reports() {
     if (response.status === 500) {
       toast({
         description:
-          "Error de conexión, si el problema persiste contacte a soporte",
+          "Error de conexión, si el problema persiste contacte a soporte", title:"Error"
       });
     }
   }, [toast]);
@@ -69,7 +69,7 @@ export default function Reports() {
     if (response.status === 500) {
       toast({
         description:
-          "Error de conexión, si el problema persiste contacte a soporte",
+          "Error de conexión, si el problema persiste contacte a soporte", title:"Error"
       });
     }
   }, [date, filterSelected, toast]); // Dependencias necesarias

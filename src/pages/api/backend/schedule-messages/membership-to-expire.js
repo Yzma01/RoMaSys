@@ -25,9 +25,8 @@ export async function startMessageSending() {
     console.log("Mensajes pendientes: ", pendingMessages);
 
     if (pendingMessages.length === 0) {
-      console.log("No hay mensajes pendientes.");
-      setTimeout(() => startMessageSending(), ONCE_DAY);
-
+      // console.log("No hay mensajes pendientes.");
+      //  setTimeout(() => startMessageSending(), TESTING);
       return;
     }
 
@@ -38,11 +37,11 @@ export async function startMessageSending() {
       if (client) {
         let clientAdditionalData = await AdditionalClientData.findOne({
           _id: client.cli_additional_data,
-        });
-        await sendAndMarkAsSent(client, clientAdditionalData, message); //!Creo que ya no se ocupa
+        });//!Creo que ya no se ocupa
+        await sendAndMarkAsSent(client, clientAdditionalData, message); 
       }
     }
-    await startMessageSending();
+    // await startMessageSending();
   } catch (error) {
     console.error("Error al procesar mensajes programados:", error);
   }
