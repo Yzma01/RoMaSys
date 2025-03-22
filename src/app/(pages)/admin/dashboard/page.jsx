@@ -58,12 +58,8 @@ export default function Dashboard() {
     if (response.status === 500) {
       toast({
         description:
-<<<<<<< HEAD
-          "Error de conexión, si el problema persiste contacte a soporte",cd 
-=======
           "Error de conexión, si el problema persiste contacte a soporte", title: "Error"
->>>>>>> 193e1a6f9f871fe150b894a11ba497febebf32bb
-      });
+      });s
     }
     setIsLoading(false);
   }, [toast]);
