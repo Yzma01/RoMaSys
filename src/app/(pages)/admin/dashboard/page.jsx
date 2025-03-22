@@ -58,7 +58,7 @@ export default function Dashboard() {
     if (response.status === 500) {
       toast({
         description:
-          "Error de conexión, si el problema persiste contacte a soporte",
+          "Error de conexión, si el problema persiste contacte a soporte",cd 
       });
     }
     setIsLoading(false);
