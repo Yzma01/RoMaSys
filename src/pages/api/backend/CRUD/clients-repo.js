@@ -77,11 +77,11 @@ async function _getClients(req, res) {
       .json({ message: "Error retrieving clients" + error.message });
   }
 }
-
 //*Add client
 async function addClient(req, res) {
   const body = req.body;
   const today = new Date();
+
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
@@ -126,11 +126,12 @@ async function addClient(req, res) {
 
     await scheduleMessage(client);
 
-    res.status(201).json({ message: "Client saved!", client });
+    return res.status(201).json({ message: "Client saved!", client }); // Asegúrate de usar return aquí
   } catch (error) {
-    res
+    console.error("Error adding client:", error); // Debug: Imprime el error en la consola
+    return res
       .status(error.status || 500)
-      .json({ message: "Error added  clients  " + error.message });
+      .json({ message: "Error adding clients: " + error.message });
   }
 }
 

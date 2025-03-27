@@ -31,8 +31,10 @@ export async function phoneAlredyInUse(body) {
 }
 
 
-export async function emailAlreadyInUse(body) {
+export async function emailAlreadyInUse(body, res) {
+  console.log("lolaoal", body.cli_email);
   if (await Client.findOne({ cli_email: body.cli_email })) {
+    console.log("pppppppppppppppppppp")
     throw {
       message: 'Email "' + body.cli_email + '" is already in use',
       status: 407,
