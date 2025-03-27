@@ -14,7 +14,7 @@ const FormInput = ({ value, placeholder, setValue }) => {
             : "text"
         }
         className="peer w-full border-none border-b-2 border-gray-500 bg-transparent text-white focus:outline-none focus:border-b-3 focus:border-gradient-to-r from-blue-800 to-cyan-400 transition-colors duration-200 py-2 "
-        placeholder={placeholder}
+        placeholder=" "
         value={value}
         onChange={(e) => setValue(e.target.value)}
         required
