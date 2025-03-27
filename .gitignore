@@ -30,6 +30,7 @@ yarn-error.log*
 .env
 
 .middleware
+rutines.json
 
 # vercel
 .vercel
