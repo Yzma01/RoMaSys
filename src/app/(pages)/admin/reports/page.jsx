@@ -79,8 +79,8 @@ export default function Reports() {
   }, [handleFilter]);
 
   return (
-    <div className="h-screen w-full flex flex-col">
-      <div className="h-fit flex flex-row justify-between m-10 gap-10">
+    <div className="h-screen w-full flex flex-col min-h-screen">
+      <div className="h-fit flex flex-row justify-between m-10 gap-10 w-full max-w-screen-lg mx-auto">
         <RoutineChart data={routineData} />
         <MonthlyTypeChart data={monthlyTypeData} />
         <NewClientsMonthlyChart data={newClientsData} />

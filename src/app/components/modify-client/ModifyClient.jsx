@@ -214,8 +214,8 @@ const ModifySelectedClient = ({ selectedClient }) => {
   };
 
   return (
-    <div className=" flex items-center justify-center h-[100vh] w-full flex-col">
-      <div className="flex items-center justify-center w-full">
+    <div className=" flex items-center justify-center h-[100vh] w-full flex-col min-h-screen">
+      <div className="flex items-center justify-center w-full max-w-screen-lg mx-auto">
         <AnimatePresence>
           <motion.div
             className="overflow-hidden"
