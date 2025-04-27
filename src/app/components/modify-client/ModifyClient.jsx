@@ -288,4 +288,5 @@ const ModifySelectedClient = ({ selectedClient }) => {
       </div>
     </div>
   );
-}  
+}
+export default ModifySelectedClient;  
