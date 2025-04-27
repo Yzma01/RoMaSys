@@ -214,7 +214,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
   };
 
   return (
-    <div className=" flex items-center justify-center h-[100vh] w-full flex-col min-h-screen">
+    <div className="flex items-center justify-center min-h-screen w-full flex-col">
       <div className="flex items-center justify-center w-full max-w-screen-lg mx-auto">
         <AnimatePresence>
           <motion.div
@@ -224,14 +224,14 @@ const ModifySelectedClient = ({ selectedClient }) => {
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 1.5 }}
           >
-            <div className="flex flex-col  text-white p-5 w-fit">
+            <div className="flex flex-col text-white p-5 w-full">
               <h1 className="text-xl sm:text-2xl mb-2 font-bold text-center">
                 Modificar Usuario
               </h1>
-              <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 w-fit mx-4 md:mx-8 lg:mx-16">
+              <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 w-full mx-4 md:mx-8 lg:mx-16">
                 <section>
                   <header className="flex flex-col sm:flex-row items-center justify-between">
-                    <div className="flex flex-row w-fit sm:w-3/4 mb-4 sm:mb-0 gap-10 -mr-28">
+                    <div className="flex flex-row w-full sm:w-3/4 mb-4 sm:mb-0 gap-10 -mr-28">
                       <BasicInformation
                         modify={true}
                         id={id}
@@ -274,7 +274,6 @@ const ModifySelectedClient = ({ selectedClient }) => {
                       text={"Cancelar"}
                       onClick={() => navigate("/admin/dashboard")}
                     />
-
                     <Button
                       onClick={(e) => handleSubmit()}
                       color={"green"}
@@ -288,7 +287,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
         </AnimatePresence>
       </div>
     </div>
-  );
+  );  
 };
 
 export default ModifySelectedClient;
