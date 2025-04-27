@@ -168,9 +168,8 @@ export default function AddClient() {
       doVerifications(response);
     }
   }
-
   return (
-    <div className="bg-adminBackground flex items-center justify-center h-[100vh] w-full">
+    <div className="bg-adminBackground flex items-center justify-center min-h-screen w-full">
       <AnimatePresence>
         <motion.div
           className="overflow-hidden"
