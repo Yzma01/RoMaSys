@@ -6,7 +6,7 @@ import ModifySelectedClient from '../../../../components/modify-client/ModifyCli
 function ModifyClient() {
   const { id } = useParams();
   return (
-    <div className='h-[100vh]'>
+    <div className='h-[100vh] min-h-screen'>
       <ModifySelectedClient selectedClient={id}/>
     </div>
   );
