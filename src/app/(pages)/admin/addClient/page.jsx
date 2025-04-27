@@ -179,14 +179,11 @@ export default function AddClient() {
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 1.5 }}
         >
-          <div className="flex flex-col  text-white p-5 w-fit">
-            {/* <h1 className="text-xl sm:text-2xl mb-2 font-bold">
-              Agregar Cliente
-            </h1> */}
-            <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 w-fit mx-4 md:mx-8 lg:mx-16">
+          <div className="flex flex-col text-white p-5 w-full max-w-screen-lg mx-auto">
+            <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 mx-4 md:mx-8 lg:mx-16">
               <section>
                 <header className="flex flex-col sm:flex-row items-center justify-between">
-                  <div className="flex flex-row w-fit sm:w-3/4 mb-4 sm:mb-0 gap-10 -mr-28">
+                  <div className="flex flex-row w-full sm:w-3/4 mb-4 sm:mb-0 gap-10 -mr-28">
                     <BasicInformation
                       modify={false}
                       id={id}
@@ -239,4 +236,4 @@ export default function AddClient() {
       </AnimatePresence>
     </div>
   );
-}
+}  
