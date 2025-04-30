@@ -114,7 +114,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-blueDark">
+    <div className="min-h-screen w-full bg-blueDark">
       <div className="h-full text-white flex items-center justify-center">
         {isLoading ? (
           <Loader />
@@ -129,7 +129,7 @@ export default function Dashboard() {
                 transition={{ duration: 1.5 }}
               >
                 <div className="flex items-center justify-center w-full h-full text-white">
-                  <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 w-full h-auto mx-4 md:mx-8 lg:mx-16">
+                  <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 h-auto md:mx-8 lg:mx-16">
                     <section>
                       <header className="flex flex-col sm:flex-row items-center justify-between w-full">
                         <div className="flex flex-col w-full sm:w-3/4 mb-4 sm:mb-0">
