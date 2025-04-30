@@ -24,9 +24,6 @@ export async function sendEmail(
  
 
   try {
-
-
-    
     smtpEmail.subject = subject;
     smtpEmail.to = [{ email: clientEmail, name: clientName }];
 

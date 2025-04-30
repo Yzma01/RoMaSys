@@ -51,7 +51,7 @@ export async function startMessageSending() {
 async function sendAndMarkAsSent(client, clientAdditionalData, message) {
   console.log(`Enviando mensaje a: ${message.msg_client_id}`);
   try {
-   await sendEmail(subjectEmail, client.cli_email, client.cli_name.cli_name, messageToSend, typeOfEmail);
+   await sendEmail(subjectEmail, client.cli_email, client.cli_name, messageToSend, typeOfEmail);
 
     console.log("Correo enviado con éxito:");
     await MessageAgenda.findOneAndDelete({ _id: message._id });
