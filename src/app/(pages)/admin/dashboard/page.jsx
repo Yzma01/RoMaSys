@@ -114,7 +114,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-blueDark">
+    <div className="min-h-screen w-full bg-blueDark flex items-center justify-center">
       <div className="h-full text-white flex items-center justify-center">
         {isLoading ? (
           <Loader />
