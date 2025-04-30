@@ -178,7 +178,10 @@ export default function AddClient() {
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 1.5 }}
         >
-          <div className="flex flex-col text-white p-5 w-full max-w-screen-lg mx-auto">
+          <div className="flex flex-col text-white p-5 w-fit max-w-screen-lg mx-auto">
+              {/* <h1 className="text-xl sm:text-2xl mb-2 font-bold">
+              Agregar Cliente
+            </h1> */}
             <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 mx-4 md:mx-8 lg:mx-16">
               <section>
                 <header className="flex flex-col sm:flex-row items-center justify-between">

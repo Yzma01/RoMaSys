@@ -214,7 +214,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full bg-blueDark">
+    <div className="flex items-center justify-center min-h-screen w-full bg-adminBackground">
       <div className="w-full max-w-screen-lg mx-auto px-4 sm:px-8">
         <AnimatePresence>
           <motion.div
