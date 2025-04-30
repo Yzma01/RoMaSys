@@ -228,7 +228,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
               <h1 className="text-xl sm:text-2xl mb-2 font-bold text-center">
                 Modificar Usuario
               </h1>
-              <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 w-fit">
+              <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 w-full">
                 <section>
                   <header className="flex flex-col sm:flex-row items-center justify-between">
                     <div className="flex flex-row w-fit sm:w-3/4 mb-4 sm:mb-0 gap-10 -mr-28">
