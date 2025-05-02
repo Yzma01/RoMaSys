@@ -12,6 +12,8 @@ import Image from "next/image";
 import { emitEvent } from "@/hooks/use-event";
 import { useEffect } from "react";
 import DevComponent from "../utils/DevComponent";
+import { Message, NotificationImportant } from "@mui/icons-material";
+import MessageNotification from "./MessageNotification";
 
 export function Sidebar({ sidebarOpen, setSidebarOpen }){
   const location = useLocation();
@@ -73,7 +75,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }){
             </NavLink>
           </div>
         ))}
-
+        <MessageNotification sidebarOpen={sidebarOpen}/>
         {
           //<PopupQr sidebarOpen={sidebarOpen} />
           //<DevComponent open={sidebarOpen}/>
