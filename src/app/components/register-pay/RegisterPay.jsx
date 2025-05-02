@@ -58,15 +58,22 @@ const RegisterPay = ({ selectedClient }) => {
       pay_amount: amount.toString(),
       pay_monthly_payment_type: monthlyType.toLocaleLowerCase(),
     };
-    const response = await makeFetch("/api/payments", "POST", "", body);
+    let response;
+    if(!isNegative()){
+      response = await makeFetch("/api/payments", "POST", "", body);
+    }
     doVerifications(response);
   };
 
-  const doVerifications = (response) => {
+  const isNegative=()=>{
     if (verifiedNegative()) {
       toast({ description: "Los números no pueden ser negativos", title:"Error" });
-      return;
+      return true;
     }
+    return false;
+  }
+
+  const doVerifications = (response) => {
     validate(`Pago realizado con éxito.`, response.status, 200);
     validate(
       `Error de conexión, si el problema persiste contacte a soporte.`,

@@ -114,12 +114,12 @@ export default function Dashboard() {
   };
 
   return (
-    <div>
-      <div className="h-[100vh] text-white flex items-center justify-center">
+    <div className="min-h-screen w-full bg-adminBackground flex items-center justify-center">
+      <div className="h-full text-white flex items-center justify-center">
         {isLoading ? (
           <Loader />
         ) : (
-          <div>
+          <div className="w-full h-full">
             <AnimatePresence>
               <motion.div
                 className="overflow-hidden"
@@ -128,10 +128,10 @@ export default function Dashboard() {
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 1.5 }}
               >
-                <div className="flex items-center justify-center h-[100vh] text-white">
-                  <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 max-w-full w-full h-auto mx-4 md:mx-8 lg:mx-16">
+                <div className="flex items-center justify-center w-full h-full text-white">
+                  <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 h-auto md:mx-8 lg:mx-16">
                     <section>
-                      <header className="flex flex-col sm:flex-row items-center justify-between">
+                      <header className="flex flex-col sm:flex-row items-center justify-between w-full">
                         <div className="flex flex-col w-full sm:w-3/4 mb-4 sm:mb-0">
                           <h1 className="text-xl sm:text-2xl mb-2 font-bold">
                             DASHBOARD
@@ -162,4 +162,4 @@ export default function Dashboard() {
       </div>
     </div>
   );
-}
+}  

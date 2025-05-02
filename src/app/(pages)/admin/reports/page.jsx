@@ -32,11 +32,12 @@ export default function Reports() {
     if (response.status === 500) {
       toast({
         description:
-          "Error de conexión, si el problema persiste contacte a soporte", title:"Error"
+          "Error de conexión, si el problema persiste contacte a soporte",
+        title: "Error",
       });
     }
   }, [toast]);
-  
+
   useEffect(() => {
     getData();
   }, [getData]);
@@ -55,13 +56,13 @@ export default function Reports() {
       endDate: date?.to || "",
       monthlyPaymentType: filterSelected || "",
     });
-  
+
     const response = await makeFetch(
       `/api/reports/incomingByRange?${params}`,
       "GET",
       ""
     );
-  
+
     if (response.status === 200) {
       const data = await response.json();
       setLastMontIncoming(data);
@@ -69,18 +70,19 @@ export default function Reports() {
     if (response.status === 500) {
       toast({
         description:
-          "Error de conexión, si el problema persiste contacte a soporte", title:"Error"
+          "Error de conexión, si el problema persiste contacte a soporte",
+        title: "Error",
       });
     }
   }, [date, filterSelected, toast]); // Dependencias necesarias
-  
+
   useEffect(() => {
     handleFilter();
   }, [handleFilter]);
-
+  
   return (
-    <div className="h-screen w-full flex flex-col">
-      <div className="h-fit flex flex-row justify-between m-10 gap-10">
+    <div className="min-h-screen w-full flex flex-col">
+      <div className="flex flex-row justify-between m-10 gap-10 w-full max-w-screen-lg mx-auto">
         <RoutineChart data={routineData} />
         <MonthlyTypeChart data={monthlyTypeData} />
         <NewClientsMonthlyChart data={newClientsData} />
@@ -95,9 +97,9 @@ export default function Reports() {
           handleFilter={() => handleFilter}
         />
       </div>
-      <div className="flex w-full h-screen flex-col justify-center items-center mt-[-25px]">
+      <div className="flex w-full h-fit flex-col justify-center items-center mt-[-25px]">
         <DownloadButton
-          onClick={() =>  setTimeout(() => downloadReport(document.body), 4000)}
+          onClick={() => setTimeout(() => downloadReport(document.body), 4000)}
         />
       </div>
     </div>

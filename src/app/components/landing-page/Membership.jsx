@@ -6,7 +6,10 @@ import MemberShipCards from "./MemberShipCards";
 const Membership = () => {
   return (
     <div>
-      <div className="relative w-full flex justify-center items-center" id="Prices">
+      <div
+        className="relative w-full flex justify-center items-center"
+        id="Prices"
+      >
         <Image
           src={TtileBg}
           alt=""
@@ -18,7 +21,9 @@ const Membership = () => {
           Membresías
         </h1>
       </div>
-      <MemberShipCards />
+      <div className="mt-32">
+        <MemberShipCards />
+      </div>
     </div>
   );
 };
