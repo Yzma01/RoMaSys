@@ -107,7 +107,6 @@ export default function AddClient() {
   };
 
   const doVerifications = (response) => {
-    console.log("Verficaciones 🐴🐴: ", response)
     validate(`${name} ha sido agregado.`, response.status, 201);
     validate(
       `Error de conexión, si el problema persiste contacte a soporte.`,
@@ -160,11 +159,11 @@ export default function AddClient() {
             cli_birthdate: date,
           },
     };
-    setLoading(true);
     await doFechtVerifications(body);
   };
-
+  
   const doFechtVerifications = async (body) => {
+    setLoading(true);
     if (verifiedBirthday()) {
       toast({
         description: "La fecha de nacimiento es mayor a la actual",
@@ -194,8 +193,8 @@ export default function AddClient() {
       setLoading(false);
     } else {
       const response = await makeFetch("/api/clients", "POST", "", body);
-      console.log("Responseeeeeeeee:", response);
       doVerifications(response);
+      setLoading(false);
     }
   };
   return (
