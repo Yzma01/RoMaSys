@@ -5,6 +5,7 @@ export const makeFetch = async (url, method, params, body) => {
       params !== "" || params === undefined? "/" + params : ""
     }`;
     console.log(apiURL)
+    
   const response = await fetch(apiURL, {
     method: method,
     headers: {

@@ -37,29 +37,7 @@ export async function emailAlreadyInUse(body, res) {
     console.log("pppppppppppppppppppp")
     throw {
       message: 'Email "' + body.cli_email + '" is already in use',
-      status: 407,
-    };
-  }
-}
-
-export async function emailAlreadyInUseForUpdate(body, client) {
-console.log("🚀 ~ emailAlreadyInUse ~ body:", body)
-  
-  if (client.cli_email === body.cli_email) {
-    return; 
-  }
-  const existingClient = await Client.findOne({
-    cli_id: { $ne: client.cli_id },
-    cli_email: body.cli_email,
-  });
-  console.log("xxxxxxxxxxxxxxxxxxxxxx")
-
-
-  if (existingClient) {
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaa")
-    throw {
-      message: `Email "${body.cli_email}" is already in use`,
-      status: 407,
+      status: 409,
     };
   }
 }

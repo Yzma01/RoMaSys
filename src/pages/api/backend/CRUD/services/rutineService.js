@@ -21,8 +21,6 @@ export async function assignRutine(body) {
     const rutine = await Rutine.findOne(filter);
     console.log("🚀 ~ assignRutine ~ rutine:", rutine)
 
-
-    
     if (!rutine) {
       return 1;
     }

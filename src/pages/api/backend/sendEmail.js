@@ -59,13 +59,7 @@ function typeOfEmailToSend(typeOfEmail, content) {
 
 //!hacer Diseño para email de rutina
 function sendRutine(content) {
-  smtpEmail.htmlContent = `
-    <html>
-      <body>
-        <h1>${content}</h1>
-      </body>
-    </html>
-  `;
+  smtpEmail.htmlContent = content;
 }
 
 //! hacer Diseño para email de recordatorio

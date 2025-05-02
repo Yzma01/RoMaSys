@@ -1,7 +1,6 @@
 import { clientsRepo } from "../CRUD/clients-repo.js";
 
 export const getClients = (req, res) => {
-  console.log("🐕🐕🐕🐕")
   clientsRepo._getClients(req, res);
 };
 

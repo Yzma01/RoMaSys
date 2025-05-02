@@ -100,6 +100,7 @@ export default function AddClient() {
   };
 
   const doVerifications = (response) => {
+    console.log("Verficaciones 🐴🐴: ", response)
     validate(`${name} ha sido agregado.`, response.status, 201);
     validate(
       `Error de conexión, si el problema persiste contacte a soporte.`,
@@ -115,7 +116,7 @@ export default function AddClient() {
     validate(
       `El correo eléctronico ${email} ya está registrado`,
       response.status,
-      407, "Error"
+      409, "Error"
     );
   };
 
@@ -165,6 +166,7 @@ export default function AddClient() {
       toast({ description: "Por favor llene todos los campos.", title:"Error"});
     } else {
       const response = await makeFetch("/api/clients", "POST", "", body);
+      console.log("Responseeeeeeeee:", response);
       doVerifications(response);
     }
   }

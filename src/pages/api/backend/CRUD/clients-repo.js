@@ -6,7 +6,6 @@ import {
   phoneAlredyInUse,
   validatePhone,
   emailAlreadyInUse,
-  emailAlreadyInUseForUpdate,
 } from "./services/clientValidations.js";
 import { calculateNextPayDate } from "./services/clientUtils.js";
 import { sendEmail } from "../sendEmail.js";
@@ -85,14 +84,8 @@ async function addClient(req, res) {
   try {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
-    // try {
-    //   await emailAlreadyInUse(body);
-    // } catch (error) {
-    //   console.log("❌ Email en uso:", error);
-    //    return res
-    //   .status(error.status)
-    // }
-
+    await emailAlreadyInUse(body);
+ 
     body.cli_next_pay_date = calculateNextPayDate(
       body.cli_monthly_payment_type,
       today
@@ -223,9 +216,8 @@ async function _updateClient(req, res) {
     const client = await Client.findOne({ cli_id: cli_id });
 
     clientNotFound(client);
-    // await emailAlreadyInUseForUpdate(body, client);
-
     await validatePhone(body, client);
+    await emailAlreadyInUse(body);
     console.log("📍📍📍📍📍📍");
 
     if (body.cli_rutine === true) {

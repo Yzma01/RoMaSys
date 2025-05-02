@@ -11,9 +11,7 @@ export default async function handler(req, res) {
     }
   
     try {
-      console.log("Tamos en el try");
-      let response = await clientsRoutes(req, res);
-      console.log("🚀 ~ handler ~ sassssssssssssssssssssssssss:", response)
+      await clientsRoutes(req, res);
     } catch (error) {
       console.error("Error in /api/clients:", error);
       res.status(500).json({ message: "Internal Server Error" });

@@ -16,4 +16,3 @@ export function filterByGender(filter, additionalData) {
       ? additionalData.cli_gender
       : GENDERS[0];
 }
-
