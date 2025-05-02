@@ -7,6 +7,7 @@ import Button from "@/src/app/components/utils/Button";
 import { useToast } from "@/hooks/use-toast";
 import { makeFetch } from "@/src/app/components/utils/fetch";
 import { useNavigate } from "react-router-dom";
+import Loader from "@/src/app/components/utils/Loader";
 
 export default function AddClient() {
   const [id, setId] = useState("");
@@ -22,7 +23,8 @@ export default function AddClient() {
   const [goal, setGoal] = useState("");
   const [date, setDate] = useState("");
   const [gender, setGender] = useState("");
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -46,30 +48,35 @@ export default function AddClient() {
 
   const validate = (message, status, code, title) => {
     if (status == code) {
-      toast({ description: message, title:title });
+      toast({ description: message, title: title });
       return;
     }
     if (status == 201) {
       clearForm();
-      navigate('/admin/dashboard')
+      navigate("/admin/dashboard");
     }
     return;
   };
 
-  const verifiedNegative = ()=>{
+  const verifiedNegative = () => {
     const regex = /-+/;
-    return regex.test(amount) || regex.test(weight) || regex.test(height) || regex.test(phone);
-  }
+    return (
+      regex.test(amount) ||
+      regex.test(weight) ||
+      regex.test(height) ||
+      regex.test(phone)
+    );
+  };
 
-  const verifiedValidEmail = ()=>{
+  const verifiedValidEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
-  }
+  };
 
-  const verifiedBirthday = ()=>{
+  const verifiedBirthday = () => {
     const today = new Date();
     return date > today ? true : false;
-  }
+  };
 
   const verifiedNull = () => {
     if (
@@ -105,13 +112,20 @@ export default function AddClient() {
     validate(
       `Error de conexión, si el problema persiste contacte a soporte.`,
       response.status,
-      500, "Error"
+      500,
+      "Error"
     );
-    validate(`El cliente cédula: ${id} ya existe.`, response.status, 401, "Error");
+    validate(
+      `El cliente cédula: ${id} ya existe.`,
+      response.status,
+      401,
+      "Error"
+    );
     validate(
       `El número de teléfono: ${phone} ya está registrado`,
       response.status,
-      406, "Error"
+      406,
+      "Error"
     );
     validate(
       `El correo eléctronico ${email} ya está registrado`,
@@ -146,41 +160,58 @@ export default function AddClient() {
             cli_birthdate: date,
           },
     };
+    setLoading(true);
     await doFechtVerifications(body);
   };
 
-  const doFechtVerifications= async(body)=>{
-    if(verifiedBirthday()){
-      toast({description: "La fecha de nacimiento es mayor a la actual", title:"Error"});
+  const doFechtVerifications = async (body) => {
+    if (verifiedBirthday()) {
+      toast({
+        description: "La fecha de nacimiento es mayor a la actual",
+        title: "Error",
+      });
+      setLoading(false);
       return;
     }
-    if(!verifiedValidEmail()){
-      toast({description: "Correo electrónico no válido", title:"Error"});
+    if (!verifiedValidEmail()) {
+      toast({ description: "Correo electrónico no válido", title: "Error" });
+      setLoading(false);
       return;
     }
-    if(verifiedNegative()){
-      toast({description: "Los números no pueden ser negativos", title:"Error"});
+    if (verifiedNegative()) {
+      toast({
+        description: "Los números no pueden ser negativos",
+        title: "Error",
+      });
+      setLoading(false);
       return;
     }
     if (verifiedNull()) {
-      toast({ description: "Por favor llene todos los campos.", title:"Error"});
+      toast({
+        description: "Por favor llene todos los campos.",
+        title: "Error",
+      });
+      setLoading(false);
     } else {
       const response = await makeFetch("/api/clients", "POST", "", body);
       console.log("Responseeeeeeeee:", response);
       doVerifications(response);
     }
-  }
+  };
   return (
     <div className="bg-adminBackground flex items-center justify-center min-h-screen w-full">
-      <AnimatePresence>
-        <motion.div
-          className="overflow-hidden"
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: "auto", opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 1.5 }}
-        >
-          <div className="flex flex-col text-white p-5 w-full max-w-screen-lg mx-auto">
+      {loading ? (
+        <Loader />
+      ) : (
+        <AnimatePresence>
+          <motion.div
+            className="overflow-hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 1.5 }}
+          >
+            <div className="flex flex-col text-white p-5 w-full max-w-screen-lg mx-auto">
               {/* <h1 className="text-xl sm:text-2xl mb-2 font-bold">
               Agregar Cliente
             </h1> */}
@@ -188,56 +219,57 @@ export default function AddClient() {
                 <section>
                   <header className="flex flex-col sm:flex-row items-center justify-between">
                     <div className="flex flex-row w-full sm:w-3/4 mb-4 sm:mb-0 gap-10 -mr-28">
-                    <BasicInformation
-                      modify={false}
-                      id={id}
-                      name={name}
-                      lastname1={lastname1}
-                      lastname2={lastname2}
-                      phone={phone}
-                      monthlyType={monthlyType}
-                      amount={amount}
-                      routine={routine}
-                      setRoutine={setRoutine}
-                      setId={setId}
-                      setName={setName}
-                      setLastname1={setLastname1}
-                      setLastname2={setLastname2}
-                      setPhone={setPhone}
-                      setMothlyType={setMothlyType}
-                      setAmount={setAmount}
-                      email={email}
-                      setEmail={setEmail}
-                    />
-                    <Routine
-                      routine={routine}
-                      height={height}
-                      weight={weight}
-                      goal={goal}
-                      date={date}
-                      gender={gender}
-                      email={email}
-                      setHeight={setHeight}
-                      setWeight={setWeight}
-                      setGoal={setGoal}
-                      setDate={setDate}
-                      setGender={setGender}
-                      setEmail={setEmail}
+                      <BasicInformation
+                        modify={false}
+                        id={id}
+                        name={name}
+                        lastname1={lastname1}
+                        lastname2={lastname2}
+                        phone={phone}
+                        monthlyType={monthlyType}
+                        amount={amount}
+                        routine={routine}
+                        setRoutine={setRoutine}
+                        setId={setId}
+                        setName={setName}
+                        setLastname1={setLastname1}
+                        setLastname2={setLastname2}
+                        setPhone={setPhone}
+                        setMothlyType={setMothlyType}
+                        setAmount={setAmount}
+                        email={email}
+                        setEmail={setEmail}
+                      />
+                      <Routine
+                        routine={routine}
+                        height={height}
+                        weight={weight}
+                        goal={goal}
+                        date={date}
+                        gender={gender}
+                        email={email}
+                        setHeight={setHeight}
+                        setWeight={setWeight}
+                        setGoal={setGoal}
+                        setDate={setDate}
+                        setGender={setGender}
+                        setEmail={setEmail}
+                      />
+                    </div>
+                  </header>
+                  <div className="w-full items-end flex justify-center">
+                    <Button
+                      onClick={(e) => handleSubmit(e)}
+                      color={"green"}
+                      text={"Guardar"}
                     />
                   </div>
-                </header>
-                <div className="w-full items-end flex justify-center">
-                  <Button
-                    onClick={(e) => handleSubmit(e)}
-                    color={"green"}
-                    text={"Guardar"}
-                  />
-                </div>
-              </section>
+                </section>
+              </div>
             </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+      )}
     </div>
   );
-}  
+}
