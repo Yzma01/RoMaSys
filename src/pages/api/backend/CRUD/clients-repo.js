@@ -30,7 +30,6 @@ export const clientsRepo = {
 async function _getClientById(req, res) {
   const { cli_id } = req.query;
   try {
-    console.log("💐💐💐💐💐");
     const client = await Client.findOne({
       cli_id: cli_id,
     });
@@ -38,7 +37,6 @@ async function _getClientById(req, res) {
     client.cli_additional_data = await AdditionalData.findOne({
       _id: client.cli_additional_data,
     });
-    console.log("🐢🐢🐢🐢🐢🐢🐢", client);
     res.json(client);
   } catch (error) {
     res.status(500).json({ message: "Error getting client" + error.message });
@@ -47,6 +45,7 @@ async function _getClientById(req, res) {
 
 //*Get all clients
 async function _getClients(req, res) {
+  let messagesPending = 0;
   try {
     const clients = await Client.find();
 
@@ -68,14 +67,22 @@ async function _getClients(req, res) {
         console.warn("Client without additional data:", client._id);
       }
     }
+    messagesPending = await pendingNotices();
 
-    res.json(clients);
+    res.json({ clients, pendingNotices: messagesPending });
   } catch (error) {
     res
       .status(500)
       .json({ message: "Error retrieving clients" + error.message });
   }
 }
+
+async function pendingNotices() {
+  return await MessageAgenda.countDocuments({
+    msg_next_payment_date: { $lt: new Date() },
+  });
+}
+
 //*Add client
 async function addClient(req, res) {
   const body = req.body;
@@ -85,7 +92,7 @@ async function addClient(req, res) {
     await clientAlredyExists(body);
     await phoneAlredyInUse(body);
     await emailAlreadyInUse(body);
- 
+
     body.cli_next_pay_date = calculateNextPayDate(
       body.cli_monthly_payment_type,
       today
