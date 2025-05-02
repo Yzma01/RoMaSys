@@ -52,8 +52,9 @@ export default function Dashboard() {
     const response = await makeFetch("/api/clients", "GET", "");
     if (response.status === 200) {
       const data = await response.json();
-      setClients(data);
-      setOriginalClients(data);
+      setClients(data.clients);
+      emitEvent("refreshNotification", data.pendingNotices);
+      setOriginalClients(data.clients);
     }
     if (response.status === 500) {
       toast({

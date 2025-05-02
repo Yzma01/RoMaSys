@@ -3,9 +3,12 @@ import { useEvent } from "@/hooks/use-event";
 import { Message } from "@mui/icons-material";
 import React, { useState } from "react";
 import { makeFetch } from "../utils/fetch";
+import { useToast } from "@/hooks/use-toast";
 
 const MessageNotification = ({ sidebarOpen }) => {
   const [amountOfMessages, setAmountOfMessages] = useState(0);
+  const { toast } = useToast();
+
   useEvent(
     "refreshNotification",
     (amount) => {
@@ -13,15 +16,26 @@ const MessageNotification = ({ sidebarOpen }) => {
     },
     []
   );
+
+  const handleSubmit = () => {
+    if (amountOfMessages == 0 || amountOfMessages == null) {
+      toast({
+        description: "No hay mensajes pendientes.",
+      });
+      return;
+    }
+    setAmountOfMessages(0);
+    makeFetch("/api/remainder", "GET", "");
+    toast({
+      description: `Avisos enviados con éxito: ${amountOfMessages}`,
+    });
+  };
+
   return (
     <div className="flex-grow">
       <div
         className="my-8 px-[25%] transition-opacity duration-300 ease-in-out hover:bg-adminBackground flex flex-row items-center relative"
-        onClick={() => {
-            setAmountOfMessages(0);
-            makeFetch("/api/remainder", "GET", "");
-          }}
-          
+        onClick={handleSubmit}
       >
         <div className="relative px-[8px] py-[16px]">
           <Message />

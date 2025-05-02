@@ -134,6 +134,12 @@ const ModifySelectedClient = ({ selectedClient }) => {
   };
 
   const doVerifications = (response) => {
+    validate(`El cliente cédula: ${id} ya existe.`, response.status, 401, "Error");
+    validate(
+      `El número de teléfono: ${phone} ya está registrado`,
+      response.status,
+      406, "Error"
+    );
     validate(
       `El sistema no encontró una rutina para ${name}`,
       response.status,
@@ -143,12 +149,6 @@ const ModifySelectedClient = ({ selectedClient }) => {
       `Error de conexión, si el problema persiste contacte a soporte.`,
       response.status,
       500, "Error"
-    );
-    validate(`El cliente cédula: ${id} ya existe.`, response.status, 401, "Error");
-    validate(
-      `El número de teléfono: ${phone} ya está registrado`,
-      response.status,
-      406, "Error"
     );
     validate(`${name} ha sido modificado.`, response.status, 200);
   };
