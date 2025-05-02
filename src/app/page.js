@@ -5,7 +5,6 @@ import HeroCard from "./components/landing-page/HeroCard";
 import Membership from "./components/landing-page/Membership";
 import NavBar from "./components/landing-page/NavBar";
 
-
 export default function Home() {
   return (
     <div className="overflow-x-hidden">

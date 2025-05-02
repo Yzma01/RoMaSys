@@ -5,7 +5,14 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // Puedes agregar eventos aquí si es necesario
     },
-    baseUrl: "http://localhost:3000", // Cambia esto según tu proyecto
-    supportFile: false
-  }
+    baseUrl: "https://ro-ma-sys.vercel.app/", // Cambia esto según tu proyecto
+    supportFile: false,
+  },
+
+  component: {
+    devServer: {
+      framework: "next",
+      bundler: "webpack",
+    },
+  },
 });
