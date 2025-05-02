@@ -215,7 +215,6 @@ const ModifySelectedClient = ({ selectedClient }) => {
 
   return (
     <div className="flex items-center justify-center min-h-screen w-full bg-adminBackground">
-      <div className="w-full max-w-screen-lg mx-auto px-4 sm:px-8">
         <AnimatePresence>
           <motion.div
             className="overflow-hidden"
@@ -228,10 +227,11 @@ const ModifySelectedClient = ({ selectedClient }) => {
               <h1 className="text-xl sm:text-2xl mb-2 font-bold text-center">
                 Modificar Usuario
               </h1>
-              <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 w-full">
+                <div className="p-6 sm:p-8 md:p-10 lg:p-12 bg-blueDark text-white rounded-3xl shadow-lg border border-gray-3 w-full">
                 <section>
                   <header className="flex flex-col sm:flex-row items-center justify-between">
                     <div className="flex flex-row w-full sm:w-3/4 mb-4 sm:mb-0 gap-10 -mr-28">
+
                       <BasicInformation
                         modify={true}
                         id={id}
@@ -286,7 +286,6 @@ const ModifySelectedClient = ({ selectedClient }) => {
           </motion.div>
         </AnimatePresence>
       </div>
-    </div>
   );
 }
 export default ModifySelectedClient;  
