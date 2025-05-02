@@ -6,6 +6,7 @@ import {
   phoneAlredyInUse,
   validatePhone,
   emailAlreadyInUse,
+  emailAlreadyInUseForUpdate,
 } from "./services/clientValidations.js";
 import { calculateNextPayDate } from "./services/clientUtils.js";
 import { sendEmail } from "../sendEmail.js";
@@ -217,15 +218,14 @@ function unfreezeClient(body, client) {
 async function _updateClient(req, res) {
   const { cli_id } = req.query;
   const body = req.body;
-  console.log("🚀🚀🚀🚀🚀 ~ _updateClient ~ body:", body);
 
   try {
     const client = await Client.findOne({ cli_id: cli_id });
-
     clientNotFound(client);
+
     await validatePhone(body, client);
-    await emailAlreadyInUse(body);
-    console.log("📍📍📍📍📍📍");
+
+    await emailAlreadyInUseForUpdate(body, client);
 
     if (body.cli_rutine === true) {
       const rutine = await assignRutine(body);

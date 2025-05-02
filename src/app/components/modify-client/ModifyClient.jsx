@@ -15,8 +15,10 @@ import { useToast } from "@/hooks/use-toast";
 import { makeFetch } from "../utils/fetch";
 import { emitEvent } from "@/hooks/use-event";
 import { useNavigate } from "react-router-dom";
+import Loader from "../utils/Loader";
 
 const ModifySelectedClient = ({ selectedClient }) => {
+  const [loading, setLoadig] = useState(false);
   const [client, setClient] = useState(null);
   const [gender, setGender] = useState("");
   const [routine, setRoutine] = useState(false);
@@ -99,7 +101,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
     if (status == code) {
       toast({ description: message, title: title });
     }
-    if (code == 200) {
+    if (status == 200) {
       emitEvent("refreshTable", {});
       navigate("/admin/dashboard");
     }
@@ -136,6 +138,11 @@ const ModifySelectedClient = ({ selectedClient }) => {
   const doVerifications = (response) => {
     validate(`El cliente cédula: ${id} ya existe.`, response.status, 401, "Error");
     validate(
+      `El correo eléctronico: ${email} ya está registrado`,
+      response.status,
+      409, "Error"
+    );
+    validate(
       `El número de teléfono: ${phone} ya está registrado`,
       response.status,
       406, "Error"
@@ -170,6 +177,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
 
   const handleSubmit = async () => {
     const body = {
+      cli_id: id,
       cli_name: name,
       cli_last_name1: lastname1,
       cli_last_name2: lastname2,
@@ -191,30 +199,38 @@ const ModifySelectedClient = ({ selectedClient }) => {
             cli_birthdate: date,
           },
     };
-    console.log(body);
+    setLoadig(true);
     doFechtVerifications(body);
   };
 
   const doFechtVerifications = async (body) => {
     if (!verifiedValidEmail()) {
       toast({ description: "Correo electrónico no válido" , title:"Error"});
+      setLoadig(false);
       return;
     }
     if (verifiedNegative()) {
       toast({ description: "Los números no pueden ser negativos", title:"Error" });
+      setLoadig(false);
       return;
     }
     if (verifiedNull()) {
       toast({ description: "Por favor llene todos los campos." , title:"Error"});
+      setLoadig(false);
+
     } else {
-      const response = await makeFetch("/api/clients", "PUT", id, body);
-      console.log(response);
+      const response = await makeFetch("/api/clients", "PUT", selectedClient, body);
       doVerifications(response);
+      setLoadig(false);
+
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen w-full bg-adminBackground">
+       {loading ? (
+              <Loader />
+            ) : (
         <AnimatePresence>
           <motion.div
             className="overflow-hidden"
@@ -285,6 +301,7 @@ const ModifySelectedClient = ({ selectedClient }) => {
             </div>
           </motion.div>
         </AnimatePresence>
+          )}
       </div>
   );
 }
