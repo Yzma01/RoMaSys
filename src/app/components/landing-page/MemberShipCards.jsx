@@ -8,7 +8,7 @@ const MemberShipCards = () => {
     },
     {
       title: "Quincena",
-      description: " ₡ 10000",
+      description: " ₡ 12000",
     },
     {
       title: "Mes",

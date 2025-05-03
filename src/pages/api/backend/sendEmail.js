@@ -16,12 +16,6 @@ export async function sendEmail(
   content,
   typeOfEmail
 ) {
-  console.log("🚀 ~ typeOfEmail:", typeOfEmail)
-  console.log("🚀 ~ content:", content)
-  console.log("🚀 ~ clientName:", clientName)
-  console.log("🚀 ~ clientEmail:", clientEmail)
-  console.log("🚀 ~ subject:", subject)
- 
 
   try {
     smtpEmail.subject = subject;

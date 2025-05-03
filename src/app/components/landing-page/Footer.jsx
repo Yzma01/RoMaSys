@@ -21,11 +21,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row gap-4 md:gap-10">
           <label className="flex flex-row items-center gap-2">
             <LocalPhoneOutlinedIcon className="text-xl" />
-            phone
-          </label>
-          <label className="flex flex-row items-center gap-2">
-            <LocalPhoneOutlinedIcon className="text-xl" />
-            phone
+            +506 5018-8186
           </label>
         </div>
         <div className="flex items-center pt-10 justify-end gap-4 p-4">

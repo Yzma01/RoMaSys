@@ -252,12 +252,13 @@ async function _updateClient(req, res) {
     body.cli_register_date = client.cli_register_date;
     body.cli_next_pay_date = client.cli_next_pay_date;
 
+    updatePaymentId(cli_id, body);
+
     frozenClient(body, client);
     unfreezeClient(body, client);
 
     Object.assign(client, body);
     await client.save();
-
     res.status(200).json({
       message: "Client updated successfully ",
       client,
@@ -266,6 +267,18 @@ async function _updateClient(req, res) {
     res
       .status(error.status || 500)
       .json({ message: "Error updating clients " + error.message });
+  }
+}
+
+async function updatePaymentId(cli_id, body) {
+  const clientPayments = await Payment.find({ pay_client_id: cli_id });
+
+  let clientPayment = {
+    pay_client_id: body.cli_id,
+  };
+  for (let payments of clientPayments) {
+    Object.assign(payments, clientPayment);
+    await payments.save();
   }
 }
 
