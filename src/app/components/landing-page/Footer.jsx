@@ -3,13 +3,16 @@ import React from "react";
 import FmdGoodOutlinedIcon from "@mui/icons-material/FmdGoodOutlined";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
-import CameraAltRoundedIcon from "@mui/icons-material/CameraAltRounded";
 import Image from "next/image";
 import { Logo } from "@/public/images";
+import { Instagram } from "@mui/icons-material";
 
 const Footer = () => {
   return (
-    <div className="w-full bg-gradient-to-r from-red-0 via-black to-black flex flex-row " id="Contact">
+    <div
+      className="w-full bg-gradient-to-r from-red-0 via-black to-black flex flex-row "
+      id="Contact"
+    >
       <div className="flex flex-col text-white pl-4 gap-6 md:pl-10 w-[70vw] xl:w-[80vw] pt-20">
         <label className="flex flex-row items-start gap-2">
           <FmdGoodOutlinedIcon className="text-xl" />
@@ -25,15 +28,29 @@ const Footer = () => {
           </label>
         </div>
         <div className="flex items-center pt-10 justify-end gap-4 p-4">
-          <div className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-400 hover:bg-gradient-to-r hover:from-blue-900 hover:via-blue-500 hover:to-blue-300">
+          <div
+            className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-400 hover:bg-gradient-to-r hover:from-blue-900 hover:via-blue-500 hover:to-blue-300 cursor-pointer"
+            onClick={() =>
+              window.open("https://www.facebook.com/profile.php?id=61551991614289")
+            }
+          >
             <FacebookOutlinedIcon className="w-6 h-6 text-white" />
           </div>
-          <div className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-400 hover:bg-gradient-to-r hover:from-yellow-500 hover:via-red-500 hover:via-pink-600 hover:to-purple-800">
-            <CameraAltRoundedIcon className="w-6 h-6 text-white" />
+          <div
+            className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-400 hover:bg-gradient-to-r hover:from-yellow-500 hover:via-red-500 hover:via-pink-600 hover:to-purple-800 cursor-pointer"
+            onClick={() =>
+              window.open(
+                "https://www.instagram.com/fitness_gym_ni?igsh=YzljYTk1ODg3Zg=="
+              )
+            }
+          >
+            <Instagram className="w-6 h-6 text-white" />
           </div>
         </div>
         <div className="flex flex-row items-end mt-auto gap-6 md:gap-12">
-          <p className="text-white text-sm text-center pb-4">Copyright © 2024</p>
+          <p className="text-white text-sm text-center pb-4">
+            Copyright © 2024
+          </p>
         </div>
       </div>
 

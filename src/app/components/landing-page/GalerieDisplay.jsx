@@ -5,64 +5,72 @@ const images = [
   {
     src: first,
     alt: "Gym Interior 1",
-    credit: "Credit: skynesher",
+    credit: "Credit: Niger Gym",
   },
   {
     src: second,
-    alt: "People training with kettlebells",
-    credit: "Credit: nortonrsx",
+    alt: "Gym Interior 2",
+    credit: "Credit: Niger Gym",
   },
   {
     src: third,
-    alt: "People running on treadmills",
-    credit: "Credit: skynesher",
+    alt: "Gym Interior 3",
+    credit: "Credit: Niger Gym",
   },
   {
     src: fourth,
-    alt: "Dumbbell with water bottle",
-    credit: "Credit: AnnaNisk",
+    alt: "Gym Interior 4",
+    credit: "Credit: Niger Gym",
   },
   {
     src: fifth,
-    alt: "Man lifting weights",
-    credit: "Credit: nortonrsx",
+    alt: "Gym Interior 5",
+    credit: "Credit: Niger Gym",
   },
 ];
 
 export function GalerieDisplay() {
   return (
-    <div className="p-5 w-full flex flex-col items-center">
-      <div className="flex flex-col md:flex-row md:w-[60vw] md:justify-center gap-5 mb-5">
+    <div className="p-5 w-full flex flex-col items-center gap-5">
+      
+      {/* Top row - 2 images */}
+      <div className="flex flex-col md:flex-row md:w-[60vw] gap-5">
         <div className="flex-1">
-          <Image
-            src={images[0].src}
-            alt={images[0].alt}
-            layout="responsive"
-            width={600}
-            height={400}
-            className="rounded-lg object-cover"
-          />
-        </div>
-        <div className="flex flex-col gap-5 flex-1">
-          <Image
-            src={images[1].src}
-            alt={images[1].alt}
-            layout="responsive"
-            width={600}
-            height={400}
-            className="rounded-lg object-cover"
-          />
           <Image
             src={images[2].src}
             alt={images[2].alt}
             layout="responsive"
             width={600}
             height={400}
-            className="rounded-lg object-cover"
+            className="rounded-lg object-cover shadow-md shadow-black"
+          />
+        </div>
+        <div className="flex-1">
+          <Image
+            src={images[1].src}
+            alt={images[1].alt}
+            layout="responsive"
+            width={600}
+            height={400}
+            className="rounded-lg object-cover shadow-md shadow-black"
           />
         </div>
       </div>
-      <div className="flex flex-col md:flex-row md:w-[60vw] md:justify-between gap-5">
+
+      {/* Center - big image */}
+      <div className="w-full md:w-[60vw]">
+      <Image
+            src={images[0].src}
+            alt={images[0].alt}
+            layout="responsive"
+            width={600}
+            height={400}
+            className="rounded-lg object-cover shadow-md shadow-black sm:w-96"
+          />
+      </div>
+
+      {/* Bottom row - 2 images */}
+      <div className="flex flex-col md:flex-row md:w-[60vw] gap-5">
         <div className="flex-1">
           <Image
             src={images[3].src}
@@ -70,7 +78,7 @@ export function GalerieDisplay() {
             layout="responsive"
             width={600}
             height={400}
-            className="rounded-lg object-cover md:-translate-y-48 lg:-translate-y-20 xl:-translate-y-96"
+            className="rounded-lg object-cover shadow-md shadow-black"
           />
         </div>
         <div className="flex-1">
@@ -80,10 +88,11 @@ export function GalerieDisplay() {
             layout="responsive"
             width={600}
             height={400}
-            className="rounded-lg object-cover"
+            className="rounded-lg object-cover shadow-md shadow-black"
           />
         </div>
       </div>
+
     </div>
   );
 }
