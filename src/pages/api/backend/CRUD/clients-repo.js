@@ -252,7 +252,7 @@ async function _updateClient(req, res) {
     body.cli_register_date = client.cli_register_date;
     body.cli_next_pay_date = client.cli_next_pay_date;
 
-    await updatePaymentId(cli_id, body);
+    await updatePaymentId(cli_id);
 
     frozenClient(body, client);
     unfreezeClient(body, client);
@@ -270,11 +270,11 @@ async function _updateClient(req, res) {
   }
 }
 
-async function updatePaymentId(cli_id, body) {
+async function updatePaymentId(cli_id) {
   const clientPayments = await Payment.find({ pay_client_id: cli_id });
 
   let clientPayment = {
-    pay_client_id: body.cli_id,
+    pay_client_id: cli_id,
   };
   for (let payments of clientPayments) {
     Object.assign(payments, clientPayment);
