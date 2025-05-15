@@ -252,7 +252,7 @@ async function _updateClient(req, res) {
     body.cli_register_date = client.cli_register_date;
     body.cli_next_pay_date = client.cli_next_pay_date;
 
-    updatePaymentId(cli_id, body);
+    await updatePaymentId(cli_id, body);
 
     frozenClient(body, client);
     unfreezeClient(body, client);
