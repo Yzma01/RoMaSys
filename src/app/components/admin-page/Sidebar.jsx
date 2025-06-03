@@ -47,7 +47,7 @@ export function Sidebar({ sidebarOpen, setSidebarOpen }){
           className="flex mt-5 mb-2 justify-center cursor-pointer transition-all duration-300 ease-in-out"
           style={{ transform: sidebarOpen ? "scale(1.5)" : "scale(2.0)" }}
         >
-          <Image src={romasysLogo} alt="" className="z-10" width={20} height={20} />
+          <Image src={romasysLogo} alt="" className="z-10" width={40} height={40} />
         </div>
         <h2
           className="transition-opacity duration-300 ease-in-out"
